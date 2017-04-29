@@ -1,5 +1,9 @@
 # Resque::UniqueByArity
 
+NOTE:
+
+Requires the pboling fork of resque-lonely_job at https://github.com/pboling/resque-lonely_job as the standard one is just very incompatible with resque-solo (or vice versa, either direction is true; they step on each other).
+
 Usage:
 
 ```ruby
