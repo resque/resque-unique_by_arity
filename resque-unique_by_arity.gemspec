@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Peter Boling"]
   spec.email         = ["peter.boling@gmail.com"]
 
-  spec.summary       = %q{Hacks which allow integration resque_solo  and resque-lonely_simlutaneously into Resque jobs}
+  spec.summary       = %q{Magic hacks which allow integration of resque_solo  and resque-lonely_simlutaneously into Resque jobs}
   spec.description   = %q{resque_solo  and resque-lonely are incompatible - fixes that}
   spec.homepage      = "https://github.com/pboling/resque-unique_by_arity"
 
