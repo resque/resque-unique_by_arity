@@ -8,7 +8,8 @@ module Resque
             define_method(:redis_unique_hash) do |payload|
               payload = Resque.decode(Resque.encode(payload))
               job  = payload["class"]
-              args = payload["args"]
+              # It seems possible that some jobs may not have an "args" key in the payload.
+              args = payload["args"] || []
               args.map! do |arg|
                 arg.is_a?(Hash) ? arg.sort : arg
               end
