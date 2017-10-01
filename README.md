@@ -158,7 +158,7 @@ class MyJob
   def self.redis_unique_hash(payload)
     # ... See source @ lib/resque/unique_by_arity/cop_modulizer.rb 
     #       for how the built-in version works
-    # uniqueness_args = payload["args"] # over simplified - this ignores the arity
+    # uniqueness_args = payload["args"] # over simplified & ignoring arity
     # args = { class: job, args: uniqueness_args }
     # return [Digest::MD5.hexdigest(Resque.encode(args)), uniqueness_args]
   end
