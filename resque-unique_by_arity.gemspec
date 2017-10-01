@@ -8,6 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = Resque::UniqueByArity::VERSION
   spec.authors       = ["Peter Boling"]
   spec.email         = ["peter.boling@gmail.com"]
+  spec.license       = "MIT"
 
   spec.summary       = %q{Magic hacks which allow integration of resque_solo and resque-unique_at_runtime_simultaneously into Resque jobs}
   spec.description   = %q{fixes incompatibilities between resque_solo and resque-unique_at_runtime}
