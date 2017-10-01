@@ -11,12 +11,12 @@ module Resque
 
         # gem is resque_solo, which is a rewrite of resque-loner
         # see: https://github.com/neighborland/resque_solo
-        # defines a redis_key method, which if we are not careful, conflicts with a custom redis_key we set here
-        base.send(:include, Resque::Plugins::UniqueJob) if @configuration.unique_in_queue
+        # defines a redis_key method, which we have to override.
+        base.send(:include, Resque::Plugins::UniqueJob) if @configuration.unique_in_queue || @configuration.unique_across_queues
 
-        # gem is resque-lonely_job
-        # see: https://github.com/wallace/resque-lonely_job
-        base.send(:extend, Resque::Plugins::LonelyJob) if @configuration.unique_at_runtime
+        # gem is resque-unique_at_runtime
+        # see: https://github.com/pboling/resque-unique_at_runtime
+        base.send(:extend, Resque::Plugins::UniqueAtRuntime) if @configuration.unique_at_runtime
 
         uniqueness_cop_module = Resque::UniqueByArity::CopModulizer.to_mod(@configuration)
         # This will override methods from both plugins above, if configured for both

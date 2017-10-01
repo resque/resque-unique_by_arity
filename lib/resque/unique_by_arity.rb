@@ -1,5 +1,9 @@
-require "resque-lonely_job"
+require "colorized_string"
+
+require "resque-unique_at_runtime"
 require "resque_solo"
+# Little hack of the resque_solo gem
+require "resque/resque_solo/queue"
 
 require "resque/unique_by_arity/version"
 require "resque/unique_by_arity/configuration"
@@ -71,6 +75,12 @@ module Resque
     end
     def uniqueness_unique_in_queue=(unique_in_queue)
       @uniqueness_configuration.unique_in_queue = unique_in_queue
+    end
+    def uniqueness_unique_across_queues
+      @uniqueness_configuration.unique_across_queues
+    end
+    def uniqueness_unique_across_queues=(unique_across_queues)
+      @uniqueness_configuration.unique_across_queues = unique_across_queues
     end
     self.uniqueness_configuration = Configuration.new # setup defaults
   end
