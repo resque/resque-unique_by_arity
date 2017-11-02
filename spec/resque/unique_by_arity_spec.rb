@@ -224,7 +224,7 @@ RSpec.describe Resque::UniqueByArity do
         }
         let(:args) { [ opts ] }
         it "fails validation" do
-          expect(Resque::UniqueByArity).to receive(:unique_log).with("RealFake.perform has arity of -1 which will not work with arity_for_uniqueness of 2")
+          expect(Resque::UniqueByArity).to receive(:unique_log).with("RealFake.perform has arity of -1 which will not work with arity_for_uniqueness of 2", anything)
           expect { subject.perform(*args) }.to_not raise_error
         end
       end
@@ -247,7 +247,7 @@ RSpec.describe Resque::UniqueByArity do
         }
         let(:args) { [ 1, opts ] }
         it "fails validation" do
-          expect(Resque::UniqueByArity).to receive(:unique_log).with("RealFake.perform has arity of -2 which will not work with arity_for_uniqueness of 2")
+          expect(Resque::UniqueByArity).to receive(:unique_log).with("RealFake.perform has arity of -2 which will not work with arity_for_uniqueness of 2", anything)
           expect { subject.perform(*args) }.to_not raise_error
         end
       end

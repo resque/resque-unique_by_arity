@@ -23,12 +23,16 @@ module Resque
         @unique_across_queues = options.key?(:unique_across_queues) ? options[:unique_across_queues] : false
         # The default config initialization shouldn't trigger any warnings.
         if options.keys.length > 0 && @logger
-          Resque::UniqueByArity.unique_log ":arity_for_uniqueness is set to #{@arity_for_uniqueness}, but no uniqueness enforcement was turned on [:unique_at_runtime, :unique_in_queue, :unique_across_queues]" unless @unique_at_runtime || @unique_in_queue || @unique_across_queues
-          Resque::UniqueByArity.unique_log ":lock_after_execution_period is set to #{@lock_after_execution_period}, but :unique_at_runtime is not set" if @lock_after_execution_period && !@unique_at_runtime
-          Resque::UniqueByArity.unique_log ":unique_in_queue and :unique_across_queues should not be set at the same time, as :unique_across_queues will always supercede :unique_in_queue" if @unique_in_queue && @unique_across_queues
+          log ":arity_for_uniqueness is set to #{@arity_for_uniqueness}, but no uniqueness enforcement was turned on [:unique_at_runtime, :unique_in_queue, :unique_across_queues]" unless @unique_at_runtime || @unique_in_queue || @unique_across_queues
+          log ":lock_after_execution_period is set to #{@lock_after_execution_period}, but :unique_at_runtime is not set" if @lock_after_execution_period && !@unique_at_runtime
+          log ":unique_in_queue and :unique_across_queues should not be set at the same time, as :unique_across_queues will always supercede :unique_in_queue" if @unique_in_queue && @unique_across_queues
         end
       end
 
+      def log(msg)
+        Resque::UniqueByArity.unique_log(msg, self)
+      end
+      
       def to_hash
         {
             logger: logger,
@@ -58,7 +62,7 @@ module Resque
               end
         case arity_validation
           when :warning then
-            Resque::UniqueByArity.unique_log(msg)
+            log(msg)
           when :error then
             raise ArgumentError, msg
           else

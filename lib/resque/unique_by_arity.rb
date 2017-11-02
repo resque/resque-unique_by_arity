@@ -91,5 +91,6 @@ module Resque
       @uniqueness_configuration.unique_across_queues = unique_across_queues
     end
     self.uniqueness_configuration = Configuration.new # setup defaults
+    module_function(:unique_log)
   end
 end
