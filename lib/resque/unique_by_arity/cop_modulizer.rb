@@ -7,7 +7,7 @@ module Resque
             # @return [Array<String, arguments>] the key base hash used to enforce uniqueness, and the arguments from the payload used to calculate it
             define_method(:redis_unique_hash) do |payload|
               payload = Resque.decode(Resque.encode(payload))
-              puts "payload is #{payload.inspect}" if ENV['RESQUE_DEBUG'] == 'true'
+              Resque::UniqueByArity.unique_log "payload is #{payload.inspect}" if ENV['RESQUE_DEBUG'] == 'true'
               job  = payload["class"]
               # It seems possible that some jobs may not have an "args" key in the payload.
               args = payload["args"] || []
@@ -45,7 +45,7 @@ module Resque
             define_method(:unique_at_queue_time_redis_key) do |queue, payload|
               unique_hash, args_for_uniqueness = redis_unique_hash(payload)
               key = "#{solo_key_namespace(queue)}:#{solo_redis_key_prefix}:#{unique_hash}"
-              puts "#{ColorizedString['[Queue-Time]'].green} #{self}.unique_at_queue_time_redis_key for #{args_for_uniqueness} is: #{ColorizedString[key].green}" if ENV['RESQUE_DEBUG'] == 'true'
+              Resque::UniqueByArity.unique_log "#{ColorizedString['[Queue-Time]'].green} #{self}.unique_at_queue_time_redis_key for #{args_for_uniqueness} is: #{ColorizedString[key].green}" if ENV['RESQUE_DEBUG'] == 'true'
               key
             end
             #
@@ -54,7 +54,7 @@ module Resque
               # solo_key_namespace may or may not ignore the queue passed in, depending on config.
               key_match = "#{solo_key_namespace(self.instance_variable_get(:@queue))}:#{solo_redis_key_prefix}:*"
               keys = Resque.redis.keys(key_match)
-              puts "Purging #{keys.length} keys from #{ColorizedString[key_match].red}"
+              Resque::UniqueByArity.unique_log "Purging #{keys.length} keys from #{ColorizedString[key_match].red}"
               Resque.redis.del keys if keys.length > 0
             end
             if configuration.unique_in_queue
@@ -89,14 +89,14 @@ module Resque
             define_method(:unique_at_runtime_redis_key) do |*args|
               unique_hash, args_for_uniqueness = redis_unique_hash({"class" => self.to_s, "args" => args})
               key = "#{runtime_key_namespace}:#{unique_hash}"
-              puts "#{ColorizedString['[Run-Time]'].yellow} #{self}.unique_at_runtime_redis_key for #{args_for_uniqueness} is: #{ColorizedString[key].yellow}" if ENV['RESQUE_DEBUG'] == 'true'
+              Resque::UniqueByArity.unique_log "#{ColorizedString['[Run-Time]'].yellow} #{self}.unique_at_runtime_redis_key for #{args_for_uniqueness} is: #{ColorizedString[key].yellow}" if ENV['RESQUE_DEBUG'] == 'true'
               key
             end
             # @return [Fixnum] number of keys that were deleted
             define_method(:purge_unique_at_runtime_redis_keys) do
               key_match = "#{runtime_key_namespace}:*"
               keys = Resque.redis.keys(key_match)
-              puts "Purging #{keys.length} keys from #{ColorizedString[key_match].red}"
+              Resque::UniqueByArity.unique_log "Purging #{keys.length} keys from #{ColorizedString[key_match].red}"
               Resque.redis.del keys if keys.length > 0
             end
           end

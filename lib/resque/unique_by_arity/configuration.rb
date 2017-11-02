@@ -2,9 +2,11 @@ require 'logger'
 module Resque
   module UniqueByArity
     class Configuration
+      VALID_ARITY_VALIDATION_LEVELS = [ :warning, :error, nil, false ]
       attr_accessor :logger
       attr_accessor :log_level
       attr_accessor :arity_for_uniqueness
+      attr_accessor :arity_validation
       attr_accessor :lock_after_execution_period
       attr_accessor :unique_at_runtime
       attr_accessor :unique_in_queue
@@ -13,17 +15,20 @@ module Resque
         @logger = options.key?(:logger) ? options[:logger] : Logger.new(STDOUT)
         @log_level = options.key?(:log_level) ? options[:log_level] : :debug
         @arity_for_uniqueness = options.key?(:arity_for_uniqueness) ? options[:arity_for_uniqueness] : 1
+        @arity_validation = options.key?(:arity_validation) ? options[:arity_validation] : :warning
+        raise ArgumentError, "UniqueByArity::Cop.new requires arity_validation values of nil, false, :warning, :error, or an class descending from Exception but the value is #{@arity_validation} (#{@arity_validation.class})" unless VALID_ARITY_VALIDATION_LEVELS.include?(@arity_validation) || @arity_validation.ancestors.include?(Exception)
         @lock_after_execution_period = options.key?(:lock_after_execution_period) ? options[:lock_after_execution_period] : nil
         @unique_at_runtime = options.key?(:unique_at_runtime) ? options[:unique_at_runtime] : false
         @unique_in_queue = options.key?(:unique_in_queue) ? options[:unique_in_queue] : false
         @unique_across_queues = options.key?(:unique_across_queues) ? options[:unique_across_queues] : false
         # The default config initialization shouldn't trigger any warnings.
-        if options.keys.length > 0
-          warn ":arity_for_uniqueness is set to #{@arity_for_uniqueness}, but no uniqueness enforcement was turned on [:unique_at_runtime, :unique_in_queue, :unique_across_queues]" unless @unique_at_runtime || @unique_in_queue || @unique_across_queues
-          warn ":lock_after_execution_period is set to #{@lock_after_execution_period}, but :unique_at_runtime is not set" if @lock_after_execution_period && !@unique_at_runtime
-          warn ":unique_in_queue and :unique_across_queues should not be set at the same time, as :unique_across_queues will always supercede :unique_in_queue" if @unique_in_queue && @unique_across_queues
+        if options.keys.length > 0 && @logger
+          Resque::UniqueByArity.unique_log ":arity_for_uniqueness is set to #{@arity_for_uniqueness}, but no uniqueness enforcement was turned on [:unique_at_runtime, :unique_in_queue, :unique_across_queues]" unless @unique_at_runtime || @unique_in_queue || @unique_across_queues
+          Resque::UniqueByArity.unique_log ":lock_after_execution_period is set to #{@lock_after_execution_period}, but :unique_at_runtime is not set" if @lock_after_execution_period && !@unique_at_runtime
+          Resque::UniqueByArity.unique_log ":unique_in_queue and :unique_across_queues should not be set at the same time, as :unique_across_queues will always supercede :unique_in_queue" if @unique_in_queue && @unique_across_queues
         end
       end
+
       def to_hash
         {
             logger: logger,
@@ -34,6 +39,31 @@ module Resque
             unique_in_queue: unique_in_queue,
             unique_across_queues: unique_across_queues
         }
+      end
+
+      def validate_arity(klass_string, perform_method)
+        return true unless arity_validation
+        # method.arity -
+        #   Returns an indication of the number of arguments accepted by a method.
+        #   Returns a non-negative integer for methods that take a fixed number of arguments.
+        #   For Ruby methods that take a variable number of arguments, returns -n-1, where n is the number of required arguments.
+        #   For methods written in C, returns -1 if the call takes a variable number of arguments.
+        # Example:
+        #   for perform(opts = {}), method(:perform).arity # => -1
+        #   which means that the only valid arity_for_uniqueness is 0
+        msg = if perform_method.arity < (arity_for_uniqueness - 1)
+                "#{klass_string}.#{perform_method.name} has arity of #{perform_method.arity} which will not work with arity_for_uniqueness of #{arity_for_uniqueness}"
+              elsif (required_parameter_names = perform_method.parameters.take_while { |a| a[0] == :req }.map { |b| b[1] }).length < arity_for_uniqueness
+                "#{klass_string}.#{perform_method.name} has the following required parameters: #{required_parameter_names}, which is not enough to satisfy the configured arity_for_uniqueness of #{arity_for_uniqueness}"
+              end
+        case arity_validation
+          when :warning then
+            Resque::UniqueByArity.unique_log(msg)
+          when :error then
+            raise ArgumentError, msg
+          else
+            raise arity_validation, msg
+        end if msg
       end
     end
   end

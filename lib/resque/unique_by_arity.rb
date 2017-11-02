@@ -9,12 +9,14 @@ require "resque/unique_by_arity/version"
 require "resque/unique_by_arity/configuration"
 require "resque/unique_by_arity/cop"
 require "resque/unique_by_arity/cop_modulizer"
+require "resque/unique_by_arity/validation"
 
 # Usage:
 #
 # class MyJob
 #   include UniqueByArity::Cop.new(
 #     arity_for_uniqueness: 1,
+#     arity_for_validation: :warning, # or nil, false, or :error
 #     unique_at_runtime: true,
 #     unique_in_queue: true
 #   )
@@ -57,6 +59,12 @@ module Resque
     end
     def uniqueness_arity_for_uniqueness=(arity_for_uniqueness)
       @uniqueness_configuration.arity_for_uniqueness = arity_for_uniqueness
+    end
+    def uniqueness_arity_for_validation
+      @uniqueness_configuration.arity_validation
+    end
+    def uniqueness_arity_for_validation=(arity_validation)
+      @uniqueness_configuration.arity_validation = arity_validation
     end
     def uniqueness_lock_after_execution_period
       @uniqueness_configuration.lock_after_execution_period
