@@ -29,6 +29,14 @@ module Resque
         end
       end
 
+      def unique_logger
+        logger
+      end
+
+      def unique_log_level
+        log_level
+      end
+
       def log(msg)
         Resque::UniqueByArity.unique_log(msg, self)
       end
