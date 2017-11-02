@@ -1,9 +1,9 @@
 module Resque
   module UniqueByArity
     module Validation
-      def perform(*_)
-        uniq_config.validate_arity(self.to_s, self.method(:perform).super_method) if uniq_config.arity_validation
-        super
+      def self.included(base)
+        @um = base.method(:perform)
+        base.uniq_config.validate_arity(base.to_s, @um) if base.uniq_config.arity_validation
       end
     end
   end

@@ -22,7 +22,7 @@ module Resque
         # This will override methods from both plugins above, if configured for both
         base.send(:extend, uniqueness_cop_module)
         
-        base.singleton_class.prepend Resque::UniqueByArity::Validation
+        base.include Resque::UniqueByArity::Validation if @configuration.arity_validation
       end
     end
   end

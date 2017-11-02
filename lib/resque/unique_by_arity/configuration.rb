@@ -15,7 +15,7 @@ module Resque
         @logger = options.key?(:logger) ? options[:logger] : Logger.new(STDOUT)
         @log_level = options.key?(:log_level) ? options[:log_level] : :debug
         @arity_for_uniqueness = options.key?(:arity_for_uniqueness) ? options[:arity_for_uniqueness] : 1
-        @arity_validation = options.key?(:arity_validation) ? options[:arity_validation] : :warning
+        @arity_validation = options.key?(:arity_validation) ? options[:arity_validation] : false
         raise ArgumentError, "UniqueByArity::Cop.new requires arity_validation values of nil, false, :warning, :error, or an class descending from Exception but the value is #{@arity_validation} (#{@arity_validation.class})" unless VALID_ARITY_VALIDATION_LEVELS.include?(@arity_validation) || @arity_validation.ancestors.include?(Exception)
         @lock_after_execution_period = options.key?(:lock_after_execution_period) ? options[:lock_after_execution_period] : nil
         @unique_at_runtime = options.key?(:unique_at_runtime) ? options[:unique_at_runtime] : false
