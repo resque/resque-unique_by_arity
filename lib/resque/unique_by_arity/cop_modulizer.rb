@@ -25,7 +25,11 @@ module Resque
           if configuration.lock_after_execution_period
             self.instance_variable_set(:@lock_after_execution_period, configuration.lock_after_execution_period)
           end
-          
+
+          if configuration.runtime_lock_timeout
+            self.instance_variable_set(:@runtime_lock_timeout, configuration.runtime_lock_timeout)
+          end
+
           if configuration.unique_in_queue || configuration.unique_across_queues
             ### Gem: resque_solo
             ### Plugin Name: Resque::Plugins::UniqueJob
@@ -76,6 +80,7 @@ module Resque
           if configuration.unique_at_runtime
             # @return [String] the Redis namespace of the key used to enforce uniqueness (at runtime)
             define_method(:runtime_key_namespace) do
+              puts "runtime_key_namespace for #{self}"
               "unique_at_runtime:#{self}"
             end
             # Returns a string, used by Resque::Plugins::UniqueAtRuntime, that will be used as the redis key

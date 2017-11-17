@@ -12,6 +12,7 @@ class MyJob
   include UniqueByArity::Cop.new(
     arity_for_uniqueness: 1,
     lock_after_execution_period: 60,
+    runtime_lock_timeout: 60 * 60 * 24 * 5, # 5 days
     unique_at_runtime: true,
     unique_in_queue: true
   )
@@ -52,6 +53,28 @@ class MyJob
 end
 ```
 
+#### Arity For Uniqueness Validation
+
+Want this gem to tell you when it is misconfigured?  It can.
+
+```ruby
+class MyJob
+  include UniqueByArity::Cop.new(
+    arity_for_uniqueness: 3,
+    arity_validation: :warning, # or :skip, :error, or an error class to be raised, e.g. RuntimeError
+    unique_at_runtime: true
+  )
+  def self.perform(my, cat, opts = {})
+    # Because the third argument is optional the arity valdiation will not approve.
+    # Arguments to be considered for uniqueness should be required arguments.
+    # The warning log might look like:
+    # 
+    #    MyJob.perform has the following required parameters: [:my, :cat], which is not enough to satisfy the configured arity_for_uniqueness of 3
+  end
+end
+```
+
+
 ### Lock After Execution
 
 Give the job a break after it finishes running, and don't allow another of the same, with matching args @ configured arity, to start within X seconds.
@@ -61,6 +84,20 @@ class MyJob
   include UniqueByArity::Cop.new(
     arity_for_uniqueness: 1,
     lock_after_execution_period: 60,
+    unique_at_runtime: true
+  )
+end
+```
+
+### Runtime Lock Timeout
+
+If runtime lock keys get stale, they will expire on their own after some period.  You can set the expiration period on a per class basis.
+
+```ruby
+class MyJob
+  include UniqueByArity::Cop.new(
+    arity_for_uniqueness: 1,
+    runtime_lock_timeout: 60 * 60 * 24 * 5, # 5 days
     unique_at_runtime: true
   )
 end
@@ -119,6 +156,7 @@ class MyJob
   include UniqueByArity::Cop.new(
     arity_for_uniqueness: 1,
     unique_at_runtime: true,
+    runtime_lock_timeout: 60 * 60 * 24 * 5, # 5 days
     unique_in_queue: true
   )
 end
@@ -134,6 +172,7 @@ class MyJob
   include UniqueByArity::Cop.new(
     arity_for_uniqueness: 1,
     unique_at_runtime: true,
+    runtime_lock_timeout: 60 * 60 * 24 * 5, # 5 days
     unique_across_queues: true
   )
 end

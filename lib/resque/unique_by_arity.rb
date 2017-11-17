@@ -25,7 +25,7 @@ require "resque/unique_by_arity/validation"
 module Resque
   module UniqueByArity
     def unique_log(message, config_proxy = nil)
-      config_proxy ||= self
+      config_proxy ||= uniqueness_configuration
       config_proxy.unique_logger.send(config_proxy.unique_log_level, message) if config_proxy.unique_logger
     end
 
@@ -71,6 +71,12 @@ module Resque
     end
     def uniqueness_lock_after_execution_period=(lock_after_execution_period)
       @uniqueness_configuration.lock_after_execution_period = lock_after_execution_period
+    end
+    def uniqueness_runtime_lock_timeout
+      @uniqueness_configuration.runtime_lock_timeout
+    end
+    def uniqueness_runtime_lock_timeout=(runtime_lock_timeout)
+      @uniqueness_configuration.runtime_lock_timeout = runtime_lock_timeout
     end
     def uniqueness_unique_at_runtime
       @uniqueness_configuration.unique_at_runtime
