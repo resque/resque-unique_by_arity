@@ -5,10 +5,15 @@ NOTE:
 Requires `resque_solo` gem, and `resque-unique_at_runtime` gem; the latter is a fork of `resque-lonely_job`.
 Why? `resque-lonely_job` and `resque_solo` can't be used together, because their `redis_key` methods conflict.
 
+Also - you must configure this gem *after* you define the perform class method in your job or the arity validation will not work properly.
+
 Example:
 
 ```ruby
 class MyJob
+  def self.perform(arg)
+    # do stuff
+  end
   include UniqueByArity::Cop.new(
     arity_for_uniqueness: 1,
     lock_after_execution_period: 60,
@@ -43,6 +48,9 @@ Some jobs have parameters that you do not want to consider for determination of 
 
 ```ruby
 class MyJob
+  def self.perform(arg1, arg2, arg3)
+    # do stuff
+  end
   include UniqueByArity::Cop.new(
     arity_for_uniqueness: 3,
     unique_at_runtime: true
@@ -59,6 +67,9 @@ Want this gem to tell you when it is misconfigured?  It can.
 
 ```ruby
 class MyJob
+  def self.perform(arg1, arg2, arg3)
+    # do stuff
+  end
   include UniqueByArity::Cop.new(
     arity_for_uniqueness: 3,
     arity_validation: :warning, # or :skip, :error, or an error class to be raised, e.g. RuntimeError
@@ -81,6 +92,9 @@ Give the job a break after it finishes running, and don't allow another of the s
 
 ```ruby
 class MyJob
+  def self.perform(arg1)
+    # do stuff
+  end
   include UniqueByArity::Cop.new(
     arity_for_uniqueness: 1,
     lock_after_execution_period: 60,
@@ -95,6 +109,9 @@ If runtime lock keys get stale, they will expire on their own after some period.
 
 ```ruby
 class MyJob
+  def self.perform(arg1)
+    # do stuff
+  end
   include UniqueByArity::Cop.new(
     arity_for_uniqueness: 1,
     runtime_lock_timeout: 60 * 60 * 24 * 5, # 5 days
@@ -109,6 +126,9 @@ Prevent your app from running a job that is already running.
 
 ```ruby
 class MyJob
+  def self.perform(arg1)
+    # do stuff
+  end
   include UniqueByArity::Cop.new(
     arity_for_uniqueness: 1,
     unique_at_runtime: true
@@ -124,6 +144,9 @@ Prevent your app from queueing a job that is already queued in the same queue.
 
 ```ruby
 class MyJob
+  def self.perform(arg1)
+    # do stuff
+  end
   include UniqueByArity::Cop.new(
     arity_for_uniqueness: 1,
     unique_in_queue: true
@@ -137,6 +160,9 @@ Prevent your app from queueing a job that is already queued in *any* queue.
 
 ```ruby
 class MyJob
+  def self.perform(arg1)
+    # do stuff
+  end
   include UniqueByArity::Cop.new(
     arity_for_uniqueness: 1,
     unique_across_queues: true
@@ -153,6 +179,9 @@ prevent your app from queueing a job that is already queued in the same queue.
 
 ```ruby
 class MyJob
+  def self.perform(arg1)
+    # do stuff
+  end
   include UniqueByArity::Cop.new(
     arity_for_uniqueness: 1,
     unique_at_runtime: true,
@@ -169,6 +198,9 @@ prevent your app from queueing a job that is already queued in *any* queue.
 
 ```ruby
 class MyJob
+  def self.perform(arg1)
+    # do stuff
+  end
   include UniqueByArity::Cop.new(
     arity_for_uniqueness: 1,
     unique_at_runtime: true,
@@ -188,6 +220,9 @@ Redefine methods to customize all the things.  Warning: This might be crazy-maki
 
 ```ruby
 class MyJob
+  def self.perform(arg1)
+    # do stuff
+  end
   include UniqueByArity::Cop.new(
     #...
   )
