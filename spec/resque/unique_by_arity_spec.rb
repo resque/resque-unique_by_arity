@@ -7,17 +7,17 @@ RSpec.describe Resque::UniqueByArity do
 
   subject {
     Class.new do
-      include Resque::UniqueByArity::Cop.new(
-          arity_for_uniqueness: 1,
-          unique_at_runtime: true,
-          unique_in_queue: true
-      )
       def self.to_s
         "RealFake"
       end
       def self.perform(_req, _opts = {})
         # Does something
       end
+      include Resque::UniqueByArity::Cop.new(
+          arity_for_uniqueness: 1,
+          unique_at_runtime: true,
+          unique_in_queue: true
+      )
     end
   }
   let(:opts) { { } }
@@ -223,8 +223,11 @@ RSpec.describe Resque::UniqueByArity do
           end
         }
         let(:args) { [ opts ] }
+        it "logs" do
+          expect(Resque::UniqueByArity).to receive(:unique_log).with(ColorizedString["RealFake.perform has arity of -1 which will not work with arity_for_uniqueness of 2"].red, anything)
+          subject.perform(*args)
+        end
         it "fails validation" do
-          expect(Resque::UniqueByArity).to receive(:unique_log).with("RealFake.perform has arity of -1 which will not work with arity_for_uniqueness of 2", anything)
           expect { subject.perform(*args) }.to_not raise_error
         end
       end
@@ -246,8 +249,11 @@ RSpec.describe Resque::UniqueByArity do
           end
         }
         let(:args) { [ 1, opts ] }
+        it "logs" do
+          expect(Resque::UniqueByArity).to receive(:unique_log).with(ColorizedString["RealFake.perform has the following required parameters: [:_req], which is not enough to satisfy the configured arity_for_uniqueness of 2"].red, anything)
+          subject.perform(*args)
+        end
         it "fails validation" do
-          expect(Resque::UniqueByArity).to receive(:unique_log).with("RealFake.perform has arity of -2 which will not work with arity_for_uniqueness of 2", anything)
           expect { subject.perform(*args) }.to_not raise_error
         end
       end
@@ -319,8 +325,7 @@ RSpec.describe Resque::UniqueByArity do
         }
         let(:args) { [ 1, opts ] }
         it "fails validation" do
-          expect(Resque::UniqueByArity).to_not receive(:unique_log)
-          expect { subject.perform(*args) }.to raise_error ArgumentError, "RealFake.perform has arity of -2 which will not work with arity_for_uniqueness of 2"
+          expect { subject.perform(*args) }.to raise_error ArgumentError, "RealFake.perform has the following required parameters: [:_req], which is not enough to satisfy the configured arity_for_uniqueness of 2"
         end
       end
       context "no params, arity zero" do
@@ -392,7 +397,7 @@ RSpec.describe Resque::UniqueByArity do
         let(:args) { [ 1, opts ] }
         it "fails validation" do
           expect(Resque::UniqueByArity).to_not receive(:unique_log)
-          expect { subject.perform(*args) }.to raise_error RuntimeError, "RealFake.perform has arity of -2 which will not work with arity_for_uniqueness of 2"
+          expect { subject.perform(*args) }.to raise_error RuntimeError, "RealFake.perform has the following required parameters: [:_req], which is not enough to satisfy the configured arity_for_uniqueness of 2"
         end
       end
       context "no params, arity zero" do

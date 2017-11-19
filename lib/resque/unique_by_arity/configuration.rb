@@ -3,6 +3,7 @@ module Resque
   module UniqueByArity
     class Configuration
       VALID_ARITY_VALIDATION_LEVELS = [ :warning, :error, :skip, nil, false ]
+      SKIPPED_ARITY_VALIDATION_LEVELS = [ :skip, nil, false ]
       attr_accessor :logger
       attr_accessor :log_level
       attr_accessor :arity_for_uniqueness
@@ -48,6 +49,7 @@ module Resque
             logger: logger,
             log_level: log_level,
             arity_for_uniqueness: arity_for_uniqueness,
+            arity_validation: arity_validation,
             lock_after_execution_period: lock_after_execution_period,
             runtime_lock_timeout: runtime_lock_timeout,
             unique_at_runtime: unique_at_runtime,
@@ -57,7 +59,7 @@ module Resque
       end
 
       def skip_arity_validation?
-        arity_validation == :skip
+        SKIPPED_ARITY_VALIDATION_LEVELS.include?(arity_validation)
       end
 
       def validate_arity(klass_string, perform_method)
