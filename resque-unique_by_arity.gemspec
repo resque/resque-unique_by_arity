@@ -23,7 +23,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_runtime_dependency "resque-unique_at_runtime", "~> 2.0"
-  spec.add_runtime_dependency "resque_solo", "~> 0.3"
+  spec.add_runtime_dependency "resque_solo", "0.4.0"
   spec.add_runtime_dependency "colorize", "~> 0.8"
   spec.add_development_dependency "bundler", "~> 1.14"
   spec.add_development_dependency "rake", "~> 10.0"
