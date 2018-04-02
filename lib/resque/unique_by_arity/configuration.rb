@@ -13,6 +13,7 @@ module Resque
       attr_accessor :unique_at_runtime
       attr_accessor :unique_in_queue
       attr_accessor :unique_across_queues
+      attr_accessor :base_klass_name
       def initialize(**options)
         @logger = options.key?(:logger) ? options[:logger] : Logger.new(STDOUT)
         @log_level = options.key?(:log_level) ? options[:log_level] : :debug
@@ -24,11 +25,14 @@ module Resque
         @unique_at_runtime = options.key?(:unique_at_runtime) ? options[:unique_at_runtime] : false
         @unique_in_queue = options.key?(:unique_in_queue) ? options[:unique_in_queue] : false
         @unique_across_queues = options.key?(:unique_across_queues) ? options[:unique_across_queues] : false
+      end
+
+      def validate
         # The default config initialization shouldn't trigger any warnings.
-        if options.keys.length > 0 && @logger
-          log ":arity_for_uniqueness is set to #{@arity_for_uniqueness}, but no uniqueness enforcement was turned on [:unique_at_runtime, :unique_in_queue, :unique_across_queues]" unless @unique_at_runtime || @unique_in_queue || @unique_across_queues
-          log ":lock_after_execution_period is set to #{@lock_after_execution_period}, but :unique_at_runtime is not set" if @lock_after_execution_period && !@unique_at_runtime
-          log ":unique_in_queue and :unique_across_queues should not be set at the same time, as :unique_across_queues will always supercede :unique_in_queue" if @unique_in_queue && @unique_across_queues
+        if base_klass_name && logger
+          log "[#{base_klass_name}] :arity_for_uniqueness is set to #{arity_for_uniqueness}, but no uniqueness enforcement was turned on [:unique_at_runtime, :unique_in_queue, :unique_across_queues]" unless unique_at_runtime || unique_in_queue || unique_across_queues
+          log "[#{base_klass_name}] :lock_after_execution_period is set to #{lock_after_execution_period}, but :unique_at_runtime is not set" if lock_after_execution_period && !unique_at_runtime
+          log "[#{base_klass_name}] :unique_in_queue and :unique_across_queues should not be set at the same time, as :unique_across_queues will always supercede :unique_in_queue" if unique_in_queue && unique_across_queues
         end
       end
 
@@ -43,7 +47,7 @@ module Resque
       def log(msg)
         Resque::UniqueByArity.unique_log(msg, self)
       end
-      
+
       def to_hash
         {
             logger: logger,

@@ -6,6 +6,8 @@ module Resque
       end
       def included(base)
         return unless @configuration
+        @configuration.base_klass_name = base.to_s
+        @configuration.validate
         base.send(:extend, Resque::UniqueByArity)
         base.uniqueness_config_reset(@configuration.dup)
 
@@ -21,7 +23,7 @@ module Resque
         uniqueness_cop_module = Resque::UniqueByArity::CopModulizer.to_mod(@configuration)
         # This will override methods from both plugins above, if configured for both
         base.send(:extend, uniqueness_cop_module)
-        
+
         base.include Resque::UniqueByArity::Validation unless @configuration.skip_arity_validation?
       end
     end
