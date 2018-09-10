@@ -1,4 +1,11 @@
 require "bundler/setup"
+
+require 'byebug' if RbConfig::CONFIG['RUBY_INSTALL_NAME'] == 'ruby'
+
+require 'simplecov'
+SimpleCov.start
+
+# This gem
 require "resque/unique_by_arity"
 
 RSpec.configure do |config|
