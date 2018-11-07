@@ -6,7 +6,7 @@ gem 'resque-unique_at_enqueue', path: '/Users/pboling/Documents/code/intricately
 gem 'resque-unique_at_runtime', path: '/Users/pboling/Documents/code/intricately/resque-unique_at_runtime'
 
 group :test do
-  unless ENV["TRAVIS"]
+  unless ENV['TRAVIS']
     gem 'byebug', '~> 10', platform: :mri, require: false
     gem 'pry', '~> 0', platform: :mri, require: false
     gem 'pry-byebug', '~> 3', platform: :mri, require: false
