@@ -15,8 +15,14 @@ module Resque
                 arg.is_a?(Hash) ? arg.sort : arg
               end
               # what is the configured arity for uniqueness?
-              # minus one because zero indexed
-              uniqueness_args = args[0..(configuration.arity_for_uniqueness - 1)]
+              uniqueness_args = if configuration.arity_for_uniqueness.zero?
+                                  []
+                                else
+                                  # minus one because zero indexed, so
+                                  #   when arity_for_uniqueness is 2 we use args
+                                  #   at indexes 0 and 1.
+                                  args[0..(configuration.arity_for_uniqueness - 1)]
+                                end
               args = { class: job, args: uniqueness_args }
               return [Digest::MD5.hexdigest(Resque.encode(args)), uniqueness_args]
             end
