@@ -10,7 +10,7 @@ RSpec.describe Resque::UniqueByArity do
       def self.perform(_req, _opts = {})
         # Does something
       end
-      include Resque::UniqueByArity::Cop.new(
+      include Resque::Plugins::UniqueByArity.new(
           arity_for_uniqueness: 1,
           unique_at_runtime: true,
           unique_in_queue: true
@@ -75,7 +75,7 @@ RSpec.describe Resque::UniqueByArity do
           def self.perform(_opts = {})
             # Does something
           end
-          include Resque::UniqueByArity::Cop.new(
+          include Resque::Plugins::UniqueByArity.new(
               arity_for_uniqueness: 0,
               unique_at_runtime: true,
               unique_in_queue: true
@@ -103,7 +103,7 @@ RSpec.describe Resque::UniqueByArity do
             def self.perform(_opts = {})
               # Does something
             end
-            include Resque::UniqueByArity::Cop.new(
+            include Resque::Plugins::UniqueByArity.new(
                 arity_for_uniqueness: 2,
                 arity_validation: nil,
                 unique_at_runtime: true,
@@ -133,7 +133,7 @@ RSpec.describe Resque::UniqueByArity do
             def self.perform(_req, _opts = {})
               # Does something
             end
-            include Resque::UniqueByArity::Cop.new(
+            include Resque::Plugins::UniqueByArity.new(
                 arity_for_uniqueness: 2,
                 arity_validation: nil,
                 unique_at_runtime: true,
@@ -163,7 +163,7 @@ RSpec.describe Resque::UniqueByArity do
             def self.perform
               # Does something
             end
-            include Resque::UniqueByArity::Cop.new(
+            include Resque::Plugins::UniqueByArity.new(
                 arity_for_uniqueness: 0,
                 arity_validation: nil,
                 unique_at_runtime: true,
@@ -197,7 +197,7 @@ RSpec.describe Resque::UniqueByArity do
             def self.perform(_opts = {})
               # Does something
             end
-            include Resque::UniqueByArity::Cop.new(
+            include Resque::Plugins::UniqueByArity.new(
                 arity_for_uniqueness: 2,
                 arity_validation: nil,
                 unique_at_runtime: true,
@@ -227,7 +227,7 @@ RSpec.describe Resque::UniqueByArity do
             def self.perform(_req, _opts = {})
               # Does something
             end
-            include Resque::UniqueByArity::Cop.new(
+            include Resque::Plugins::UniqueByArity.new(
                 arity_for_uniqueness: 2,
                 arity_validation: nil,
                 unique_at_runtime: true,
@@ -257,7 +257,7 @@ RSpec.describe Resque::UniqueByArity do
             def self.perform
               # Does something
             end
-            include Resque::UniqueByArity::Cop.new(
+            include Resque::Plugins::UniqueByArity.new(
                 arity_for_uniqueness: 0,
                 arity_validation: nil,
                 unique_at_runtime: true,
@@ -291,7 +291,7 @@ RSpec.describe Resque::UniqueByArity do
             def self.perform(_opts = {})
               # Does something
             end
-            include Resque::UniqueByArity::Cop.new(
+            include Resque::Plugins::UniqueByArity.new(
                 arity_for_uniqueness: 2,
                 arity_validation: :warning,
                 unique_at_runtime: true,
@@ -321,7 +321,7 @@ RSpec.describe Resque::UniqueByArity do
             def self.perform(_req, _opts = {})
               # Does something
             end
-            include Resque::UniqueByArity::Cop.new(
+            include Resque::Plugins::UniqueByArity.new(
                 arity_for_uniqueness: 2,
                 arity_validation: :warning,
                 unique_at_runtime: true,
@@ -351,7 +351,7 @@ RSpec.describe Resque::UniqueByArity do
             def self.perform
               # Does something
             end
-            include Resque::UniqueByArity::Cop.new(
+            include Resque::Plugins::UniqueByArity.new(
                 arity_for_uniqueness: 0,
                 arity_validation: :warning,
                 unique_at_runtime: true,
@@ -385,7 +385,7 @@ RSpec.describe Resque::UniqueByArity do
             def self.perform(_opts = {})
               # Does something
             end
-            include Resque::UniqueByArity::Cop.new(
+            include Resque::Plugins::UniqueByArity.new(
                 arity_for_uniqueness: 2,
                 arity_validation: :error,
                 unique_at_runtime: true,
@@ -415,7 +415,7 @@ RSpec.describe Resque::UniqueByArity do
             def self.perform(_req, _opts = {})
               # Does something
             end
-            include Resque::UniqueByArity::Cop.new(
+            include Resque::Plugins::UniqueByArity.new(
                 arity_for_uniqueness: 2,
                 arity_validation: :error,
                 unique_at_runtime: true,
@@ -445,7 +445,7 @@ RSpec.describe Resque::UniqueByArity do
             def self.perform
               # Does something
             end
-            include Resque::UniqueByArity::Cop.new(
+            include Resque::Plugins::UniqueByArity.new(
                 arity_for_uniqueness: 0,
                 arity_validation: :error,
                 unique_at_runtime: true,
@@ -479,7 +479,7 @@ RSpec.describe Resque::UniqueByArity do
             def self.perform(_opts = {})
               # Does something
             end
-            include Resque::UniqueByArity::Cop.new(
+            include Resque::Plugins::UniqueByArity.new(
                 arity_for_uniqueness: 2,
                 arity_validation: RuntimeError,
                 unique_at_runtime: true,
@@ -509,7 +509,7 @@ RSpec.describe Resque::UniqueByArity do
             def self.perform(_req, _opts = {})
               # Does something
             end
-            include Resque::UniqueByArity::Cop.new(
+            include Resque::Plugins::UniqueByArity.new(
                 arity_for_uniqueness: 2,
                 arity_validation: RuntimeError,
                 unique_at_runtime: true,
@@ -539,7 +539,7 @@ RSpec.describe Resque::UniqueByArity do
             def self.perform
               # Does something
             end
-            include Resque::UniqueByArity::Cop.new(
+            include Resque::Plugins::UniqueByArity.new(
                 arity_for_uniqueness: 0,
                 arity_validation: RuntimeError,
                 unique_at_runtime: true,
@@ -561,7 +561,7 @@ RSpec.describe Resque::UniqueByArity do
   context 'module included at top of class definition' do
     let(:instance) do
       Class.new do
-        include Resque::UniqueByArity::Cop.new(
+        include Resque::Plugins::UniqueByArity.new(
             arity_for_uniqueness: 0,
             arity_validation: :warning,
             unique_at_runtime: true,
@@ -597,7 +597,7 @@ RSpec.describe Resque::UniqueByArity do
           def self.perform(_req1, _req2, _req3, _req4)
             # Does something
           end
-          include Resque::UniqueByArity::Cop.new(
+          include Resque::Plugins::UniqueByArity.new(
               arity_for_uniqueness: 1,
               unique_at_runtime: true,
               unique_in_queue: true

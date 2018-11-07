@@ -243,19 +243,19 @@ class MyJob
   # Core hashing algorithm for a job used for *all 3 types* of uniqueness 
   # @return [Array<String, arguments>], where the string is the unique digest, and arguments are the specific args that were used to calculate the digest 
   def self.redis_unique_hash(payload)
-    # ... See source @ lib/resque/unique_by_arity/cop_modulizer.rb 
+    modulizer.rb
     #       for how the built-in version works
     # uniqueness_args = payload["args"] # over simplified & ignoring arity
     # args = { class: job, args: uniqueness_args }
     # return [Digest::MD5.hexdigest(Resque.encode(args)), uniqueness_args]
   end
 
-  # Prefix to the unique key for a job for resque_solo, queue time uniqueness 
+  unique_at_enqueue
   def self.solo_redis_key_prefix
     # "unique_job:#{self}" # <= default value
   end
 
-  # Prefix to the unique redis key for a job for resque_solo, queue time uniqueness 
+  unique_at_enqueue
   def self.solo_key_namespace(queue = nil)
     # definition depends on which type of uniqueness is chosen, be careful if you customize
     # "solo:queue:#{queue}:job" # <= is for unique within queue at queue time

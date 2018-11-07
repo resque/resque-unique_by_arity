@@ -1,6 +1,6 @@
 module Resque
   module UniqueByArity
-    module CopModulizer
+    module Modulizer
       def self.to_mod(configuration)
         Module.new do
           if configuration.unique_in_queue || configuration.unique_at_runtime || configuration.unique_across_queues
@@ -41,7 +41,7 @@ module Resque
           end
 
           if configuration.unique_in_queue || configuration.unique_across_queues
-            ### Gem: resque_solo
+            ### Gem: unique_at_enqueue
             ### Plugin Name: Resque::Plugins::UniqueJob
             ### Provides: Queue-time uniqueness for a single queue, or across queues
             #
@@ -93,10 +93,10 @@ module Resque
               "unique_at_runtime:#{self}"
             end
             # Returns a string, used by Resque::Plugins::UniqueAtRuntime, that will be used as the redis key
-            # The versions of redis_key from resque_solo and resque-lonely_job are incompatible.
+            # The versions of redis_key from unique_at_enqueue and resque-lonely_job are incompatible.
             # So we forked resque-lonely_job, change the name of the method so it would not conflict,
             #   and now we can override it, and fix the params to be compatible with the redis_key
-            #   from resque_solo
+            #   from unique_at_enqueue
             # Does not need any customization for arity, because it funnels down to redis_key,
             #   and we handle the arity option there
             # @return [String] the key used to enforce loneliness (uniqueness at runtime)

@@ -41,12 +41,12 @@ Style/Documentation:
   Exclude:
     - 'spec/**/*'
     - 'test/**/*'
-    - 'lib/resque/resque_solo/queue.rb'
+    - 'lib/resque/unique_at_enqueue/queue.rb'
     - 'lib/resque/unique_at_runtime/resque_ext/resque.rb'
     - 'lib/resque/unique_by_arity.rb'
     - 'lib/resque/unique_by_arity/configuration.rb'
     - 'lib/resque/unique_by_arity/cop.rb'
-    - 'lib/resque/unique_by_arity/cop_modulizer.rb'
+    - 'lib/resque/unique_by_arity/modulizer.rb'
     - 'lib/resque/unique_by_arity/validation.rb'
 
 # Offense count: 3
@@ -66,7 +66,7 @@ Style/IfInsideElse:
 Style/IfUnlessModifier:
   Exclude:
     - 'lib/resque/unique_by_arity/configuration.rb'
-    - 'lib/resque/unique_by_arity/cop_modulizer.rb'
+    - 'lib/resque/unique_by_arity/modulizer.rb'
 
 # Offense count: 79
 # Configuration parameters: AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives, IgnoredPatterns.
