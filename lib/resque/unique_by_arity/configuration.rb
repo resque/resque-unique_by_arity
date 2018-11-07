@@ -10,6 +10,7 @@ module Resque
       attr_accessor :arity_validation
       attr_accessor :lock_after_execution_period
       attr_accessor :runtime_lock_timeout
+      attr_accessor :runtime_requeue_interval
       attr_accessor :unique_at_runtime
       attr_accessor :unique_in_queue
       attr_accessor :unique_across_queues
@@ -22,6 +23,7 @@ module Resque
         raise ArgumentError, "UniqueByArity::Cop.new requires arity_validation values of #{arity_validation.inspect}, or a class inheriting from Exception, but the value is #{@arity_validation} (#{@arity_validation.class})" unless VALID_ARITY_VALIDATION_LEVELS.include?(@arity_validation) || !@arity_validation.respond_to?(:ancestors) || @arity_validation.ancestors.include?(Exception)
         @lock_after_execution_period = options.key?(:lock_after_execution_period) ? options[:lock_after_execution_period] : nil
         @runtime_lock_timeout = options.key?(:runtime_lock_timeout) ? options[:runtime_lock_timeout] : nil
+        @runtime_requeue_interval = options.key?(:runtime_requeue_interval) ? options[:runtime_requeue_interval] : nil
         @unique_at_runtime = options.key?(:unique_at_runtime) ? options[:unique_at_runtime] : false
         @unique_in_queue = options.key?(:unique_in_queue) ? options[:unique_in_queue] : false
         @unique_across_queues = options.key?(:unique_across_queues) ? options[:unique_across_queues] : false
@@ -31,7 +33,9 @@ module Resque
         # The default config initialization shouldn't trigger any warnings.
         if base_klass_name && logger
           log "[#{base_klass_name}] :arity_for_uniqueness is set to #{arity_for_uniqueness}, but no uniqueness enforcement was turned on [:unique_at_runtime, :unique_in_queue, :unique_across_queues]" unless unique_at_runtime || unique_in_queue || unique_across_queues
-          log "[#{base_klass_name}] :lock_after_execution_period is set to #{lock_after_execution_period}, but :unique_at_runtime is not set" if lock_after_execution_period && !unique_at_runtime
+          log "[#{base_klass_name}] :lock_after_execution_period is set to #{lock_after_execution_period}, but :unique_at_runtime is not set" if lock_after_execution_period && !(unique_in_queue || unique_across_queues)
+          log "[#{base_klass_name}] :runtime_lock_timeout is set to #{runtime_lock_timeout}, but :unique_at_runtime is not set" if runtime_lock_timeout && !unique_at_runtime
+          log "[#{base_klass_name}] :runtime_requeue_interval is set to #{runtime_requeue_interval}, but :unique_at_runtime is not set" if runtime_requeue_interval && !unique_at_runtime
           log "[#{base_klass_name}] :unique_in_queue and :unique_across_queues should not be set at the same time, as :unique_across_queues will always supercede :unique_in_queue" if unique_in_queue && unique_across_queues
         end
       end
