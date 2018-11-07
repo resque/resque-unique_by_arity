@@ -2,8 +2,8 @@ require 'logger'
 module Resque
   module UniqueByArity
     class Configuration
-      VALID_ARITY_VALIDATION_LEVELS = [ :warning, :error, :skip, nil, false ]
-      SKIPPED_ARITY_VALIDATION_LEVELS = [ :skip, nil, false ]
+      VALID_ARITY_VALIDATION_LEVELS = [:warning, :error, :skip, nil, false].freeze
+      SKIPPED_ARITY_VALIDATION_LEVELS = [:skip, nil, false].freeze
       attr_accessor :logger
       attr_accessor :log_level
       attr_accessor :arity_for_uniqueness
@@ -21,6 +21,7 @@ module Resque
         @arity_for_uniqueness = options.key?(:arity_for_uniqueness) ? options[:arity_for_uniqueness] : 1
         @arity_validation = options.key?(:arity_validation) ? options[:arity_validation] : :warning
         raise ArgumentError, "UniqueByArity::Cop.new requires arity_validation values of #{arity_validation.inspect}, or a class inheriting from Exception, but the value is #{@arity_validation} (#{@arity_validation.class})" unless VALID_ARITY_VALIDATION_LEVELS.include?(@arity_validation) || !@arity_validation.respond_to?(:ancestors) || @arity_validation.ancestors.include?(Exception)
+
         @lock_after_execution_period = options.key?(:lock_after_execution_period) ? options[:lock_after_execution_period] : nil
         @runtime_lock_timeout = options.key?(:runtime_lock_timeout) ? options[:runtime_lock_timeout] : nil
         @runtime_requeue_interval = options.key?(:runtime_requeue_interval) ? options[:runtime_requeue_interval] : nil
@@ -54,15 +55,15 @@ module Resque
 
       def to_hash
         {
-            logger: logger,
-            log_level: log_level,
-            arity_for_uniqueness: arity_for_uniqueness,
-            arity_validation: arity_validation,
-            lock_after_execution_period: lock_after_execution_period,
-            runtime_lock_timeout: runtime_lock_timeout,
-            unique_at_runtime: unique_at_runtime,
-            unique_in_queue: unique_in_queue,
-            unique_across_queues: unique_across_queues
+          logger: logger,
+          log_level: log_level,
+          arity_for_uniqueness: arity_for_uniqueness,
+          arity_validation: arity_validation,
+          lock_after_execution_period: lock_after_execution_period,
+          runtime_lock_timeout: runtime_lock_timeout,
+          unique_at_runtime: unique_at_runtime,
+          unique_in_queue: unique_in_queue,
+          unique_across_queues: unique_across_queues
         }
       end
 
@@ -72,6 +73,7 @@ module Resque
 
       def validate_arity(klass_string, perform_method)
         return true if skip_arity_validation?
+
         # method.arity -
         #   Returns an indication of the number of arguments accepted by a method.
         #   Returns a non-negative integer for methods that take a fixed number of arguments.
@@ -87,7 +89,7 @@ module Resque
                   "#{klass_string}.#{perform_method.name} has arity of #{perform_method.arity} which will not work with arity_for_uniqueness of #{arity_for_uniqueness}"
                 end
               else
-                if (perform_method.arity).abs < arity_for_uniqueness
+                if perform_method.arity.abs < arity_for_uniqueness
                   # parform(a, b, c, opts = {}) # => arity == -4
                   #   and in this case arity for uniqueness can be 0, 1, 2, or 3, because 4 of the arguments are required
                   "#{klass_string}.#{perform_method.name} has arity of #{perform_method.arity} which will not work with arity_for_uniqueness of #{arity_for_uniqueness}"
@@ -95,14 +97,16 @@ module Resque
                   "#{klass_string}.#{perform_method.name} has the following required parameters: #{required_parameter_names}, which is not enough to satisfy the configured arity_for_uniqueness of #{arity_for_uniqueness}"
                 end
               end
-        case arity_validation
+        if msg
+          case arity_validation
           when :warning then
             log(ColorizedString[msg].red)
           when :error then
             raise ArgumentError, msg
           else
             raise arity_validation, msg
-        end if msg
+          end
+        end
       end
     end
   end
