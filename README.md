@@ -24,7 +24,7 @@ Why? `resque-lonely_job` and `resque_solo` can't be used together, because their
 
 ## Important Note
 
-You must configure this gem *after* you define the perform class method in your job or the arity validation will not work properly.
+You must configure this gem *after* you define the perform class method in your job or an error will be raised thanks to `perform` not having been defined yet.
 
 Example:
 
@@ -67,16 +67,13 @@ Some jobs have parameters that you do not want to consider for determination of 
 
 ```ruby
 class MyJob
-  def self.perform(arg1, arg2, arg3)
-    # do stuff
+  def self.perform(my, cat, is, the, best, opts = {})
+    # Only the first 3: [my, cat, is] will be considered for determination of uniqueness
   end
   include UniqueByArity::Cop.new(
     arity_for_uniqueness: 3,
     unique_at_runtime: true
   )
-  def self.perform(my, cat, is, the, best, opts = {})
-    # Only the first 3: [my, cat, is] will be considered for determination of uniqueness
-  end
 end
 ```
 
@@ -86,14 +83,6 @@ Want this gem to tell you when it is misconfigured?  It can.
 
 ```ruby
 class MyJob
-  def self.perform(arg1, arg2, arg3)
-    # do stuff
-  end
-  include UniqueByArity::Cop.new(
-    arity_for_uniqueness: 3,
-    arity_validation: :warning, # or :skip, :error, or an error class to be raised, e.g. RuntimeError
-    unique_at_runtime: true
-  )
   def self.perform(my, cat, opts = {})
     # Because the third argument is optional the arity valdiation will not approve.
     # Arguments to be considered for uniqueness should be required arguments.
@@ -101,6 +90,11 @@ class MyJob
     # 
     #    MyJob.perform has the following required parameters: [:my, :cat], which is not enough to satisfy the configured arity_for_uniqueness of 3
   end
+  include UniqueByArity::Cop.new(
+    arity_for_uniqueness: 3,
+    arity_validation: :warning, # or :skip, :error, or an error class to be raised, e.g. RuntimeError
+    unique_at_runtime: true
+  )
 end
 ```
 
@@ -231,7 +225,7 @@ end
 
 ### Debugging
 
-Run your worker with `RESQUE_DEBUG=true` to see payloads printed before they are used to determine uniqueness.
+Run your worker with `RESQUE_DEBUG=true` to see payloads printed before they are used to determine uniqueness, as well as a lot of other debugging output.
 
 ### Customize Unique Keys Per Job
 
