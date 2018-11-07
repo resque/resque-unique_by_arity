@@ -4,8 +4,10 @@ module Resque
       def initialize(**config)
         @configuration = Resque::UniqueByArity::Configuration.new(**config)
       end
+
       def included(base)
         return unless @configuration
+
         @configuration.base_klass_name = base.to_s
         @configuration.validate
         base.send(:extend, Resque::UniqueByArity)
