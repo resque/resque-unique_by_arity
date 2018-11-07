@@ -8,9 +8,9 @@ module Resque
             define_method(:redis_unique_hash) do |payload|
               payload = Resque.decode(Resque.encode(payload))
               Resque::UniqueByArity.unique_log "#{ColorizedString['[Arity]'].blue} payload is #{payload.inspect}" if ENV['RESQUE_DEBUG'] == 'true'
-              job  = payload["class"]
+              job  = payload['class']
               # It seems possible that some jobs may not have an "args" key in the payload.
-              args = payload["args"] || []
+              args = payload['args'] || []
               args.map! do |arg|
                 arg.is_a?(Hash) ? arg.sort : arg
               end
@@ -29,11 +29,15 @@ module Resque
           end
 
           if configuration.lock_after_execution_period
-            self.instance_variable_set(:@lock_after_execution_period, configuration.lock_after_execution_period)
+            instance_variable_set(:@lock_after_execution_period, configuration.lock_after_execution_period)
           end
 
           if configuration.runtime_lock_timeout
-            self.instance_variable_set(:@runtime_lock_timeout, configuration.runtime_lock_timeout)
+            instance_variable_set(:@runtime_lock_timeout, configuration.runtime_lock_timeout)
+          end
+
+          if configuration.runtime_requeue_interval
+            instance_variable_set(:@runtime_requeue_interval, configuration.runtime_requeue_interval)
           end
 
           if configuration.unique_in_queue || configuration.unique_across_queues
@@ -62,10 +66,10 @@ module Resque
             # @return [Fixnum] number of keys that were deleted
             define_method(:purge_unique_queued_redis_keys) do
               # solo_key_namespace may or may not ignore the queue passed in, depending on config.
-              key_match = "#{solo_key_namespace(self.instance_variable_get(:@queue))}:#{solo_redis_key_prefix}:*"
+              key_match = "#{solo_key_namespace(instance_variable_get(:@queue))}:#{solo_redis_key_prefix}:*"
               keys = Resque.redis.keys(key_match)
               Resque::UniqueByArity.unique_log "#{ColorizedString['[Arity][Queue-Time]'].blue} Purging #{keys.length} keys from #{ColorizedString[key_match].red}"
-              Resque.redis.del keys if keys.length > 0
+              Resque.redis.del keys unless keys.empty?
             end
             if configuration.unique_in_queue
               # @return [String] the Redis namespace of the key used to enforce uniqueness (at queue-time)
@@ -75,7 +79,7 @@ module Resque
             elsif configuration.unique_across_queues
               # @return [String] the Redis namespace of the key used to enforce uniqueness (at queue-time)
               define_method(:solo_key_namespace) do |_queue = nil|
-                "solo:across_queues:job"
+                'solo:across_queues:job'
               end
             end
           end
@@ -97,7 +101,7 @@ module Resque
             #   and we handle the arity option there
             # @return [String] the key used to enforce loneliness (uniqueness at runtime)
             define_method(:unique_at_runtime_redis_key) do |*args|
-              unique_hash, args_for_uniqueness = redis_unique_hash({"class" => self.to_s, "args" => args})
+              unique_hash, args_for_uniqueness = redis_unique_hash('class' => to_s, 'args' => args)
               key = "#{runtime_key_namespace}:#{unique_hash}"
               Resque::UniqueByArity.unique_log "#{ColorizedString['[Arity][Run-Time]'].yellow} #{self}.unique_at_runtime_redis_key for #{args_for_uniqueness} is: #{ColorizedString[key].yellow}" if ENV['RESQUE_DEBUG'] == 'true'
               key
@@ -107,7 +111,7 @@ module Resque
               key_match = "#{runtime_key_namespace}:*"
               keys = Resque.redis.keys(key_match)
               Resque::UniqueByArity.unique_log "#{ColorizedString['[Arity][Run-Time]'].blue} Purging #{keys.length} keys from #{ColorizedString[key_match].red}"
-              Resque.redis.del keys if keys.length > 0
+              Resque.redis.del keys unless keys.empty?
             end
           end
         end
