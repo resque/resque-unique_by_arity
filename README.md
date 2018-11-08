@@ -289,20 +289,20 @@ class MyJob
   end
 
   unique_in_queue
-  def self.solo_redis_key_prefix
+  def self.unique_at_runtime_redis_key_prefix
     # "unique_job:#{self}" # <= default value
   end
 
   unique_in_queue
-  def self.solo_key_namespace(queue = nil)
+  def self.unique_at_runtime_key_namespace(queue = nil)
     # definition depends on which type of uniqueness is chosen, be careful if you customize
     # "r-uiq:queue:#{queue}:job" # <= is for unique within queue at queue time
     # "r-uiq:across_queues:job" # <= is for unique across all queues at queue time
   end
   
-  def self.unique_at_queue_time_redis_key(queue, payload)
+  def self.unique_in_queue_redis_key(queue, payload)
     # unique_hash, _args_for_uniqueness = redis_unique_hash(payload)
-    # "#{solo_key_namespace(queue)}:#{solo_redis_key_prefix}:#{unique_hash}"
+    # "#{unique_at_runtime_key_namespace(queue)}:#{unique_at_runtime_redis_key_prefix}:#{unique_hash}"
   end
   
   def self.runtime_key_namespace

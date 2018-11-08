@@ -35,24 +35,24 @@ RSpec.describe Resque::UniqueByArity do
     end
   end
 
-  context '.solo_redis_key_prefix' do
+  context '.unique_at_runtime_redis_key_prefix' do
     it 'gives unique_job:RealFake' do
-      expect(subject.solo_redis_key_prefix).to eq 'unique_job:RealFake'
+      expect(subject.unique_at_runtime_redis_key_prefix).to eq 'unique_job:RealFake'
     end
   end
 
-  context '.solo_key_namespace' do
+  context '.unique_at_runtime_key_namespace' do
     context 'with bogus queue' do
       it 'gives r-uiq:queue:bogus:job' do
-        expect(subject.solo_key_namespace('bogus')).to eq 'r-uiq:queue:bogus:job'
+        expect(subject.unique_at_runtime_key_namespace('bogus')).to eq 'r-uiq:queue:bogus:job'
       end
     end
   end
 
-  context '.unique_at_queue_time_redis_key' do
+  context '.unique_in_queue_redis_key' do
     context 'with bogus queue' do
       it 'gives r-uiq:queue:bogus:job:unique_job:RealFake:ef0f8a28f2c84e48211489121112e67f' do
-        expect(subject.unique_at_queue_time_redis_key('bogus', class: subject.to_s, args: args)).to eq 'r-uiq:queue:bogus:job:unique_job:RealFake:ef0f8a28f2c84e48211489121112e67f'
+        expect(subject.unique_in_queue_redis_key('bogus', class: subject.to_s, args: args)).to eq 'r-uiq:queue:bogus:job:unique_job:RealFake:ef0f8a28f2c84e48211489121112e67f'
       end
     end
   end
@@ -675,7 +675,7 @@ RSpec.describe Resque::UniqueByArity do
     context 'with debug_mode => true' do
       subject { described_class.unique_debug('warbler', Resque::UniqueByArity::Configuration.new(debug_mode: true, logger: logger, log_level: :info)) }
       it('logs') do
-        expect(logger).to receive(:debug)#.with(/R-UBA.*warbler/)
+        expect(logger).to receive(:debug).with(/R-UBA.*warbler/)
         block_is_expected.not_to raise_error
       end
     end
@@ -683,7 +683,7 @@ RSpec.describe Resque::UniqueByArity do
       let(:resque_debug) { 'arity' }
       subject { described_class.unique_debug('warbler', Resque::UniqueByArity::Configuration.new(logger: logger, log_level: :info)) }
       it('logs') do
-        expect(logger).to receive(:debug)#.with(/R-UBA.*warbler/)
+        expect(logger).to receive(:debug).with(/R-UBA.*warbler/)
         block_is_expected.not_to raise_error
       end
     end

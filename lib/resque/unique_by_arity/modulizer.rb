@@ -57,7 +57,7 @@ module Resque
             ### Provides: Queue-time uniqueness for a single queue, or across queues
             #
             # Returns a string, used by Resque::Plugins::UniqueJob, that will be used as the prefix to the redis key
-            define_method(:solo_redis_key_prefix) do
+            define_method(:unique_at_runtime_redis_key_prefix) do
               "unique_job:#{self}"
             end
             #
@@ -67,29 +67,29 @@ module Resque
             # Payload is what Resque stored for this job along with the job's class name:
             #   a hash containing :class and :args
             # @return [String] the key used to enforce uniqueness (at queue-time)
-            define_method(:unique_at_queue_time_redis_key) do |queue, payload|
+            define_method(:unique_in_queue_redis_key) do |queue, payload|
               unique_hash, args_for_uniqueness = redis_unique_hash(payload)
-              key = "#{solo_key_namespace(queue)}:#{solo_redis_key_prefix}:#{unique_hash}"
-              Resque::UniqueByArity.unique_debug("#{self}.unique_at_queue_time_redis_key for #{args_for_uniqueness} is: #{ColorizedString[key].green}")
+              key = "#{unique_at_runtime_key_namespace(queue)}:#{unique_at_runtime_redis_key_prefix}:#{unique_hash}"
+              Resque::UniqueByArity.unique_debug("#{self}.unique_in_queue_redis_key for #{args_for_uniqueness} is: #{ColorizedString[key].green}")
               key
             end
             #
             # @return [Fixnum] number of keys that were deleted
             define_method(:purge_unique_queued_redis_keys) do
-              # solo_key_namespace may or may not ignore the queue passed in, depending on config.
-              key_match = "#{solo_key_namespace(instance_variable_get(:@queue))}:#{solo_redis_key_prefix}:*"
+              # unique_at_runtime_key_namespace may or may not ignore the queue passed in, depending on config.
+              key_match = "#{unique_at_runtime_key_namespace(instance_variable_get(:@queue))}:#{unique_at_runtime_redis_key_prefix}:*"
               keys = Resque.redis.keys(key_match)
               Resque::UniqueByArity.unique_log("#{Resque::UniqueByArity::PLUGIN_TAG}#{Resque::UniqueInQueue::PLUGIN_TAG} Purging #{keys.length} keys from #{ColorizedString[key_match].red}")
               Resque.redis.del keys unless keys.empty?
             end
             if configuration.unique_in_queue
               # @return [String] the Redis namespace of the key used to enforce uniqueness (at queue-time)
-              define_method(:solo_key_namespace) do |queue = nil|
+              define_method(:unique_at_runtime_key_namespace) do |queue = nil|
                 "#{configuration.unique_in_queue_key_base}:queue:#{queue}:job"
               end
             elsif configuration.unique_across_queues
               # @return [String] the Redis namespace of the key used to enforce uniqueness (at queue-time)
-              define_method(:solo_key_namespace) do |_queue = nil|
+              define_method(:unique_at_runtime_key_namespace) do |_queue = nil|
                 "#{configuration.unique_in_queue_key_base}:across_queues:job"
               end
             end
