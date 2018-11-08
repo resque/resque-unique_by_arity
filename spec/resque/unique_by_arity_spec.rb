@@ -43,29 +43,29 @@ RSpec.describe Resque::UniqueByArity do
 
   context '.solo_key_namespace' do
     context 'with bogus queue' do
-      it 'gives solo:queue:bogus:job' do
-        expect(subject.solo_key_namespace('bogus')).to eq 'solo:queue:bogus:job'
+      it 'gives r-uiq:queue:bogus:job' do
+        expect(subject.solo_key_namespace('bogus')).to eq 'r-uiq:queue:bogus:job'
       end
     end
   end
 
   context '.unique_at_queue_time_redis_key' do
     context 'with bogus queue' do
-      it 'gives solo:queue:bogus:job:unique_job:RealFake:ef0f8a28f2c84e48211489121112e67f' do
-        expect(subject.unique_at_queue_time_redis_key('bogus', class: subject.to_s, args: args)).to eq 'solo:queue:bogus:job:unique_job:RealFake:ef0f8a28f2c84e48211489121112e67f'
+      it 'gives r-uiq:queue:bogus:job:unique_job:RealFake:ef0f8a28f2c84e48211489121112e67f' do
+        expect(subject.unique_at_queue_time_redis_key('bogus', class: subject.to_s, args: args)).to eq 'r-uiq:queue:bogus:job:unique_job:RealFake:ef0f8a28f2c84e48211489121112e67f'
       end
     end
   end
 
   context '.runtime_key_namespace' do
-    it 'gives unique_at_runtime:RealFake' do
-      expect(subject.runtime_key_namespace).to eq 'unique_at_runtime:RealFake'
+    it 'gives r-uar:RealFake' do
+      expect(subject.runtime_key_namespace).to eq 'r-uar:RealFake'
     end
   end
 
   context '.unique_at_runtime_redis_key' do
-    it 'gives unique_at_runtime:RealFake:ef0f8a28f2c84e48211489121112e67f' do
-      expect(subject.unique_at_runtime_redis_key(*args)).to eq 'unique_at_runtime:RealFake:ef0f8a28f2c84e48211489121112e67f'
+    it 'gives r-uar:RealFake:ef0f8a28f2c84e48211489121112e67f' do
+      expect(subject.unique_at_runtime_redis_key(*args)).to eq 'r-uar:RealFake:ef0f8a28f2c84e48211489121112e67f'
     end
     context 'when perform has no required args' do
       let(:instance) do
@@ -86,8 +86,8 @@ RSpec.describe Resque::UniqueByArity do
       end
       let(:args) { [opts] }
 
-      it 'gives unique_at_runtime:RealFake:b7784ea79e21dc5d1a2fab675a505d53' do
-        expect(subject.unique_at_runtime_redis_key(*args)).to eq 'unique_at_runtime:RealFake:b7784ea79e21dc5d1a2fab675a505d53'
+      it 'gives r-uar:RealFake:b7784ea79e21dc5d1a2fab675a505d53' do
+        expect(subject.unique_at_runtime_redis_key(*args)).to eq 'r-uar:RealFake:b7784ea79e21dc5d1a2fab675a505d53'
       end
     end
   end
@@ -657,6 +657,42 @@ RSpec.describe Resque::UniqueByArity do
 
       it 'is positive' do
         expect(subject.method(:perform).arity).to eq(4)
+      end
+    end
+  end
+
+  let(:unique_log_level) { :info }
+  let(:logger) { Logger.new('/dev/null') }
+  describe '.unique_log' do
+    subject { described_class.unique_log('warbler', Resque::UniqueByArity::Configuration.new(logger: logger, log_level: :info)) }
+    it('logs') do
+      expect(logger).to receive(:info).with('warbler')
+      block_is_expected.not_to raise_error
+    end
+  end
+
+  describe '.unique_debug' do
+    context 'with debug_mode => true' do
+      subject { described_class.unique_debug('warbler', Resque::UniqueByArity::Configuration.new(debug_mode: true, logger: logger, log_level: :info)) }
+      it('logs') do
+        expect(logger).to receive(:debug)#.with(/R-UBA.*warbler/)
+        block_is_expected.not_to raise_error
+      end
+    end
+    context 'with ENV["RESQUE_DEBUG"] = "arity"', :env_resque_stubbed do
+      let(:resque_debug) { 'arity' }
+      subject { described_class.unique_debug('warbler', Resque::UniqueByArity::Configuration.new(logger: logger, log_level: :info)) }
+      it('logs') do
+        expect(logger).to receive(:debug)#.with(/R-UBA.*warbler/)
+        block_is_expected.not_to raise_error
+      end
+    end
+    context 'with ENV["RESQUE_DEBUG"] = nil', :env_resque_stubbed do
+      let(:resque_debug) { nil }
+      subject { described_class.unique_debug('warbler', Resque::UniqueByArity::Configuration.new(logger: logger, log_level: :info)) }
+      it('does not logs') do
+        expect(logger).not_to receive(:debug)
+        block_is_expected.not_to raise_error
       end
     end
   end

@@ -9,10 +9,10 @@ Gem::Specification.new do |spec|
   spec.email         = ['peter.boling@gmail.com']
   spec.license       = 'MIT'
 
-  spec.summary       = 'Configure resque-unique_at_enqueue and resque-unique_at_runtime uniqueness by arity of perform method'
-  spec.description   = 'Configure resque-unique_at_enqueue and resque-unique_at_runtime uniqueness by arity of perform method, with automated cleanup tools'
+  spec.summary       = 'Configure resque-unique_in_queue and resque-unique_at_runtime uniqueness by arity of perform method'
+  spec.description   = 'Configure resque-unique_in_queue and resque-unique_at_runtime uniqueness by arity of perform method, with automated cleanup tools'
   spec.homepage      = 'https://github.com/pboling/resque-unique_by_arity'
-  spec.required_ruby_version = '>= 2.0.0'
+  spec.required_ruby_version = '>= 2.3.0'
 
   spec.files = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(test|spec|features)/})
@@ -21,7 +21,7 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency 'colorize', '~> 0.8'
   spec.add_runtime_dependency 'resque', '>= 1.2'
-  spec.add_runtime_dependency 'resque-unique_at_enqueue', '~> 1.0'
+  spec.add_runtime_dependency 'resque-unique_in_queue', '~> 1.0'
   spec.add_runtime_dependency 'resque-unique_at_runtime', '~> 2.0'
 
   spec.add_development_dependency 'bundler', '~> 1.16'
@@ -31,6 +31,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rake', '~> 12.3'
   spec.add_development_dependency 'rspec', '~> 3.0'
   spec.add_development_dependency 'rspec-block_is_expected', '~> 1.0'
+  spec.add_development_dependency 'rspec-stubbed_env', '~> 1.0'
   spec.add_development_dependency 'rubocop', '~> 0.60'
   spec.add_development_dependency 'rubocop-rspec', '~> 1.30'
 end

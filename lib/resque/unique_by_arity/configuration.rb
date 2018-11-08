@@ -4,6 +4,8 @@ module Resque
     class Configuration
       VALID_ARITY_VALIDATION_LEVELS = [:warning, :error, :skip, nil, false].freeze
       SKIPPED_ARITY_VALIDATION_LEVELS = [:skip, nil, false].freeze
+      DEFAULT_AT_RUNTIME_KEY_BASE = 'r-uar'.freeze
+      DEFAULT_IN_QUEUE_KEY_BASE = 'r-uiq'.freeze
       attr_accessor :logger
       attr_accessor :log_level
       attr_accessor :arity_for_uniqueness
@@ -12,22 +14,29 @@ module Resque
       attr_accessor :runtime_lock_timeout
       attr_accessor :runtime_requeue_interval
       attr_accessor :unique_at_runtime
+      attr_accessor :unique_at_runtime_key_base
       attr_accessor :unique_in_queue
+      attr_accessor :unique_in_queue_key_base
       attr_accessor :unique_across_queues
       attr_accessor :base_klass_name
+      attr_accessor :debug_mode
       def initialize(**options)
         @logger = options.key?(:logger) ? options[:logger] : Logger.new(STDOUT)
         @log_level = options.key?(:log_level) ? options[:log_level] : :debug
         @arity_for_uniqueness = options.key?(:arity_for_uniqueness) ? options[:arity_for_uniqueness] : 1
         @arity_validation = options.key?(:arity_validation) ? options[:arity_validation] : :warning
-        raise ArgumentError, "UniqueByArity::Cop.new requires arity_validation values of #{arity_validation.inspect}, or a class inheriting from Exception, but the value is #{@arity_validation} (#{@arity_validation.class})" unless VALID_ARITY_VALIDATION_LEVELS.include?(@arity_validation) || !@arity_validation.respond_to?(:ancestors) || @arity_validation.ancestors.include?(Exception)
+        raise ArgumentError, "Resque::Plugins::UniqueByArity.new requires arity_validation values of #{arity_validation.inspect}, or a class inheriting from Exception, but the value is #{@arity_validation} (#{@arity_validation.class})" unless VALID_ARITY_VALIDATION_LEVELS.include?(@arity_validation) || !@arity_validation.respond_to?(:ancestors) || @arity_validation.ancestors.include?(Exception)
 
         @lock_after_execution_period = options.key?(:lock_after_execution_period) ? options[:lock_after_execution_period] : nil
         @runtime_lock_timeout = options.key?(:runtime_lock_timeout) ? options[:runtime_lock_timeout] : nil
         @runtime_requeue_interval = options.key?(:runtime_requeue_interval) ? options[:runtime_requeue_interval] : nil
         @unique_at_runtime = options.key?(:unique_at_runtime) ? options[:unique_at_runtime] : false
+        @unique_at_runtime_key_base = options.key?(:unique_at_runtime_key_base) ? options[:unique_at_runtime_key_base] : DEFAULT_AT_RUNTIME_KEY_BASE
+        @unique_in_queue_key_base = options.key?(:unique_in_queue_key_base) ? options[:unique_in_queue_key_base] : DEFAULT_IN_QUEUE_KEY_BASE
         @unique_in_queue = options.key?(:unique_in_queue) ? options[:unique_in_queue] : false
         @unique_across_queues = options.key?(:unique_across_queues) ? options[:unique_across_queues] : false
+        env_debug = ENV['RESQUE_DEBUG']
+        @debug_mode = options.key?(:debug_mode) ? options[:debug_mode] : env_debug == 'true' || (env_debug.is_a?(String) && env_debug.match?(/arity/))
       end
 
       def validate

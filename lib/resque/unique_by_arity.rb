@@ -2,9 +2,10 @@ require 'resque/unique_by_arity/version'
 
 # External Gems
 require 'colorized_string'
+require 'resque'
 
 # External Resque Plugins
-require 'resque-unique_at_enqueue'
+require 'resque-unique_in_queue'
 require 'resque-unique_at_runtime'
 
 require 'resque/plugins/unique_by_arity'
@@ -27,18 +28,19 @@ require 'resque/unique_by_arity/validation'
 #
 # NOTE: DO NOT include this module directly.
 #       Use the Resque::Plugins::UniqueByArity approach as above.
+#       This module is ultimately extended into the job class.
 module Resque
   module UniqueByArity
-    env_debug = ENV['RESQUE_DEBUG']
-    ARITY_DEBUG = env_debug == 'true' || (env_debug.is_a?(String) && env_debug.match?(/arity/)) || env_debug
+    PLUGIN_TAG = (ColorizedString['[R-UBA] '].green).freeze
+
     def unique_log(message, config_proxy = nil)
       config_proxy ||= uniqueness_configuration
-      config_proxy.unique_logger.send(config_proxy.unique_log_level, message) if config_proxy.unique_logger
+      config_proxy.unique_logger&.send(config_proxy.unique_log_level, message) if config_proxy.unique_logger
     end
 
     def unique_debug(message, config_proxy = nil)
       config_proxy ||= uniqueness_configuration
-      config_proxy.unique_logger.debug(message) if ARITY_DEBUG
+      config_proxy.unique_logger&.debug("#{Resque::UniqueByArity::PLUGIN_TAG}#{message}") if config_proxy.debug_mode
     end
     module_function(:unique_log, :unique_debug)
 

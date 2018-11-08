@@ -24,6 +24,10 @@ Why? `resque-lonely_job` and `resque_solo` can't be used together, because their
 
 ## Important Note
 
+See `lib/resque/unique_by_arity/configuration.rb` for all config options.  Only a smattering of what is available is documented in this README.
+
+## Most Important Note
+
 You must configure this gem *after* you define the perform class method in your job or an error will be raised thanks to `perform` not having been defined yet.
 
 Example:
@@ -149,6 +153,17 @@ class MyJob
 end
 ```
 
+#### Oops, I have stale runtime uniqueness keys for MyJob stored in Redis...
+ 
+Preventing jobs with matching signatures from running, and they never get
+dequeued because there is no actual corresponding job to dequeue.
+
+*How to deal?*
+
+```ruby
+MyJob.purge_unique_at_runtime_redis_keys
+```
+
 ### Unique At Queue Time
 
 #### Unique In Job's Specific Queue
@@ -181,6 +196,29 @@ class MyJob
     unique_across_queues: true
   )
 end
+```
+
+#### Oops, I have stale Queue Time uniqueness keys...
+ 
+Preventing jobs with matching signatures from being queued, and they never get
+dequeued because there is no actual corresponding job to dequeue.
+
+*How to deal?*
+
+Option: Rampage
+
+```ruby
+# Delete *all* queued jobs in the queue, and
+#   delete *all* unqueness keys for the queue.
+Redis.remove_queue('queue_name')
+```
+
+Option: Butterfly
+
+```ruby
+# Delete *no* queued jobs at all, and
+#   delete *all* unqueness keys for the queue (might then allow duplicates).
+Resque::UniqueInQueue::Queue.cleanup('queue_name')
 ```
 
 ### All Together Now
@@ -250,16 +288,16 @@ class MyJob
     # return [Digest::MD5.hexdigest(Resque.encode(args)), uniqueness_args]
   end
 
-  unique_at_enqueue
+  unique_in_queue
   def self.solo_redis_key_prefix
     # "unique_job:#{self}" # <= default value
   end
 
-  unique_at_enqueue
+  unique_in_queue
   def self.solo_key_namespace(queue = nil)
     # definition depends on which type of uniqueness is chosen, be careful if you customize
-    # "solo:queue:#{queue}:job" # <= is for unique within queue at queue time
-    # "solo:across_queues:job" # <= is for unique across all queues at queue time
+    # "r-uiq:queue:#{queue}:job" # <= is for unique within queue at queue time
+    # "r-uiq:across_queues:job" # <= is for unique across all queues at queue time
   end
   
   def self.unique_at_queue_time_redis_key(queue, payload)
