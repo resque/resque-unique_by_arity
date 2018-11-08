@@ -37,7 +37,7 @@ class MyJob
   def self.perform(arg)
     # do stuff
   end
-  include UniqueByArity::Cop.new(
+  include Resque::Plugins::UniqueByArity.new(
     arity_for_uniqueness: 1,
     lock_after_execution_period: 60,
     runtime_lock_timeout: 60 * 60 * 24 * 5, # 5 days
@@ -74,7 +74,7 @@ class MyJob
   def self.perform(my, cat, is, the, best, opts = {})
     # Only the first 3: [my, cat, is] will be considered for determination of uniqueness
   end
-  include UniqueByArity::Cop.new(
+  include Resque::Plugins::UniqueByArity.new(
     arity_for_uniqueness: 3,
     unique_at_runtime: true
   )
@@ -94,7 +94,7 @@ class MyJob
     # 
     #    MyJob.perform has the following required parameters: [:my, :cat], which is not enough to satisfy the configured arity_for_uniqueness of 3
   end
-  include UniqueByArity::Cop.new(
+  include Resque::Plugins::UniqueByArity.new(
     arity_for_uniqueness: 3,
     arity_validation: :warning, # or :skip, :error, or an error class to be raised, e.g. RuntimeError
     unique_at_runtime: true
@@ -112,7 +112,7 @@ class MyJob
   def self.perform(arg1)
     # do stuff
   end
-  include UniqueByArity::Cop.new(
+  include Resque::Plugins::UniqueByArity.new(
     arity_for_uniqueness: 1,
     lock_after_execution_period: 60,
     unique_at_runtime: true
@@ -129,7 +129,7 @@ class MyJob
   def self.perform(arg1)
     # do stuff
   end
-  include UniqueByArity::Cop.new(
+  include Resque::Plugins::UniqueByArity.new(
     arity_for_uniqueness: 1,
     runtime_lock_timeout: 60 * 60 * 24 * 5, # 5 days
     unique_at_runtime: true
@@ -146,7 +146,7 @@ class MyJob
   def self.perform(arg1)
     # do stuff
   end
-  include UniqueByArity::Cop.new(
+  include Resque::Plugins::UniqueByArity.new(
     arity_for_uniqueness: 1,
     unique_at_runtime: true
   )
@@ -175,7 +175,7 @@ class MyJob
   def self.perform(arg1)
     # do stuff
   end
-  include UniqueByArity::Cop.new(
+  include Resque::Plugins::UniqueByArity.new(
     arity_for_uniqueness: 1,
     unique_in_queue: true
   )
@@ -191,7 +191,7 @@ class MyJob
   def self.perform(arg1)
     # do stuff
   end
-  include UniqueByArity::Cop.new(
+  include Resque::Plugins::UniqueByArity.new(
     arity_for_uniqueness: 1,
     unique_across_queues: true
   )
@@ -233,7 +233,7 @@ class MyJob
   def self.perform(arg1)
     # do stuff
   end
-  include UniqueByArity::Cop.new(
+  include Resque::Plugins::UniqueByArity.new(
     arity_for_uniqueness: 1,
     unique_at_runtime: true,
     runtime_lock_timeout: 60 * 60 * 24 * 5, # 5 days
@@ -252,7 +252,7 @@ class MyJob
   def self.perform(arg1)
     # do stuff
   end
-  include UniqueByArity::Cop.new(
+  include Resque::Plugins::UniqueByArity.new(
     arity_for_uniqueness: 1,
     unique_at_runtime: true,
     runtime_lock_timeout: 60 * 60 * 24 * 5, # 5 days
@@ -274,7 +274,7 @@ class MyJob
   def self.perform(arg1)
     # do stuff
   end
-  include UniqueByArity::Cop.new(
+  include Resque::Plugins::UniqueByArity.new(
     #...
   )
 
