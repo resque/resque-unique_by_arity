@@ -30,6 +30,9 @@ module Resque
       def included(base)
         return unless @configuration
 
+        # We don't have access to the base class when initializing, but...
+        #   we do initialize unique instances of the module for each class.
+        # As a result we can configure per class.
         @configuration.base_klass_name = base.to_s
         @configuration.validate
         base.send(:extend, Resque::UniqueByArity)

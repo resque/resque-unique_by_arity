@@ -35,8 +35,10 @@ module Resque
         @unique_in_queue_key_base = options.key?(:unique_in_queue_key_base) ? options[:unique_in_queue_key_base] : DEFAULT_IN_QUEUE_KEY_BASE
         @unique_in_queue = options.key?(:unique_in_queue) ? options[:unique_in_queue] : false
         @unique_across_queues = options.key?(:unique_across_queues) ? options[:unique_across_queues] : false
+        # Can't be both unique in queue and unique across queues.
+        raise ArgumentError, "Resque::Plugins::UniqueByArity.new requires either one or none of @unique_across_queues and @unique_in_queue to be true. Having both set to true is non-sensical." if @unique_in_queue && @unique_across_queues
         env_debug = ENV['RESQUE_DEBUG']
-        @debug_mode = options.key?(:debug_mode) ? options[:debug_mode] : env_debug == 'true' || (env_debug.is_a?(String) && env_debug.match?(/arity/))
+        @debug_mode = !!(options.key?(:debug_mode) ? options[:debug_mode] : env_debug == 'true' || (env_debug.is_a?(String) && env_debug.match?(/arity/)))
       end
 
       def validate
@@ -64,10 +66,12 @@ module Resque
 
       def to_hash
         {
-          logger: logger,
           log_level: log_level,
+          logger: logger,
           arity_for_uniqueness: arity_for_uniqueness,
           arity_validation: arity_validation,
+          base_klass_name: base_klass_name,
+          debug_mode: debug_mode,
           lock_after_execution_period: lock_after_execution_period,
           runtime_lock_timeout: runtime_lock_timeout,
           unique_at_runtime: unique_at_runtime,
