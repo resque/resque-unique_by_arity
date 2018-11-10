@@ -4,8 +4,12 @@ Because some jobs have parameters that you do not want to consider for determina
 
 NOTE:
 
-Requires `resque_solo` gem, and `resque-unique_by_arity` gem; the latter is a fork of `resque-lonely_job`.
-Why? `resque-lonely_job` and `resque_solo` can't be used together, because their `redis_key` methods conflict.
+I rewrote, and renamed, both `resque_solo` and `resque-lonely_job`, becuase they can't be used together.  Why?  Their `redis_key` methods directly conflict, among other more subtle issues.
+
+This gem requires use of my rewritten gems for uniqueness enforcement:
+
+  - [`resque-unique_at_runtime`](https://github.com/pboling/resque-unique_at_runtime)
+  - [`resque-unique_in_queue`](https://github.com/pboling/resque-unique_in_queue)
 
 | Project                 |  Resque::UniqueByArity |
 |------------------------ | ----------------------- |

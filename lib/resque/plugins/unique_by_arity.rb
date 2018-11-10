@@ -38,8 +38,8 @@ module Resque
         base.send(:extend, Resque::UniqueByArity)
         base.uniqueness_config_reset(@configuration.dup)
 
-        # gem is unique_in_queue, which is a rewrite of resque-loner
-        # see: https://github.com/neighborland/resque_solo
+        # gem is resque-unique_in_queue, which is a rewrite of resque-solo / resque-loner
+        # see: https://github.com/pboling/resque-unique_in_queue
         # defines a redis_key method, which we have to override.
         base.send(:include, Resque::Plugins::UniqueInQueue) if @configuration.unique_in_queue || @configuration.unique_across_queues
 
