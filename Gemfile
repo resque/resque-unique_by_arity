@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 
 gem 'resque-unique_in_queue'
-gem 'resque-unique_at_runtime'
+gem 'resque-unique_at_runtime', '3.0.2'
 
 group :test do
   unless ENV['TRAVIS']
