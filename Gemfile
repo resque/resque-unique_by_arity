@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 
-gem 'resque-unique_in_queue'
+gem 'resque-unique_in_queue', '1.0.3'
 gem 'resque-unique_at_runtime'
 
 group :test do
