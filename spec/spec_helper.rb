@@ -8,7 +8,7 @@ require 'simplecov'
 SimpleCov.start
 
 # This gem
-require 'resque/unique_by_arity'
+require 'resque-unique_by_arity'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
@@ -19,8 +19,9 @@ RSpec.configure do |config|
   end
 
   RSpec.shared_context "resque_debug" do
+    env_resque_stubbed
     include_context 'with stubbed env'
-    let(:resque_debug) { 'runtime' }
+    let(:resque_debug) { 'arity' }
     before do
       stub_env('RESQUE_DEBUG' => resque_debug)
     end

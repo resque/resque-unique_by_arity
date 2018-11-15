@@ -35,16 +35,16 @@ RSpec.describe Resque::UniqueByArity do
     end
   end
 
-  context '.unique_at_runtime_redis_key_prefix' do
+  context '.unique_in_queue_redis_key_prefix' do
     it 'gives unique_job:RealFake' do
-      expect(subject.unique_at_runtime_redis_key_prefix).to eq 'unique_job:RealFake'
+      expect(subject.unique_in_queue_redis_key_prefix).to eq 'unique_job:RealFake'
     end
   end
 
-  context '.unique_at_runtime_key_namespace' do
+  context '.unique_in_queue_key_namespace' do
     context 'with bogus queue' do
       it 'gives r-uiq:queue:bogus:job' do
-        expect(subject.unique_at_runtime_key_namespace('bogus')).to eq 'r-uiq:queue:bogus:job'
+        expect(subject.unique_in_queue_key_namespace('bogus')).to eq 'r-uiq:queue:bogus:job'
       end
     end
   end
@@ -184,6 +184,10 @@ RSpec.describe Resque::UniqueByArity do
       it 'gives defenestrate:RealFake:b7784ea79e21dc5d1a2fab675a505d53' do
         expect(subject.unique_at_runtime_redis_key(*args)).to eq 'defenestrate:RealFake:b7784ea79e21dc5d1a2fab675a505d53'
       end
+
+      it 'gives defenestrate:RealFake:b7784ea79e21dc5d1a2fab675a505d53' do
+        expect(subject.unique_at_runtime_redis_key(*args)).to eq 'defenestrate:RealFake:b7784ea79e21dc5d1a2fab675a505d53'
+      end
     end
   end
 
@@ -218,7 +222,7 @@ RSpec.describe Resque::UniqueByArity do
           subject { instance.perform(*args) }
 
           it 'does not log' do
-            expect(described_class).not_to receive(:unique_log)
+            expect(described_class).not_to receive(:log)
             block_is_expected.not_to raise_error
           end
         end
@@ -251,7 +255,7 @@ RSpec.describe Resque::UniqueByArity do
           subject { instance.perform(*args) }
 
           it 'does not log' do
-            expect(described_class).not_to receive(:unique_log)
+            expect(described_class).not_to receive(:log)
             block_is_expected.not_to raise_error
           end
         end
@@ -284,7 +288,7 @@ RSpec.describe Resque::UniqueByArity do
           subject { instance.perform(*args) }
 
           it 'does not log' do
-            expect(described_class).not_to receive(:unique_log)
+            expect(described_class).not_to receive(:log)
             block_is_expected.not_to raise_error
           end
         end
@@ -321,7 +325,7 @@ RSpec.describe Resque::UniqueByArity do
           subject { instance.perform(*args) }
 
           it 'does not log' do
-            expect(described_class).not_to receive(:unique_log)
+            expect(described_class).not_to receive(:log)
             block_is_expected.not_to raise_error
           end
         end
@@ -354,7 +358,7 @@ RSpec.describe Resque::UniqueByArity do
           subject { instance.perform(*args) }
 
           it 'does not log' do
-            expect(described_class).not_to receive(:unique_log)
+            expect(described_class).not_to receive(:log)
             block_is_expected.not_to raise_error
           end
         end
@@ -387,7 +391,7 @@ RSpec.describe Resque::UniqueByArity do
           subject { instance.perform(*args) }
 
           it 'does not log' do
-            expect(described_class).not_to receive(:unique_log)
+            expect(described_class).not_to receive(:log)
             block_is_expected.not_to raise_error
           end
         end
@@ -424,7 +428,7 @@ RSpec.describe Resque::UniqueByArity do
           subject { instance.perform(*args) }
 
           it 'logs' do
-            expect(described_class).to receive(:unique_log).with(ColorizedString['RealFake.perform has arity of -1 which will not work with arity_for_uniqueness of 2'].red, anything)
+            expect(described_class).to receive(:log).with(ColorizedString['RealFake.perform has arity of -1 which will not work with arity_for_uniqueness of 2'].red, anything)
             block_is_expected.not_to raise_error
           end
         end
@@ -457,7 +461,7 @@ RSpec.describe Resque::UniqueByArity do
           subject { instance.perform(*args) }
 
           it 'logs' do
-            expect(described_class).to receive(:unique_log).with(ColorizedString['RealFake.perform has the following required parameters: [:_req], which is not enough to satisfy the configured arity_for_uniqueness of 2'].red, anything)
+            expect(described_class).to receive(:log).with(ColorizedString['RealFake.perform has the following required parameters: [:_req], which is not enough to satisfy the configured arity_for_uniqueness of 2'].red, anything)
             block_is_expected.not_to raise_error
           end
         end
@@ -490,7 +494,7 @@ RSpec.describe Resque::UniqueByArity do
           subject { instance.perform(*args) }
 
           it 'does not log' do
-            expect(described_class).not_to receive(:unique_log)
+            expect(described_class).not_to receive(:log)
             block_is_expected.not_to raise_error
           end
         end
@@ -527,7 +531,7 @@ RSpec.describe Resque::UniqueByArity do
           subject { instance.perform(*args) }
 
           it 'does not log, raises error' do
-            expect(described_class).not_to receive(:unique_log)
+            expect(described_class).not_to receive(:log)
             block_is_expected.to raise_error ArgumentError, 'RealFake.perform has arity of -1 which will not work with arity_for_uniqueness of 2'
           end
         end
@@ -560,7 +564,7 @@ RSpec.describe Resque::UniqueByArity do
           subject { instance.perform(*args) }
 
           it 'does not log, raises error' do
-            expect(described_class).not_to receive(:unique_log)
+            expect(described_class).not_to receive(:log)
             block_is_expected.to raise_error ArgumentError, 'RealFake.perform has the following required parameters: [:_req], which is not enough to satisfy the configured arity_for_uniqueness of 2'
           end
         end
@@ -593,7 +597,7 @@ RSpec.describe Resque::UniqueByArity do
           subject { instance.perform(*args) }
 
           it 'does not log' do
-            expect(described_class).not_to receive(:unique_log)
+            expect(described_class).not_to receive(:log)
             block_is_expected.not_to raise_error
           end
         end
@@ -630,7 +634,7 @@ RSpec.describe Resque::UniqueByArity do
           subject { instance.perform(*args) }
 
           it 'does not log, raises error' do
-            expect(described_class).not_to receive(:unique_log)
+            expect(described_class).not_to receive(:log)
             block_is_expected.to raise_error RuntimeError, 'RealFake.perform has arity of -1 which will not work with arity_for_uniqueness of 2'
           end
         end
@@ -663,7 +667,7 @@ RSpec.describe Resque::UniqueByArity do
           subject { instance.perform(*args) }
 
           it 'does not log, raises error' do
-            expect(described_class).not_to receive(:unique_log)
+            expect(described_class).not_to receive(:log)
             block_is_expected.to raise_error RuntimeError, 'RealFake.perform has the following required parameters: [:_req], which is not enough to satisfy the configured arity_for_uniqueness of 2'
           end
         end
@@ -693,7 +697,7 @@ RSpec.describe Resque::UniqueByArity do
         let(:args) { [] }
 
         it 'passes validation' do
-          expect(described_class).not_to receive(:unique_log)
+          expect(described_class).not_to receive(:log)
           expect { subject.perform(*args) }.not_to raise_error
         end
       end
@@ -724,7 +728,7 @@ RSpec.describe Resque::UniqueByArity do
     let(:args) { [] }
 
     it 'does not work' do
-      expect(described_class).not_to receive(:unique_log)
+      expect(described_class).not_to receive(:log)
       block_is_expected.to raise_error NameError, /undefined method `perform' for class/
     end
   end
@@ -757,37 +761,28 @@ RSpec.describe Resque::UniqueByArity do
   end
 
   context 'logging' do
-    let(:unique_log_level) { :info }
+    let(:log_level) { :info }
     let(:logger) { Logger.new('/dev/null') }
-    describe '.unique_log' do
-      subject { described_class.unique_log('warbler', Resque::UniqueByArity::Configuration.new(logger: logger, log_level: :info)) }
+    describe '.log' do
+      subject { described_class.log('warbler', Resque::UniqueByArity::Configuration.new(logger: logger, log_level: :info)) }
       it('logs') do
         expect(logger).to receive(:info).with('warbler')
         block_is_expected.not_to raise_error
       end
     end
 
-    describe '.unique_debug' do
+    describe '.debug' do
       context 'with debug_mode => true' do
-        subject { described_class.unique_debug('warbler', Resque::UniqueByArity::Configuration.new(debug_mode: true, logger: logger, log_level: :info)) }
+        subject { described_class.debug('warbler', Resque::UniqueByArity::Configuration.new(debug_mode: true, logger: logger, log_level: :info)) }
         it('logs') do
           expect(logger).to receive(:debug).with(/R-UBA.*warbler/)
           block_is_expected.not_to raise_error
         end
       end
-      context 'with ENV["RESQUE_DEBUG"] = "arity"', :env_resque_stubbed do
-        let(:resque_debug) { 'arity' }
-        subject { described_class.unique_debug('warbler', Resque::UniqueByArity::Configuration.new(logger: logger, log_level: :info)) }
+      context 'with debug_mode => false' do
+        subject { described_class.debug('warbler', Resque::UniqueByArity::Configuration.new(debug_mode: false, logger: logger, log_level: :info)) }
         it('logs') do
-          expect(logger).to receive(:debug).with(/R-UBA.*warbler/)
-          block_is_expected.not_to raise_error
-        end
-      end
-      context 'with ENV["RESQUE_DEBUG"] = nil', :env_resque_stubbed do
-        let(:resque_debug) { nil }
-        subject { described_class.unique_debug('warbler', Resque::UniqueByArity::Configuration.new(logger: logger, log_level: :info)) }
-        it('does not logs') do
-          expect(logger).not_to receive(:debug)
+          expect(logger).not_to receive(:debug).with(/R-UBA.*warbler/)
           block_is_expected.not_to raise_error
         end
       end

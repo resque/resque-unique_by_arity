@@ -2,8 +2,8 @@ source 'https://rubygems.org'
 
 git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 
-gem 'resque-unique_in_queue'
-gem 'resque-unique_at_runtime'
+gem 'resque-unique_in_queue', path: '/Users/pboling/Documents/code/intricately/resque-unique_in_queue'
+gem 'resque-unique_at_runtime', path: '/Users/pboling/Documents/code/intricately/resque-unique_at_runtime'
 
 group :test do
   unless ENV['TRAVIS']

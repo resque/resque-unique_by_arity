@@ -1,10 +1,13 @@
 # Resque::UniqueByArity
 
-Because some jobs have parameters that you do not want to consider for determination of uniqueness.
+Because some jobs have parameters that you do not want to consider for 
+determination of uniqueness.
 
 NOTE:
 
-I rewrote, and renamed, both `resque_solo` and `resque-lonely_job`, becuase they can't be used together.  Why?  Their `redis_key` methods directly conflict, among other more subtle issues.
+I rewrote, and renamed, both `resque_solo` and `resque-lonely_job`, becuase they
+ can't be used together.  Why?  Their `redis_key` methods directly conflict, 
+ among other more subtle issues.
 
 This gem requires use of my rewritten gems for uniqueness enforcement:
 
@@ -28,11 +31,13 @@ This gem requires use of my rewritten gems for uniqueness enforcement:
 
 ## Important Note
 
-See `lib/resque/unique_by_arity/configuration.rb` for all config options.  Only a smattering of what is available is documented in this README.
+See `lib/resque/unique_by_arity/configuration.rb` for all config options.  Only
+ a smattering of what is available is documented in this README.
 
 ## Most Important Note
 
-You must configure this gem *after* you define the perform class method in your job or an error will be raised thanks to `perform` not having been defined yet.
+You must configure this gem *after* you define the perform class method in your
+ job or an error will be raised thanks to `perform` not having been defined yet.
 
 Example:
 
@@ -69,9 +74,44 @@ Or install it yourself as:
 
 ## Usage
 
+This gem will take care to set the class instance variables (similar to the
+ familiar `@queue` class instance variable) that are utilized by 
+ `resque-unique_in_queue` and `resque-unique_at_runtime` (default values shown):
+
+ ```ruby
+# For resque-unique_at_runtime
+@runtime_lock_timeout = 60 * 60 * 24 * 5
+@runtime_requeue_interval = 1
+@unique_at_runtime_key_base = 'r-uar'.freeze
+
+# For resque-unique_in_queue
+@lock_after_execution_period = 0
+@ttl = -1
+@unique_in_queue_key_base = 'r-uiq'.freeze
+```
+
+All you need to do is configure this gem accordingly:
+```ruby
+  include Resque::Plugins::UniqueByArity.new(
+    arity_for_uniqueness: 3,
+    unique_at_runtime: true,
+    unique_in_queue: true,
+    # No need to do the following if keeping default values
+    runtime_lock_timeout: 60 * 60 * 24 * 5,
+    runtime_requeue_interval: 1,
+    unique_at_runtime_key_base: 'r-uar'.freeze,
+    lock_after_execution_period: 0,
+    ttl: 0,
+    unique_in_queue_key_base: 'r-uiq'.freeze
+  )
+```
+
 ### Arity For Uniqueness
 
-Some jobs have parameters that you do not want to consider for determination of uniqueness.  Resque jobs should use simple parameters, **not named parameters**, so you can just specify the number of parameters, counting from the left, you want to be considered for uniqueness.
+Some jobs have parameters that you do not want to consider for determination of
+ uniqueness.  Resque jobs should use simple parameters, **not named parameters**,
+  so you can just specify the number of parameters, counting from the left, you
+   want to be considered for uniqueness.
 
 ```ruby
 class MyJob
@@ -109,7 +149,8 @@ end
 
 ### Lock After Execution
 
-Give the job a break after it finishes running, and don't allow another of the same, with matching args @ configured arity, to start within X seconds.
+Give the job a break after it finishes running, and don't allow another of the
+ same, with matching args @ configured arity, to start within X seconds.
 
 ```ruby
 class MyJob
@@ -126,7 +167,8 @@ end
 
 ### Runtime Lock Timeout
 
-If runtime lock keys get stale, they will expire on their own after some period.  You can set the expiration period on a per class basis.
+If runtime lock keys get stale, they will expire on their own after some period.
+  You can set the expiration period on a per class basis.
 
 ```ruby
 class MyJob
@@ -267,7 +309,8 @@ end
 
 ### Debugging
 
-Run your worker with `RESQUE_DEBUG=true` to see payloads printed before they are used to determine uniqueness, as well as a lot of other debugging output.
+Run your worker with `RESQUE_DEBUG=true` to see payloads printed before they are
+ used to determine uniqueness, as well as a lot of other debugging output.
 
 ### Customize Unique Keys Per Job
 

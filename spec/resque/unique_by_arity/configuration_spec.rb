@@ -160,6 +160,7 @@ describe Resque::UniqueByArity::Configuration do
                               debug_mode: false, # normalized to true || false
                               lock_after_execution_period: lock_after_execution_period,
                               runtime_lock_timeout: runtime_lock_timeout,
+                              ttl: -1,
                               unique_at_runtime: unique_at_runtime,
                               unique_in_queue: unique_in_queue,
                               unique_across_queues: unique_across_queues

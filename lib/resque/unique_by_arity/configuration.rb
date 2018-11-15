@@ -1,11 +1,13 @@
 require 'logger'
 module Resque
   module UniqueByArity
+    # This class is for configurations that are per job class, *not* app-wide.
+    # Each setting will default to the global config values.
     class Configuration
       VALID_ARITY_VALIDATION_LEVELS = [:warning, :error, :skip, nil, false].freeze
       SKIPPED_ARITY_VALIDATION_LEVELS = [:skip, nil, false].freeze
-      DEFAULT_AT_RUNTIME_KEY_BASE = 'r-uar'.freeze
-      DEFAULT_IN_QUEUE_KEY_BASE = 'r-uiq'.freeze
+      DEFAULT_LOG_LEVEL = :debug
+
       attr_accessor :logger
       attr_accessor :log_level
       attr_accessor :arity_for_uniqueness
@@ -18,27 +20,35 @@ module Resque
       attr_accessor :unique_in_queue
       attr_accessor :unique_in_queue_key_base
       attr_accessor :unique_across_queues
+      attr_accessor :ttl
       attr_accessor :base_klass_name
       attr_accessor :debug_mode
+
       def initialize(**options)
-        @logger = options.key?(:logger) ? options[:logger] : Logger.new(STDOUT)
-        @log_level = options.key?(:log_level) ? options[:log_level] : :debug
-        @arity_for_uniqueness = options.key?(:arity_for_uniqueness) ? options[:arity_for_uniqueness] : 1
-        @arity_validation = options.key?(:arity_validation) ? options[:arity_validation] : :warning
+        @logger = options.key?(:logger) ? options[:logger] : defcon(:logger) || Logger.new(STDOUT)
+        @log_level = options.key?(:log_level) ? options[:log_level] : defcon(:log_level) || :debug
+        @arity_for_uniqueness = options.key?(:arity_for_uniqueness) ? options[:arity_for_uniqueness] : defcon(:arity_for_uniqueness) || 1
+        @arity_validation = options.key?(:arity_validation) ? options[:arity_validation] : defcon(:arity_validation) || :warning
         raise ArgumentError, "Resque::Plugins::UniqueByArity.new requires arity_validation values of #{arity_validation.inspect}, or a class inheriting from Exception, but the value is #{@arity_validation} (#{@arity_validation.class})" unless VALID_ARITY_VALIDATION_LEVELS.include?(@arity_validation) || !@arity_validation.respond_to?(:ancestors) || @arity_validation.ancestors.include?(Exception)
 
-        @lock_after_execution_period = options.key?(:lock_after_execution_period) ? options[:lock_after_execution_period] : nil
-        @runtime_lock_timeout = options.key?(:runtime_lock_timeout) ? options[:runtime_lock_timeout] : nil
-        @runtime_requeue_interval = options.key?(:runtime_requeue_interval) ? options[:runtime_requeue_interval] : nil
-        @unique_at_runtime = options.key?(:unique_at_runtime) ? options[:unique_at_runtime] : false
-        @unique_at_runtime_key_base = options.key?(:unique_at_runtime_key_base) ? options[:unique_at_runtime_key_base] : DEFAULT_AT_RUNTIME_KEY_BASE
-        @unique_in_queue_key_base = options.key?(:unique_in_queue_key_base) ? options[:unique_in_queue_key_base] : DEFAULT_IN_QUEUE_KEY_BASE
-        @unique_in_queue = options.key?(:unique_in_queue) ? options[:unique_in_queue] : false
-        @unique_across_queues = options.key?(:unique_across_queues) ? options[:unique_across_queues] : false
-        # Can't be both unique in queue and unique across queues.
+        @ttl = options.key?(:ttl) ? options[:ttl] : defcon(:ttl) || nil
+        @lock_after_execution_period = options.key?(:lock_after_execution_period) ? options[:lock_after_execution_period] : defcon(:lock_after_execution_period) || nil
+        @runtime_lock_timeout = options.key?(:runtime_lock_timeout) ? options[:runtime_lock_timeout] : defcon(:runtime_lock_timeout) || nil
+        @runtime_requeue_interval = options.key?(:runtime_requeue_interval) ? options[:runtime_requeue_interval] : defcon(:runtime_requeue_interval) || nil
+        @unique_at_runtime = options.key?(:unique_at_runtime) ? options[:unique_at_runtime] : defcon(:unique_at_runtime) || false
+        @unique_at_runtime_key_base = options.key?(:unique_at_runtime_key_base) ? options[:unique_at_runtime_key_base] : defcon(:unique_at_runtime_key_base) || nil
+        @unique_in_queue_key_base = options.key?(:unique_in_queue_key_base) ? options[:unique_in_queue_key_base] : defcon(:unique_in_queue_key_base) || nil
+        @unique_in_queue = options.key?(:unique_in_queue) ? options[:unique_in_queue] : defcon(:unique_in_queue) || false
+        @unique_across_queues = options.key?(:unique_across_queues) ? options[:unique_across_queues] : defcon(:unique_across_queues) || false
+        # Can't be both unique in queue and unique across queues, since they
+        #   must necessarily use different locking key structures, and therefore
+        #   can't both be active.
         raise ArgumentError, "Resque::Plugins::UniqueByArity.new requires either one or none of @unique_across_queues and @unique_in_queue to be true. Having both set to true is non-sensical." if @unique_in_queue && @unique_across_queues
-        env_debug = ENV['RESQUE_DEBUG']
-        @debug_mode = !!(options.key?(:debug_mode) ? options[:debug_mode] : env_debug == 'true' || (env_debug.is_a?(String) && env_debug.match?(/arity/)))
+        @debug_mode = !!(options.key?(:debug_mode) ? options[:debug_mode] : defcon(:debug_mode))
+        if @debug_mode
+          # Make sure there is a logger when in debug_mode
+          @logger ||= Logger.new(STDOUT)
+        end
       end
 
       def validate
@@ -52,16 +62,8 @@ module Resque
         end
       end
 
-      def unique_logger
-        logger
-      end
-
-      def unique_log_level
-        log_level
-      end
-
       def log(msg)
-        Resque::UniqueByArity.unique_log(msg, self)
+        Resque::UniqueByArity.log(msg, self)
       end
 
       def to_hash
@@ -74,6 +76,7 @@ module Resque
           debug_mode: debug_mode,
           lock_after_execution_period: lock_after_execution_period,
           runtime_lock_timeout: runtime_lock_timeout,
+          ttl: ttl,
           unique_at_runtime: unique_at_runtime,
           unique_in_queue: unique_in_queue,
           unique_across_queues: unique_across_queues
@@ -120,6 +123,21 @@ module Resque
             raise arity_validation, msg
           end
         end
+      end
+
+      def defcon(sym)
+        Resque::UniqueByArity.configuration.send(sym)
+      end
+
+      def debug_mode=(val)
+        @debug_mode = !!val
+      end
+
+      private
+
+      def debug_mode_from_env
+        env_debug = ENV['RESQUE_DEBUG']
+        @debug_mode = !!(env_debug == 'true' || (env_debug.is_a?(String) && env_debug.match?(/queue/)))
       end
     end
   end

@@ -35,7 +35,7 @@ module Resque
         # As a result we can configure per class.
         @configuration.base_klass_name = base.to_s
         @configuration.validate
-        base.send(:extend, Resque::UniqueByArity)
+        base.send(:extend, Resque::UniqueByArity::UniqueJob)
         base.uniqueness_config_reset(@configuration.dup)
 
         # gem is resque-unique_in_queue, which is a rewrite of resque-solo / resque-loner
@@ -45,7 +45,38 @@ module Resque
 
         # gem is resque-unique_at_runtime, which is a rewrite of resque-lonely_job
         # see: https://github.com/pboling/resque-unique_at_runtime
-        base.send(:extend, Resque::Plugins::UniqueAtRuntime) if @configuration.unique_at_runtime
+        base.send(:include, Resque::Plugins::UniqueAtRuntime) if @configuration.unique_at_runtime
+
+        # For resque-unique_at_runtime
+        #
+        if @configuration.runtime_lock_timeout
+          base.instance_variable_set(:@runtime_lock_timeout, @configuration.runtime_lock_timeout)
+        end
+
+        if @configuration.runtime_requeue_interval
+          base.instance_variable_set(:@runtime_requeue_interval, @configuration.runtime_requeue_interval)
+        end
+
+        if @configuration.unique_at_runtime_key_base
+          base.instance_variable_set(:@unique_at_runtime_key_base, @configuration.unique_at_runtime_key_base)
+        end
+
+        # For resque-unique_in_queue
+        #
+        if @configuration.lock_after_execution_period
+          base.instance_variable_set(:@lock_after_execution_period, @configuration.lock_after_execution_period)
+        end
+
+        if @configuration.ttl
+          base.instance_variable_set(:@ttl, @configuration.ttl)
+        end
+
+        # Normally doesn't make sense to override per each class because
+        #   it wouldn't be able to determine or enforce uniqueness across queues,
+        #   and general cleanup of stray keys would be nearly impossible.
+        if @configuration.unique_in_queue_key_base
+          base.instance_variable_set(:@unique_in_queue_key_base, @configuration.unique_in_queue_key_base)
+        end
 
         uniqueness_cop_module = Resque::UniqueByArity::Modulizer.to_mod(@configuration)
         # This will override methods from both plugins above, if configured for both
