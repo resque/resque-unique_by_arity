@@ -19,10 +19,10 @@ Gem::Specification.new do |spec|
   end
   spec.require_paths = ['lib']
 
-  spec.add_runtime_dependency 'colorize', '~> 0.8'
+  spec.add_runtime_dependency 'colorize', '>= 0.8'
   spec.add_runtime_dependency 'resque', '>= 1.2'
-  spec.add_runtime_dependency 'resque-unique_in_queue', '~> 1.0'
-  spec.add_runtime_dependency 'resque-unique_at_runtime', '~> 3.0'
+  spec.add_runtime_dependency 'resque-unique_in_queue', '>= 2'
+  spec.add_runtime_dependency 'resque-unique_at_runtime', '>= 3'
 
   spec.add_development_dependency 'bundler', '~> 1.16'
   spec.add_development_dependency 'byebug', '~> 10.0'
