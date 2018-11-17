@@ -21,6 +21,7 @@ module Resque
     def configure
       yield(@configuration)
     end
+    module_function(:configure)
 
     #### CONFIG ####
     # Access globally configured settings:

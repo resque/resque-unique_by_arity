@@ -1,761 +1,104 @@
 require 'spec_helper'
 
 RSpec.describe Resque::UniqueByArity do
-  subject { instance }
-
-  let(:instance) do
-    Class.new do
-      def self.to_s
-        'RealFake'
-      end
-
-      def self.perform(_req, _opts = {})
-        # Does something
-      end
-      include Resque::Plugins::UniqueByArity.new(
-        arity_for_uniqueness: 1,
-        unique_at_runtime: true,
-        unique_in_queue: true
-      )
-    end
-  end
-
-  let(:opts) { {} }
-  let(:args) { [1, opts] }
-
   it 'has a version number' do
     expect(Resque::UniqueByArity::VERSION).not_to be nil
   end
 
-  context '.redis_unique_hash' do
-    context 'with company id 1' do
-      it "gives ['ef0f8a28f2c84e48211489121112e67f', [1]]" do
-        expect(subject.redis_unique_hash(class: subject.to_s, args: args)).to eq ['ef0f8a28f2c84e48211489121112e67f', [1]]
-      end
+  context 'configuration' do
+    before do
+      Resque::UniqueByArity::GlobalConfiguration.instance.reset
     end
-  end
-
-  context '.unique_in_queue_redis_key_prefix' do
-    it 'gives unique_job:RealFake' do
-      expect(subject.unique_in_queue_redis_key_prefix).to eq 'unique_job:RealFake'
+    it 'has default logger' do
+      expect(Resque::UniqueByArity.configuration.logger).to eq(nil)
     end
-  end
-
-  context '.unique_in_queue_key_namespace' do
-    context 'with bogus queue' do
-      it 'gives r-uiq:queue:bogus:job' do
-        expect(subject.unique_in_queue_key_namespace('bogus')).to eq 'r-uiq:queue:bogus:job'
-      end
+    it 'has default log_level' do
+      expect(Resque::UniqueByArity.configuration.log_level).to eq(:debug)
     end
-  end
-
-  context '.unique_in_queue_redis_key' do
-    context 'with bogus queue' do
-      it 'gives r-uiq:queue:bogus:job:unique_job:RealFake:ef0f8a28f2c84e48211489121112e67f' do
-        expect(subject.unique_in_queue_redis_key('bogus', class: subject.to_s, args: args)).to eq 'r-uiq:queue:bogus:job:unique_job:RealFake:ef0f8a28f2c84e48211489121112e67f'
-      end
+    it 'has default arity_for_uniqueness' do
+      expect(Resque::UniqueByArity.configuration.arity_for_uniqueness).to eq(nil)
     end
-    context 'when custom unique_at_runtime_key_base' do
-      let(:instance) do
-        Class.new do
-          def self.to_s
-            'RealFake'
-          end
-
-          def self.perform(req1, _opts = {})
-            # Does something
-          end
-          include Resque::Plugins::UniqueByArity.new(
-              arity_for_uniqueness: 0,
-              unique_at_runtime: true,
-              unique_in_queue: true,
-              unique_in_queue_key_base: 'defenestrate'
-          )
-        end
-      end
-      let(:args) { [opts] }
-
-      it 'gives defenestrate:queue:bogus:job:unique_job:RealFake:ef0f8a28f2c84e48211489121112e67f' do
-        expect(subject.unique_in_queue_redis_key('bogus', class: subject.to_s, args: args)).to eq 'defenestrate:queue:bogus:job:unique_job:RealFake:b7784ea79e21dc5d1a2fab675a505d53'
-      end
+    it 'has default arity_validation' do
+      expect(Resque::UniqueByArity.configuration.arity_validation).to eq(nil)
     end
-    context 'when perform has no required args' do
-      let(:instance) do
-        Class.new do
-          def self.to_s
-            'RealFake'
-          end
-
-          def self.perform(_opts = {})
-            # Does something
-          end
-          include Resque::Plugins::UniqueByArity.new(
-              arity_for_uniqueness: 0,
-              unique_at_runtime: true,
-              unique_in_queue: true,
-              unique_in_queue_key_base: 'defenestrate'
-          )
-        end
-      end
-      let(:args) { [opts] }
-
-      it 'gives defenestrate:queue:bogus:job:unique_job:RealFake:ef0f8a28f2c84e48211489121112e67f' do
-        expect(subject.unique_in_queue_redis_key('bogus', class: subject.to_s, args: args)).to eq 'defenestrate:queue:bogus:job:unique_job:RealFake:b7784ea79e21dc5d1a2fab675a505d53'
-      end
+    it 'has default lock_after_execution_period' do
+      expect(Resque::UniqueByArity.configuration.lock_after_execution_period).to eq(0)
     end
-  end
-
-  context '.runtime_key_namespace' do
-    it 'gives r-uar:RealFake' do
-      expect(subject.runtime_key_namespace).to eq 'r-uar:RealFake'
+    it 'has default runtime_lock_timeout' do
+      expect(Resque::UniqueByArity.configuration.runtime_lock_timeout).to eq(60 * 60 * 24 * 5)
     end
-  end
-
-  context '.unique_at_runtime_redis_key' do
-    it 'gives r-uar:RealFake:ef0f8a28f2c84e48211489121112e67f' do
-      expect(subject.unique_at_runtime_redis_key(*args)).to eq 'r-uar:RealFake:ef0f8a28f2c84e48211489121112e67f'
+    it 'has default runtime_requeue_interval' do
+      expect(Resque::UniqueByArity.configuration.runtime_requeue_interval).to eq(1)
     end
-    context 'when perform has no required args' do
-      let(:instance) do
-        Class.new do
-          def self.to_s
-            'RealFake'
-          end
-
-          def self.perform(_opts = {})
-            # Does something
-          end
-          include Resque::Plugins::UniqueByArity.new(
-            arity_for_uniqueness: 0,
-            unique_at_runtime: true,
-            unique_in_queue: true
-          )
-        end
-      end
-      let(:args) { [opts] }
-
-      it 'gives r-uar:RealFake:b7784ea79e21dc5d1a2fab675a505d53' do
-        expect(subject.unique_at_runtime_redis_key(*args)).to eq 'r-uar:RealFake:b7784ea79e21dc5d1a2fab675a505d53'
-      end
+    it 'has default unique_at_runtime_key_base' do
+      expect(Resque::UniqueByArity.configuration.unique_at_runtime_key_base).to eq('r-uar')
     end
-    context 'when perform has required args, but arity is 0' do
-      let(:instance) do
-        Class.new do
-          def self.to_s
-            'RealFake'
-          end
-
-          def self.perform(req1, _opts = {})
-            # Does something
-          end
-          include Resque::Plugins::UniqueByArity.new(
-              arity_for_uniqueness: 0,
-              unique_at_runtime: true,
-              unique_in_queue: true
-          )
-        end
-      end
-      let(:args) { [opts] }
-
-      it 'gives r-uar:RealFake:b7784ea79e21dc5d1a2fab675a505d53' do
-        expect(subject.unique_at_runtime_redis_key(*args)).to eq 'r-uar:RealFake:b7784ea79e21dc5d1a2fab675a505d53'
-      end
+    it 'has default unique_in_queue_key_base' do
+      expect(Resque::UniqueByArity.configuration.unique_in_queue_key_base).to eq('r-uiq')
     end
-    context 'when custom unique_at_runtime_key_base' do
-      let(:instance) do
-        Class.new do
-          def self.to_s
-            'RealFake'
-          end
-
-          def self.perform(req1, _opts = {})
-            # Does something
-          end
-          include Resque::Plugins::UniqueByArity.new(
-              arity_for_uniqueness: 0,
-              unique_at_runtime: true,
-              unique_in_queue: true,
-              unique_at_runtime_key_base: 'defenestrate'
-          )
-        end
-      end
-      let(:args) { [opts] }
-
-      it 'gives defenestrate:RealFake:b7784ea79e21dc5d1a2fab675a505d53' do
-        expect(subject.unique_at_runtime_redis_key(*args)).to eq 'defenestrate:RealFake:b7784ea79e21dc5d1a2fab675a505d53'
-      end
-
-      it 'gives defenestrate:RealFake:b7784ea79e21dc5d1a2fab675a505d53' do
-        expect(subject.unique_at_runtime_redis_key(*args)).to eq 'defenestrate:RealFake:b7784ea79e21dc5d1a2fab675a505d53'
-      end
+    it 'has default unique_at_runtime' do
+      expect(Resque::UniqueByArity.configuration.unique_at_runtime).to eq(false)
     end
-  end
-
-  context 'arity_for_uniqueness' do
-    context 'arity_validation is nil' do
-      let(:arity_validation) { nil }
-
-      context 'no required params, arity high' do
-        subject { instance }
-
-        let(:instance) do
-          Class.new do
-            def self.to_s
-              'RealFake'
-            end
-
-            def self.perform(_opts = {})
-              # Does something
-            end
-            include Resque::Plugins::UniqueByArity.new(
-              arity_for_uniqueness: 2,
-              arity_validation: nil,
-              unique_at_runtime: true,
-              unique_in_queue: true
-            )
-          end
-        end
-
-        let(:args) { [opts] }
-
-        context 'validation' do
-          subject { instance.perform(*args) }
-
-          it 'does not log' do
-            expect(described_class).not_to receive(:log)
-            block_is_expected.not_to raise_error
-          end
-        end
-      end
-
-      context 'not enough required params, arity high' do
-        subject { instance }
-
-        let(:instance) do
-          Class.new do
-            def self.to_s
-              'RealFake'
-            end
-
-            def self.perform(_req, _opts = {})
-              # Does something
-            end
-            include Resque::Plugins::UniqueByArity.new(
-              arity_for_uniqueness: 2,
-              arity_validation: nil,
-              unique_at_runtime: true,
-              unique_in_queue: true
-            )
-          end
-        end
-
-        let(:args) { [1, opts] }
-
-        context 'validation' do
-          subject { instance.perform(*args) }
-
-          it 'does not log' do
-            expect(described_class).not_to receive(:log)
-            block_is_expected.not_to raise_error
-          end
-        end
-      end
-
-      context 'no params, arity zero' do
-        subject { instance }
-
-        let(:instance) do
-          Class.new do
-            def self.to_s
-              'RealFake'
-            end
-
-            def self.perform
-              # Does something
-            end
-            include Resque::Plugins::UniqueByArity.new(
-              arity_for_uniqueness: 0,
-              arity_validation: nil,
-              unique_at_runtime: true,
-              unique_in_queue: true
-            )
-          end
-        end
-
-        let(:args) { [] }
-
-        context 'validation' do
-          subject { instance.perform(*args) }
-
-          it 'does not log' do
-            expect(described_class).not_to receive(:log)
-            block_is_expected.not_to raise_error
-          end
-        end
-      end
+    it 'has default unique_in_queue' do
+      expect(Resque::UniqueByArity.configuration.unique_in_queue).to eq(false)
+    end
+    it 'has default unique_across_queues' do
+      expect(Resque::UniqueByArity.configuration.unique_across_queues).to eq(false)
+    end
+    it 'has default ttl' do
+      expect(Resque::UniqueByArity.configuration.ttl).to eq(-1)
+    end
+    it 'has default debug_mode' do
+      expect(Resque::UniqueByArity.configuration.debug_mode).to eq(false)
     end
 
-    context 'arity_validation is false' do
-      let(:arity_validation) { false }
-
-      context 'no required params, arity high' do
-        subject { instance }
-
-        let(:instance) do
-          Class.new do
-            def self.to_s
-              'RealFake'
-            end
-
-            def self.perform(_opts = {})
-              # Does something
-            end
-            include Resque::Plugins::UniqueByArity.new(
-              arity_for_uniqueness: 2,
-              arity_validation: nil,
-              unique_at_runtime: true,
-              unique_in_queue: true
-            )
-          end
-        end
-
-        let(:args) { [opts] }
-
-        context 'validation' do
-          subject { instance.perform(*args) }
-
-          it 'does not log' do
-            expect(described_class).not_to receive(:log)
-            block_is_expected.not_to raise_error
-          end
+    context 'global' do
+      let(:logger) { Logger.new('/dev/null') }
+      let(:log_level) { :info }
+      let(:arity_for_uniqueness) { 3 }
+      let(:unique_at_runtime) { true }
+      let(:unique_in_queue) { true }
+      let(:runtime_lock_timeout) { 10 }
+      let(:runtime_requeue_interval) { 4 }
+      let(:unique_at_runtime_key_base) { 'abc' }
+      let(:lock_after_execution_period) { 7 }
+      let(:ttl) { 2 }
+      let(:unique_in_queue_key_base) { 'def' }
+      let(:debug_mode) { true }
+      before do
+        Resque::UniqueByArity.configure do |config|
+          config.logger = logger
+          config.log_level = log_level
+          config.arity_for_uniqueness = arity_for_uniqueness
+          config.unique_at_runtime = unique_at_runtime
+          config.unique_in_queue = unique_in_queue
+          config.runtime_lock_timeout = runtime_lock_timeout
+          config.runtime_requeue_interval = runtime_requeue_interval
+          config.unique_at_runtime_key_base = unique_at_runtime_key_base
+          config.lock_after_execution_period = lock_after_execution_period
+          config.ttl = ttl
+          config.unique_in_queue_key_base = unique_in_queue_key_base
+          # Normally debug mode should be set via an environment variable switch
+          #   rather than in the configure block.
+          config.debug_mode = debug_mode
         end
       end
-
-      context 'not enough required params, arity high' do
-        subject { instance }
-
-        let(:instance) do
-          Class.new do
-            def self.to_s
-              'RealFake'
-            end
-
-            def self.perform(_req, _opts = {})
-              # Does something
-            end
-            include Resque::Plugins::UniqueByArity.new(
-              arity_for_uniqueness: 2,
-              arity_validation: nil,
-              unique_at_runtime: true,
-              unique_in_queue: true
-            )
-          end
-        end
-
-        let(:args) { [1, opts] }
-
-        context 'validation' do
-          subject { instance.perform(*args) }
-
-          it 'does not log' do
-            expect(described_class).not_to receive(:log)
-            block_is_expected.not_to raise_error
-          end
-        end
+      after do
+        Resque::UniqueByArity::GlobalConfiguration.instance.reset
       end
-
-      context 'no params, arity zero' do
-        subject { instance }
-
-        let(:instance) do
-          Class.new do
-            def self.to_s
-              'RealFake'
-            end
-
-            def self.perform
-              # Does something
-            end
-            include Resque::Plugins::UniqueByArity.new(
-              arity_for_uniqueness: 0,
-              arity_validation: nil,
-              unique_at_runtime: true,
-              unique_in_queue: true
-            )
-          end
-        end
-
-        let(:args) { [] }
-
-        context 'validation' do
-          subject { instance.perform(*args) }
-
-          it 'does not log' do
-            expect(described_class).not_to receive(:log)
-            block_is_expected.not_to raise_error
-          end
-        end
-      end
-    end
-
-    context 'arity_validation is :warning' do
-      let(:arity_validation) { :warning }
-
-      context 'no required params, arity high' do
-        subject { instance }
-
-        let(:instance) do
-          Class.new do
-            def self.to_s
-              'RealFake'
-            end
-
-            def self.perform(_opts = {})
-              # Does something
-            end
-            include Resque::Plugins::UniqueByArity.new(
-              arity_for_uniqueness: 2,
-              arity_validation: :warning,
-              unique_at_runtime: true,
-              unique_in_queue: true
-            )
-          end
-        end
-
-        let(:args) { [opts] }
-
-        context 'validation' do
-          subject { instance.perform(*args) }
-
-          it 'logs' do
-            expect(described_class).to receive(:log).with(ColorizedString['RealFake.perform has arity of -1 which will not work with arity_for_uniqueness of 2'].red, anything)
-            block_is_expected.not_to raise_error
-          end
-        end
-      end
-
-      context 'not enough required params, arity high' do
-        subject { instance }
-
-        let(:instance) do
-          Class.new do
-            def self.to_s
-              'RealFake'
-            end
-
-            def self.perform(_req, _opts = {})
-              # Does something
-            end
-            include Resque::Plugins::UniqueByArity.new(
-              arity_for_uniqueness: 2,
-              arity_validation: :warning,
-              unique_at_runtime: true,
-              unique_in_queue: true
-            )
-          end
-        end
-
-        let(:args) { [1, opts] }
-
-        context 'validation' do
-          subject { instance.perform(*args) }
-
-          it 'logs' do
-            expect(described_class).to receive(:log).with(ColorizedString['RealFake.perform has the following required parameters: [:_req], which is not enough to satisfy the configured arity_for_uniqueness of 2'].red, anything)
-            block_is_expected.not_to raise_error
-          end
-        end
-      end
-
-      context 'no params, arity zero' do
-        subject { instance }
-
-        let(:instance) do
-          Class.new do
-            def self.to_s
-              'RealFake'
-            end
-
-            def self.perform
-              # Does something
-            end
-            include Resque::Plugins::UniqueByArity.new(
-              arity_for_uniqueness: 0,
-              arity_validation: :warning,
-              unique_at_runtime: true,
-              unique_in_queue: true
-            )
-          end
-        end
-
-        let(:args) { [] }
-
-        context 'validation' do
-          subject { instance.perform(*args) }
-
-          it 'does not log' do
-            expect(described_class).not_to receive(:log)
-            block_is_expected.not_to raise_error
-          end
-        end
-      end
-    end
-
-    context 'arity_validation is :error' do
-      let(:arity_validation) { :error }
-
-      context 'no required params, arity high' do
-        subject { instance }
-
-        let(:instance) do
-          Class.new do
-            def self.to_s
-              'RealFake'
-            end
-
-            def self.perform(_opts = {})
-              # Does something
-            end
-            include Resque::Plugins::UniqueByArity.new(
-              arity_for_uniqueness: 2,
-              arity_validation: :error,
-              unique_at_runtime: true,
-              unique_in_queue: true
-            )
-          end
-        end
-
-        let(:args) { [opts] }
-
-        context 'validation' do
-          subject { instance.perform(*args) }
-
-          it 'does not log, raises error' do
-            expect(described_class).not_to receive(:log)
-            block_is_expected.to raise_error ArgumentError, 'RealFake.perform has arity of -1 which will not work with arity_for_uniqueness of 2'
-          end
-        end
-      end
-
-      context 'not enough required params, arity high' do
-        subject { instance }
-
-        let(:instance) do
-          Class.new do
-            def self.to_s
-              'RealFake'
-            end
-
-            def self.perform(_req, _opts = {})
-              # Does something
-            end
-            include Resque::Plugins::UniqueByArity.new(
-              arity_for_uniqueness: 2,
-              arity_validation: :error,
-              unique_at_runtime: true,
-              unique_in_queue: true
-            )
-          end
-        end
-
-        let(:args) { [1, opts] }
-
-        context 'validation' do
-          subject { instance.perform(*args) }
-
-          it 'does not log, raises error' do
-            expect(described_class).not_to receive(:log)
-            block_is_expected.to raise_error ArgumentError, 'RealFake.perform has the following required parameters: [:_req], which is not enough to satisfy the configured arity_for_uniqueness of 2'
-          end
-        end
-      end
-
-      context 'no params, arity zero' do
-        subject { instance }
-
-        let(:instance) do
-          Class.new do
-            def self.to_s
-              'RealFake'
-            end
-
-            def self.perform
-              # Does something
-            end
-            include Resque::Plugins::UniqueByArity.new(
-              arity_for_uniqueness: 0,
-              arity_validation: :error,
-              unique_at_runtime: true,
-              unique_in_queue: true
-            )
-          end
-        end
-
-        let(:args) { [] }
-
-        context 'validation' do
-          subject { instance.perform(*args) }
-
-          it 'does not log' do
-            expect(described_class).not_to receive(:log)
-            block_is_expected.not_to raise_error
-          end
-        end
-      end
-    end
-
-    context 'arity_validation is an error class' do
-      let(:arity_validation) { RuntimeError }
-
-      context 'no required params, arity high' do
-        subject { instance }
-
-        let(:instance) do
-          Class.new do
-            def self.to_s
-              'RealFake'
-            end
-
-            def self.perform(_opts = {})
-              # Does something
-            end
-            include Resque::Plugins::UniqueByArity.new(
-              arity_for_uniqueness: 2,
-              arity_validation: RuntimeError,
-              unique_at_runtime: true,
-              unique_in_queue: true
-            )
-          end
-        end
-
-        let(:args) { [opts] }
-
-        context 'validation' do
-          subject { instance.perform(*args) }
-
-          it 'does not log, raises error' do
-            expect(described_class).not_to receive(:log)
-            block_is_expected.to raise_error RuntimeError, 'RealFake.perform has arity of -1 which will not work with arity_for_uniqueness of 2'
-          end
-        end
-      end
-
-      context 'not enough required params, arity high' do
-        subject { instance }
-
-        let(:instance) do
-          Class.new do
-            def self.to_s
-              'RealFake'
-            end
-
-            def self.perform(_req, _opts = {})
-              # Does something
-            end
-            include Resque::Plugins::UniqueByArity.new(
-              arity_for_uniqueness: 2,
-              arity_validation: RuntimeError,
-              unique_at_runtime: true,
-              unique_in_queue: true
-            )
-          end
-        end
-
-        let(:args) { [1, opts] }
-
-        context 'validation' do
-          subject { instance.perform(*args) }
-
-          it 'does not log, raises error' do
-            expect(described_class).not_to receive(:log)
-            block_is_expected.to raise_error RuntimeError, 'RealFake.perform has the following required parameters: [:_req], which is not enough to satisfy the configured arity_for_uniqueness of 2'
-          end
-        end
-      end
-
-      context 'no params, arity zero' do
-        subject { instance }
-
-        let(:instance) do
-          Class.new do
-            def self.to_s
-              'RealFake'
-            end
-
-            def self.perform
-              # Does something
-            end
-            include Resque::Plugins::UniqueByArity.new(
-              arity_for_uniqueness: 0,
-              arity_validation: RuntimeError,
-              unique_at_runtime: true,
-              unique_in_queue: true
-            )
-          end
-        end
-
-        let(:args) { [] }
-
-        it 'passes validation' do
-          expect(described_class).not_to receive(:log)
-          expect { subject.perform(*args) }.not_to raise_error
-        end
-      end
-    end
-  end
-
-  context 'module included at top of class definition' do
-    subject { instance.perform(*args) }
-
-    let(:instance) do
-      Class.new do
-        include Resque::Plugins::UniqueByArity.new(
-          arity_for_uniqueness: 0,
-          arity_validation: :warning,
-          unique_at_runtime: true,
-          unique_in_queue: true
-        )
-        def self.to_s
-          'RealFake'
-        end
-
-        def self.perform
-          # Does something
-        end
-      end
-    end
-
-    let(:args) { [] }
-
-    it 'does not work' do
-      expect(described_class).not_to receive(:log)
-      block_is_expected.to raise_error NameError, /undefined method `perform' for class/
-    end
-  end
-
-  describe 'method arity' do
-    context 'only required parameters' do
-      subject { instance }
-
-      let(:instance) do
-        Class.new do
-          def self.to_s
-            'RealFake'
-          end
-
-          def self.perform(_req1, _req2, _req3, _req4)
-            # Does something
-          end
-          include Resque::Plugins::UniqueByArity.new(
-            arity_for_uniqueness: 1,
-            unique_at_runtime: true,
-            unique_in_queue: true
-          )
-        end
-      end
-
-      it 'is positive' do
-        expect(subject.method(:perform).arity).to eq(4)
+      it 'sets' do
+        expect(Resque::UniqueByArity.configuration.logger).to eq(logger)
+        expect(Resque::UniqueByArity.configuration.log_level).to eq(log_level)
+        expect(Resque::UniqueByArity.configuration.arity_for_uniqueness).to eq(arity_for_uniqueness)
+        expect(Resque::UniqueByArity.configuration.unique_at_runtime).to eq(unique_at_runtime)
+        expect(Resque::UniqueByArity.configuration.unique_in_queue).to eq(unique_in_queue)
+        expect(Resque::UniqueByArity.configuration.runtime_lock_timeout).to eq(runtime_lock_timeout)
+        expect(Resque::UniqueByArity.configuration.runtime_requeue_interval).to eq(runtime_requeue_interval)
+        expect(Resque::UniqueByArity.configuration.unique_at_runtime_key_base).to eq(unique_at_runtime_key_base)
+        expect(Resque::UniqueByArity.configuration.lock_after_execution_period).to eq(lock_after_execution_period)
+        expect(Resque::UniqueByArity.configuration.ttl).to eq(ttl)
+        expect(Resque::UniqueByArity.configuration.unique_in_queue_key_base).to eq(unique_in_queue_key_base)
+        expect(Resque::UniqueByArity.configuration.debug_mode).to eq(debug_mode)
       end
     end
   end
@@ -764,7 +107,7 @@ RSpec.describe Resque::UniqueByArity do
     let(:log_level) { :info }
     let(:logger) { Logger.new('/dev/null') }
     describe '.log' do
-      subject { described_class.log('warbler', Resque::UniqueByArity::Configuration.new(logger: logger, log_level: :info)) }
+      subject { Resque::UniqueByArity.log('warbler', Resque::UniqueByArity::Configuration.new(logger: logger, log_level: :info)) }
       it('logs') do
         expect(logger).to receive(:info).with('warbler')
         block_is_expected.not_to raise_error
@@ -773,14 +116,14 @@ RSpec.describe Resque::UniqueByArity do
 
     describe '.debug' do
       context 'with debug_mode => true' do
-        subject { described_class.debug('warbler', Resque::UniqueByArity::Configuration.new(debug_mode: true, logger: logger, log_level: :info)) }
+        subject { Resque::UniqueByArity.debug('warbler', Resque::UniqueByArity::Configuration.new(debug_mode: true, logger: logger, log_level: :info)) }
         it('logs') do
           expect(logger).to receive(:debug).with(/R-UBA.*warbler/)
           block_is_expected.not_to raise_error
         end
       end
       context 'with debug_mode => false' do
-        subject { described_class.debug('warbler', Resque::UniqueByArity::Configuration.new(debug_mode: false, logger: logger, log_level: :info)) }
+        subject { Resque::UniqueByArity.debug('warbler', Resque::UniqueByArity::Configuration.new(debug_mode: false, logger: logger, log_level: :info)) }
         it('logs') do
           expect(logger).not_to receive(:debug).with(/R-UBA.*warbler/)
           block_is_expected.not_to raise_error

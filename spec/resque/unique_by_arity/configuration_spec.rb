@@ -39,7 +39,7 @@ describe Resque::UniqueByArity::Configuration do
           debug_mode: debug_mode
       }
     end
-    let(:instance) { described_class.new(**options) }
+    let(:instance) { Resque::UniqueByArity::Configuration.new(**options) }
     describe "#initialize" do
       subject { instance }
       it 'does not raise' do

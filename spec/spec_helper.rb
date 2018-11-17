@@ -28,3 +28,5 @@ RSpec.configure do |config|
   end
   config.include_context "resque_debug", :env_resque_stubbed => true
 end
+
+RSpec::Mocks.configuration.allow_message_expectations_on_nil = true

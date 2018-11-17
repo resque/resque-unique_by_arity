@@ -17,8 +17,6 @@
 module Resque
   module UniqueByArity
     module UniqueJob
-      PLUGIN_TAG = (ColorizedString['[R-UBA] '].green).freeze
-
       def uniq_log(message, config_proxy = nil)
         config_proxy ||= uniq_config
         config_proxy.logger&.send(config_proxy.log_level, message) if config_proxy.logger

@@ -53,7 +53,7 @@ module Resque
             #
             # @return [Fixnum] number of keys that were deleted
             define_method(:purge_unique_queued_redis_keys) do
-              # unique_at_runtime_key_namespace may or may not ignore the queue passed in, depending on config.
+              # unique_in_queue_key_namespace may or may not ignore the queue passed in, depending on config.
               key_match = "#{unique_in_queue_key_namespace(instance_variable_get(:@queue))}:#{unique_in_queue_redis_key_prefix}:*"
               keys = Resque.redis.keys(key_match)
               Resque::UniqueByArity.log("#{Resque::UniqueByArity::PLUGIN_TAG}#{Resque::UniqueInQueue::PLUGIN_TAG} #{ColorizedString['Purging'].red} #{keys.length} keys from #{ColorizedString[key_match].red}")

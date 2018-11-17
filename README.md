@@ -74,6 +74,36 @@ Or install it yourself as:
 
 ## Usage
 
+### Global Configuration
+
+The following is showing the default values.  These global configs are copied into each per-class config unless they are overridden by the class config.
+
+
+Create an initializer (e.g. `config/initializers/resque-unique_by_arity.rb` for rails) and customize the following:
+
+```ruby
+  Resque::UniqueByArity.configure do |config|
+    config.logger = nil
+    config.log_level = :debug
+    config.arity_for_uniqueness = 0
+    config.unique_at_runtime = false
+    config.unique_in_queue = false
+    # No need to do the following if keeping default values
+    config.runtime_lock_timeout = 60 * 60 * 24 * 5
+    config.runtime_requeue_interval = 1
+    config.unique_at_runtime_key_base = 'r-uar'.freeze
+    config.lock_after_execution_period = 0
+    config.ttl = -1
+    config.unique_in_queue_key_base = 'r-uiq'.freeze
+    # Debug Mode is preferably set via an environment variable:
+    #   to one of 'true', 'arity', or 'arity,queue,runtime' for all three tools:
+    #     ENV['RESQUE_DEBUG'] = 'true'
+    # config.debug_mode = true
+  end
+```
+
+### Per Job Class Configuration
+
 This gem will take care to set the class instance variables (similar to the
  familiar `@queue` class instance variable) that are utilized by 
  `resque-unique_in_queue` and `resque-unique_at_runtime` (default values shown):
@@ -93,16 +123,19 @@ This gem will take care to set the class instance variables (similar to the
 All you need to do is configure this gem accordingly:
 ```ruby
   include Resque::Plugins::UniqueByArity.new(
-    arity_for_uniqueness: 3,
-    unique_at_runtime: true,
-    unique_in_queue: true,
+    arity_for_uniqueness: 1,
+    # Turn on one or both of the following:
+    unique_at_runtime: false,
+    unique_in_queue: false,
     # No need to do the following if keeping default values
     runtime_lock_timeout: 60 * 60 * 24 * 5,
     runtime_requeue_interval: 1,
-    unique_at_runtime_key_base: 'r-uar'.freeze,
+    # would override the global setting, probably a bad idea.
+    # unique_at_runtime_key_base: 'r-uar'.freeze,
     lock_after_execution_period: 0,
-    ttl: 0,
-    unique_in_queue_key_base: 'r-uiq'.freeze
+    ttl: -1,
+    # would override the global setting, probably a bad idea.
+    # unique_in_queue_key_base: 'r-uiq'.freeze
   )
 ```
 
@@ -328,28 +361,25 @@ class MyJob
   # Core hashing algorithm for a job used for *all 3 types* of uniqueness 
   # @return [Array<String, arguments>], where the string is the unique digest, and arguments are the specific args that were used to calculate the digest 
   def self.redis_unique_hash(payload)
-    modulizer.rb
     #       for how the built-in version works
     # uniqueness_args = payload["args"] # over simplified & ignoring arity
     # args = { class: job, args: uniqueness_args }
     # return [Digest::MD5.hexdigest(Resque.encode(args)), uniqueness_args]
   end
 
-  unique_in_queue
-  def self.unique_at_runtime_redis_key_prefix
+  def self.unique_in_queue_redis_key_prefix
     # "unique_job:#{self}" # <= default value
-  end
-
-  unique_in_queue
-  def self.unique_at_runtime_key_namespace(queue = nil)
-    # definition depends on which type of uniqueness is chosen, be careful if you customize
-    # "r-uiq:queue:#{queue}:job" # <= is for unique within queue at queue time
-    # "r-uiq:across_queues:job" # <= is for unique across all queues at queue time
   end
   
   def self.unique_in_queue_redis_key(queue, payload)
     # unique_hash, _args_for_uniqueness = redis_unique_hash(payload)
-    # "#{unique_at_runtime_key_namespace(queue)}:#{unique_at_runtime_redis_key_prefix}:#{unique_hash}"
+    # "#{unique_in_queue_key_namespace(queue)}:#{unique_in_queue_redis_key_prefix}:#{unique_hash}"
+  end
+
+  def self.unique_in_queue_key_namespace(queue = nil)
+    # definition depends on which type of uniqueness is chosen, be careful if you customize
+    # "r-uiq:queue:#{queue}:job" # <= is for unique within queue at queue time
+    # "r-uiq:across_queues:job" # <= is for unique across all queues at queue time
   end
   
   def self.runtime_key_namespace
