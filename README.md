@@ -288,7 +288,7 @@ Option: Rampage
 
 ```ruby
 # Delete *all* queued jobs in the queue, and
-#   delete *all* unqueness keys for the queue.
+#   delete *all* uniqueness keys for the queue.
 Redis.remove_queue('queue_name')
 ```
 
@@ -296,7 +296,7 @@ Option: Butterfly
 
 ```ruby
 # Delete *no* queued jobs at all, and
-#   delete *all* unqueness keys for the queue (might then allow duplicates).
+#   delete *all* uniqueness keys for the queue (might then allow duplicates).
 Resque::UniqueInQueue::Queue.cleanup('queue_name')
 ```
 
