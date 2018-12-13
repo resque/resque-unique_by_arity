@@ -9,6 +9,7 @@ require 'resque-unique_in_queue'
 require 'resque-unique_at_runtime'
 
 require 'resque/unique_by_arity/configuration'
+require 'resque/unique_by_arity/configuration/validator'
 require 'resque/unique_by_arity/global_configuration'
 require 'resque/unique_by_arity'
 require 'resque/unique_by_arity/modulizer'

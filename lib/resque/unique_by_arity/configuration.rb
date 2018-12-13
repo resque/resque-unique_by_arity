@@ -52,14 +52,9 @@ module Resque
       end
 
       def validate
-        # The default config initialization shouldn't trigger any warnings.
-        if base_klass_name && logger
-          log "[#{base_klass_name}] :arity_for_uniqueness is set to #{arity_for_uniqueness}, but no uniqueness enforcement was turned on [:unique_at_runtime, :unique_in_queue, :unique_across_queues]" unless unique_at_runtime || unique_in_queue || unique_across_queues
-          log "[#{base_klass_name}] :lock_after_execution_period is set to #{lock_after_execution_period}, but :unique_at_runtime is not set" if lock_after_execution_period && !(unique_in_queue || unique_across_queues)
-          log "[#{base_klass_name}] :runtime_lock_timeout is set to #{runtime_lock_timeout}, but :unique_at_runtime is not set" if runtime_lock_timeout && !unique_at_runtime
-          log "[#{base_klass_name}] :runtime_requeue_interval is set to #{runtime_requeue_interval}, but :unique_at_runtime is not set" if runtime_requeue_interval && !unique_at_runtime
-          log "[#{base_klass_name}] :unique_in_queue and :unique_across_queues should not be set at the same time, as :unique_across_queues will always supercede :unique_in_queue" if unique_in_queue && unique_across_queues
-        end
+        return unless base_klass_name && logger
+
+        Validator.log_warnings(self)
       end
 
       def log(msg)
