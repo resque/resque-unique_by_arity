@@ -11,6 +11,9 @@ module Resque
       attr_accessor :logger
       attr_accessor :log_level
       attr_accessor :arity_for_uniqueness
+      attr_accessor :arity_for_uniqueness_at_runtime
+      attr_accessor :arity_for_uniqueness_in_queue
+      attr_accessor :arity_for_uniqueness_across_queues
       attr_accessor :arity_validation
       attr_accessor :lock_after_execution_period
       attr_accessor :runtime_lock_timeout
@@ -28,6 +31,9 @@ module Resque
         @logger = options.key?(:logger) ? options[:logger] : defcon(:logger) || Logger.new(STDOUT)
         @log_level = options.key?(:log_level) ? options[:log_level] : defcon(:log_level) || :debug
         @arity_for_uniqueness = options.key?(:arity_for_uniqueness) ? options[:arity_for_uniqueness] : defcon(:arity_for_uniqueness) || 1
+        @arity_for_uniqueness_at_runtime = options.key?(:arity_for_uniqueness_at_runtime) ? options[:arity_for_uniqueness_at_runtime] : defcon(:arity_for_uniqueness_at_runtime) || @arity_for_uniqueness
+        @arity_for_uniqueness_in_queue = options.key?(:arity_for_uniqueness_in_queue) ? options[:arity_for_uniqueness_in_queue] : defcon(:arity_for_uniqueness_in_queue) || @arity_for_uniqueness
+        @arity_for_uniqueness_across_queues = options.key?(:arity_for_uniqueness_across_queues) ? options[:arity_for_uniqueness_across_queues] : defcon(:arity_for_uniqueness_across_queues) || @arity_for_uniqueness
         @arity_validation = options.key?(:arity_validation) ? options[:arity_validation] : defcon(:arity_validation) || :warning
         raise ArgumentError, "Resque::Plugins::UniqueByArity.new requires arity_validation values of #{arity_validation.inspect}, or a class inheriting from Exception, but the value is #{@arity_validation} (#{@arity_validation.class})" unless VALID_ARITY_VALIDATION_LEVELS.include?(@arity_validation) || !@arity_validation.respond_to?(:ancestors) || @arity_validation.ancestors.include?(Exception)
 
@@ -66,6 +72,9 @@ module Resque
           log_level: log_level,
           logger: logger,
           arity_for_uniqueness: arity_for_uniqueness,
+          arity_for_uniqueness_at_runtime: arity_for_uniqueness_at_runtime,
+          arity_for_uniqueness_in_queue: arity_for_uniqueness_in_queue,
+          arity_for_uniqueness_across_queues: arity_for_uniqueness_across_queues,
           arity_validation: arity_validation,
           base_klass_name: base_klass_name,
           debug_mode: debug_mode,

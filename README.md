@@ -1,12 +1,12 @@
 # Resque::UniqueByArity
 
-Because some jobs have parameters that you do not want to consider for 
+Because some jobs have parameters that you do not want to consider for
 determination of uniqueness.
 
 NOTE:
 
 I rewrote, and renamed, both `resque_solo` and `resque-lonely_job`, becuase they
- can't be used together.  Why?  Their `redis_key` methods directly conflict, 
+ can't be used together.  Why?  Their `redis_key` methods directly conflict,
  among other more subtle issues.
 
 This gem requires use of my rewritten gems for uniqueness enforcement:
@@ -105,7 +105,7 @@ Create an initializer (e.g. `config/initializers/resque-unique_by_arity.rb` for 
 ### Per Job Class Configuration
 
 This gem will take care to set the class instance variables (similar to the
- familiar `@queue` class instance variable) that are utilized by 
+ familiar `@queue` class instance variable) that are utilized by
  `resque-unique_in_queue` and `resque-unique_at_runtime` (default values shown):
 
  ```ruby
@@ -168,7 +168,7 @@ class MyJob
     # Because the third argument is optional the arity valdiation will not approve.
     # Arguments to be considered for uniqueness should be required arguments.
     # The warning log might look like:
-    # 
+    #
     #    MyJob.perform has the following required parameters: [:my, :cat], which is not enough to satisfy the configured arity_for_uniqueness of 3
   end
   include Resque::Plugins::UniqueByArity.new(
@@ -233,7 +233,7 @@ end
 ```
 
 #### Oops, I have stale runtime uniqueness keys for MyJob stored in Redis...
- 
+
 Preventing jobs with matching signatures from running, and they never get
 dequeued because there is no actual corresponding job to dequeue.
 
@@ -278,7 +278,7 @@ end
 ```
 
 #### Oops, I have stale Queue Time uniqueness keys...
- 
+
 Preventing jobs with matching signatures from being queued, and they never get
 dequeued because there is no actual corresponding job to dequeue.
 
@@ -358,9 +358,9 @@ class MyJob
     #...
   )
 
-  # Core hashing algorithm for a job used for *all 3 types* of uniqueness 
-  # @return [Array<String, arguments>], where the string is the unique digest, and arguments are the specific args that were used to calculate the digest 
-  def self.redis_unique_hash(payload)
+  # Core hashing algorithm for a job used for *all 3 types* of uniqueness
+  # @return [Array<String, arguments>], where the string is the unique digest, and arguments are the specific args that were used to calculate the digest
+  def self.redis_unique_hash(payload, arity_for_uniqueness = 1)
     #       for how the built-in version works
     # uniqueness_args = payload["args"] # over simplified & ignoring arity
     # args = { class: job, args: uniqueness_args }
@@ -370,9 +370,10 @@ class MyJob
   def self.unique_in_queue_redis_key_prefix
     # "unique_job:#{self}" # <= default value
   end
-  
+
   def self.unique_in_queue_redis_key(queue, payload)
-    # unique_hash, _args_for_uniqueness = redis_unique_hash(payload)
+    # arity_for_uniqueness = determine_arity # over simplified & ignoring context-specific arity determination
+    # unique_hash, _args_for_uniqueness = redis_unique_hash(payload, arity_for_uniqueness)
     # "#{unique_in_queue_key_namespace(queue)}:#{unique_in_queue_redis_key_prefix}:#{unique_hash}"
   end
 
@@ -381,13 +382,14 @@ class MyJob
     # "r-uiq:queue:#{queue}:job" # <= is for unique within queue at queue time
     # "r-uiq:across_queues:job" # <= is for unique across all queues at queue time
   end
-  
+
   def self.runtime_key_namespace
     # "unique_at_runtime:#{self}"
   end
-  
+
   def self.unique_at_runtime_redis_key(*args)
-    # unique_hash, _args_for_uniqueness = redis_unique_hash({"class" => self.to_s, "args" => args})
+    # payload = {"class" => self.to_s, "args" => args}
+    # unique_hash, _args_for_uniqueness = redis_unique_hash(payload, configuration.arity_for_uniqueness_at_runtime)
     # key = "#{runtime_key_namespace}:#{unique_hash}" # <= simplified default
   end
 end
@@ -436,7 +438,7 @@ spec.add_dependency 'resque-unique_by_arity', '~> 0.0'
 
 * Copyright (c) 2017 - 2018 [Peter H. Boling][peterboling] of [Rails Bling][railsbling]
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT) 
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
 [license]: LICENSE
 [semver]: http://semver.org/

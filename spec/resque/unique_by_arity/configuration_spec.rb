@@ -7,6 +7,9 @@ describe Resque::UniqueByArity::Configuration do
     let(:log_level) { :info }
     let(:logger) { Logger.new('/dev/null') }
     let(:arity_for_uniqueness) { 0 }
+    let(:arity_for_uniqueness_at_runtime) { 0 }
+    let(:arity_for_uniqueness_in_queue) { 0 }
+    let(:arity_for_uniqueness_across_queues) { 0 }
     let(:arity_validation) { :warning }
     let(:lock_after_execution_period) { nil }
     let(:runtime_lock_timeout) { 10 }
@@ -25,6 +28,9 @@ describe Resque::UniqueByArity::Configuration do
           logger: logger,
           log_level: log_level,
           arity_for_uniqueness: arity_for_uniqueness,
+          arity_for_uniqueness_at_runtime: arity_for_uniqueness_at_runtime,
+          arity_for_uniqueness_in_queue: arity_for_uniqueness_in_queue,
+          arity_for_uniqueness_across_queues: arity_for_uniqueness_across_queues,
           arity_validation: arity_validation,
           lock_after_execution_period: lock_after_execution_period,
           runtime_lock_timeout: runtime_lock_timeout,
@@ -61,6 +67,24 @@ describe Resque::UniqueByArity::Configuration do
         subject { instance.arity_for_uniqueness }
         it 'sets arity_for_uniqueness' do
           is_expected.to eq(arity_for_uniqueness)
+        end
+      end
+      context 'arity_for_uniqueness_at_runtime option' do
+        subject { instance.arity_for_uniqueness_at_runtime }
+        it 'sets arity_for_uniqueness_at_runtime' do
+          is_expected.to eq(arity_for_uniqueness_at_runtime)
+        end
+      end
+      context 'arity_for_uniqueness_in_queue option' do
+        subject { instance.arity_for_uniqueness_in_queue }
+        it 'sets arity_for_uniqueness_in_queue' do
+          is_expected.to eq(arity_for_uniqueness_in_queue)
+        end
+      end
+      context 'arity_for_uniqueness_across_queues option' do
+        subject { instance.arity_for_uniqueness_across_queues }
+        it 'sets arity_for_uniqueness_across_queues' do
+          is_expected.to eq(arity_for_uniqueness_across_queues)
         end
       end
       context 'arity_validation option' do
@@ -155,6 +179,9 @@ describe Resque::UniqueByArity::Configuration do
                               log_level: :info,
                               logger: logger,
                               arity_for_uniqueness: arity_for_uniqueness,
+                              arity_for_uniqueness_at_runtime: arity_for_uniqueness_at_runtime,
+                              arity_for_uniqueness_in_queue: arity_for_uniqueness_in_queue,
+                              arity_for_uniqueness_across_queues: arity_for_uniqueness_across_queues,
                               arity_validation: arity_validation,
                               base_klass_name: nil, # Not set by initialize!
                               debug_mode: false, # normalized to true || false

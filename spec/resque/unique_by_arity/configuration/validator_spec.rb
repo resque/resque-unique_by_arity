@@ -95,5 +95,59 @@ describe Resque::UniqueByArity::Configuration::Validator do
 
       it { expect(Resque::UniqueByArity).to have_received(:log) }
     end
+
+    context 'when arity_for_uniqueness_at_runtime is set' do
+      let(:config) do
+        Resque::UniqueByArity::Configuration.new(
+          arity_for_uniqueness_at_runtime: 100
+        )
+      end
+
+      subject { described_class.new(config) }
+
+      before do
+        allow(Resque::UniqueByArity).to receive(:log)
+
+        subject.log_warnings
+      end
+
+      it { expect(Resque::UniqueByArity).to have_received(:log) }
+    end
+
+    context 'when arity_for_uniqueness_in_queue is set' do
+      let(:config) do
+        Resque::UniqueByArity::Configuration.new(
+          arity_for_uniqueness_in_queue: 100
+        )
+      end
+
+      subject { described_class.new(config) }
+
+      before do
+        allow(Resque::UniqueByArity).to receive(:log)
+
+        subject.log_warnings
+      end
+
+      it { expect(Resque::UniqueByArity).to have_received(:log) }
+    end
+
+    context 'when arity_for_uniqueness_across_queues is set' do
+      let(:config) do
+        Resque::UniqueByArity::Configuration.new(
+          arity_for_uniqueness_across_queues: 100
+        )
+      end
+
+      subject { described_class.new(config) }
+
+      before do
+        allow(Resque::UniqueByArity).to receive(:log)
+
+        subject.log_warnings
+      end
+
+      it { expect(Resque::UniqueByArity).to have_received(:log) }
+    end
   end
 end

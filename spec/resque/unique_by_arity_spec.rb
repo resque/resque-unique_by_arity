@@ -18,6 +18,15 @@ RSpec.describe Resque::UniqueByArity do
     it 'has default arity_for_uniqueness' do
       expect(Resque::UniqueByArity.configuration.arity_for_uniqueness).to eq(nil)
     end
+    it 'has default arity_for_uniqueness_at_runtime' do
+      expect(Resque::UniqueByArity.configuration.arity_for_uniqueness_at_runtime).to eq(nil)
+    end
+    it 'has default arity_for_uniqueness_in_queue' do
+      expect(Resque::UniqueByArity.configuration.arity_for_uniqueness_in_queue).to eq(nil)
+    end
+    it 'has default arity_for_uniqueness_across_queues' do
+      expect(Resque::UniqueByArity.configuration.arity_for_uniqueness_across_queues).to eq(nil)
+    end
     it 'has default arity_validation' do
       expect(Resque::UniqueByArity.configuration.arity_validation).to eq(nil)
     end
@@ -56,6 +65,9 @@ RSpec.describe Resque::UniqueByArity do
       let(:logger) { Logger.new('/dev/null') }
       let(:log_level) { :info }
       let(:arity_for_uniqueness) { 3 }
+      let(:arity_for_uniqueness_at_runtime) { 1 }
+      let(:arity_for_uniqueness_in_queue) { 3 }
+      let(:arity_for_uniqueness_across_queues) { 3 }
       let(:unique_at_runtime) { true }
       let(:unique_in_queue) { true }
       let(:runtime_lock_timeout) { 10 }
@@ -70,6 +82,9 @@ RSpec.describe Resque::UniqueByArity do
           config.logger = logger
           config.log_level = log_level
           config.arity_for_uniqueness = arity_for_uniqueness
+          config.arity_for_uniqueness_at_runtime = arity_for_uniqueness_at_runtime
+          config.arity_for_uniqueness_in_queue = arity_for_uniqueness_in_queue
+          config.arity_for_uniqueness_across_queues = arity_for_uniqueness_across_queues
           config.unique_at_runtime = unique_at_runtime
           config.unique_in_queue = unique_in_queue
           config.runtime_lock_timeout = runtime_lock_timeout
@@ -90,6 +105,9 @@ RSpec.describe Resque::UniqueByArity do
         expect(Resque::UniqueByArity.configuration.logger).to eq(logger)
         expect(Resque::UniqueByArity.configuration.log_level).to eq(log_level)
         expect(Resque::UniqueByArity.configuration.arity_for_uniqueness).to eq(arity_for_uniqueness)
+        expect(Resque::UniqueByArity.configuration.arity_for_uniqueness_at_runtime).to eq(arity_for_uniqueness_at_runtime)
+        expect(Resque::UniqueByArity.configuration.arity_for_uniqueness_in_queue).to eq(arity_for_uniqueness_in_queue)
+        expect(Resque::UniqueByArity.configuration.arity_for_uniqueness_across_queues).to eq(arity_for_uniqueness_across_queues)
         expect(Resque::UniqueByArity.configuration.unique_at_runtime).to eq(unique_at_runtime)
         expect(Resque::UniqueByArity.configuration.unique_in_queue).to eq(unique_in_queue)
         expect(Resque::UniqueByArity.configuration.runtime_lock_timeout).to eq(runtime_lock_timeout)
