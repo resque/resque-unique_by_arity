@@ -26,7 +26,7 @@ RSpec.describe Resque::Plugins::UniqueByArity do
   context '.redis_unique_hash' do
     context 'with id 1' do
       it "gives ['ef0f8a28f2c84e48211489121112e67f', [1]]" do
-        expect(subject.redis_unique_hash(class: subject.to_s, args: args)).to eq ['ef0f8a28f2c84e48211489121112e67f', [1]]
+        expect(subject.redis_unique_hash({class: subject.to_s, args: args}, 1)).to eq ['ef0f8a28f2c84e48211489121112e67f', [1]]
       end
     end
   end
@@ -49,6 +49,29 @@ RSpec.describe Resque::Plugins::UniqueByArity do
     context 'with bogus queue' do
       it 'gives r-uiq:queue:bogus:job:unique_job:RealFake:ef0f8a28f2c84e48211489121112e67f' do
         expect(subject.unique_in_queue_redis_key('bogus', class: subject.to_s, args: args)).to eq 'r-uiq:queue:bogus:job:unique_job:RealFake:ef0f8a28f2c84e48211489121112e67f'
+      end
+    end
+    context 'when arity_for_uniqueness_in_queue is higher than arity_for_uniqueness_at_runtime' do
+      let(:instance) do
+        Class.new do
+          def self.to_s
+            'RealFake'
+          end
+
+          def self.perform(_req, _opts = {})
+            # Does something
+          end
+          include Resque::Plugins::UniqueByArity.new(
+            arity_for_uniqueness_at_runtime: 2,
+            arity_for_uniqueness_in_queue: 3,
+            unique_at_runtime: true,
+            unique_in_queue: true
+          )
+        end
+      end
+
+      it 'gives r-uiq:queue:bogus:job:unique_job:RealFake:3dd0acb8de86d0dc0aaafcb770a8d5b7' do
+        expect(subject.unique_in_queue_redis_key('bogus', class: subject.to_s, args: args)).to eq 'r-uiq:queue:bogus:job:unique_job:RealFake:3dd0acb8de86d0dc0aaafcb770a8d5b7'
       end
     end
     context 'when custom unique_at_runtime_key_base' do
@@ -110,6 +133,29 @@ RSpec.describe Resque::Plugins::UniqueByArity do
   context '.unique_at_runtime_redis_key' do
     it 'gives r-uar:RealFake:ef0f8a28f2c84e48211489121112e67f' do
       expect(subject.unique_at_runtime_redis_key(*args)).to eq 'r-uar:RealFake:ef0f8a28f2c84e48211489121112e67f'
+    end
+    context 'when arity_for_uniqueness_in_queue is higher than arity_for_uniqueness_at_runtime' do
+      let(:instance) do
+        Class.new do
+          def self.to_s
+            'RealFake'
+          end
+
+          def self.perform(_req, _opts = {})
+            # Does something
+          end
+          include Resque::Plugins::UniqueByArity.new(
+            arity_for_uniqueness_at_runtime: 2,
+            arity_for_uniqueness_in_queue: 3,
+            unique_at_runtime: true,
+            unique_in_queue: true
+          )
+        end
+      end
+
+      it 'gives r-uar:RealFake:ef0f8a28f2c84e48211489121112e67f' do
+        expect(subject.unique_at_runtime_redis_key(*args)).to eq 'r-uar:RealFake:3dd0acb8de86d0dc0aaafcb770a8d5b7'
+      end
     end
     context 'when perform has no required args' do
       let(:instance) do
@@ -744,6 +790,8 @@ RSpec.describe Resque::Plugins::UniqueByArity do
           end
           include Resque::Plugins::UniqueByArity.new(
             arity_for_uniqueness: 1,
+            arity_for_uniqueness_at_runtime: 2,
+            arity_for_uniqueness_in_queue: 3,
             unique_at_runtime: true,
             unique_in_queue: true
           )

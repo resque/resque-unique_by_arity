@@ -32,6 +32,9 @@ module Resque
         @logger = nil
         @log_level = DEFAULT_LOG_LEVEL
         @arity_for_uniqueness = nil
+        @arity_for_uniqueness_at_runtime = nil
+        @arity_for_uniqueness_in_queue = nil
+        @arity_for_uniqueness_across_queues = nil
         @arity_validation = nil
         @lock_after_execution_period = DEFAULT_LOCK_AFTER_EXECUTION_PERIOD
         @runtime_lock_timeout = DEFAULT_LOCK_TIMEOUT
