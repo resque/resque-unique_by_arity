@@ -7,7 +7,7 @@ gem 'resque-unique_at_runtime'
 
 group :test do
   unless ENV['TRAVIS']
-    gem 'byebug', '~> 10', platform: :mri, require: false
+    gem 'byebug', '~> 11', platform: :mri, require: false
     gem 'pry', '~> 0', platform: :mri, require: false
     gem 'pry-byebug', '~> 3', platform: :mri, require: false
   end
