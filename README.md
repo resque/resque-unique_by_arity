@@ -5,7 +5,7 @@ determination of uniqueness.
 
 NOTE:
 
-I rewrote, and renamed, both `resque_solo` and `resque-lonely_job`, becuase they
+I rewrote, and renamed, both `resque_solo` and `resque-lonely_job`, because they
  can't be used together.  Why?  Their `redis_key` methods directly conflict,
  among other more subtle issues.
 
