@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    resque-unique_by_arity (3.0.2)
+    resque-unique_by_arity (3.0.3)
       colorize (>= 0.8)
       resque (>= 1.2)
       resque-unique_at_runtime (>= 3)
@@ -285,7 +285,7 @@ PATH
 PATH
   remote: /var/home/pboling/src/my/resque/resque-unique_at_runtime
   specs:
-    resque-unique_at_runtime (4.0.1)
+    resque-unique_at_runtime (4.0.2)
       colorize (>= 0.8)
       resque (>= 1.2)
       version_gem (~> 1.1, >= 1.1.14)
@@ -996,8 +996,8 @@ CHECKSUMS
   reline (0.6.3) sha256=1198b04973565b36ec0f11542ab3f5cfeeec34823f4e54cebde90968092b1835
   require_bench (1.0.4) sha256=c8ef54aac5c01f80bb5f110f7c08d304417a6c7b34f3683e1923227b6e65d004
   resque (3.0.0) sha256=ee6f02b61b2af48c587587dd6fb3b9b5eca94e348c568aed8e9d7e7872b2f713
-  resque-unique_at_runtime (4.0.1)
-  resque-unique_by_arity (3.0.2)
+  resque-unique_at_runtime (4.0.2)
+  resque-unique_by_arity (3.0.3)
   resque-unique_in_queue (2.0.2)
   rexml (3.4.4) sha256=19e0a2c3425dfbf2d4fc1189747bdb2f849b6c5e74180401b15734bc97b5d142
   rspec (3.13.2) sha256=206284a08ad798e61f86d7ca3e376718d52c0bc944626b2349266f239f820587

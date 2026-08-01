@@ -1,4 +1,4 @@
-<a href="https://github.com/resque"><img alt="resque Logo by Aboling0, CC BY-SA 4.0" src="https://logos.galtzo.com/assets/images/resque/avatar-128px.svg" width="14%" align="right"/></a>
+<a href="https://github.com/resque"><img alt="resque Logo by GitHub" src="https://github.com/resque.png?size=192" width="14%" align="right"/></a>
 
 # 💎 Resque::UniqueByArity
 
