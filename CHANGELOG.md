@@ -96,3 +96,15 @@ Please file a bug if you notice a violation of semantic versioning.
 - Restore legacy top-level RSpec DSL support after templating and accept Ruby 4 NameError quoting.
 
 ### Security
+
+## [3.0.2] - 2018-11-17
+
+- TAG: [v3.0.2][3.0.2t]
+
+### Changed
+
+- Historical release notes are unavailable in this changelog.
+
+[Unreleased]: https://github.com/resque/resque-unique_by_arity/compare/v3.0.2...HEAD
+[3.0.2]: https://github.com/resque/resque-unique_by_arity/compare/1765bbc873d8830ce982598bb129cd81208acd22...v3.0.2
+[3.0.2t]: https://github.com/resque/resque-unique_by_arity/releases/tag/v3.0.2
