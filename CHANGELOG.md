@@ -96,4 +96,3 @@ Please file a bug if you notice a violation of semantic versioning.
 - Restore legacy top-level RSpec DSL support after templating and accept Ruby 4 NameError quoting.
 
 ### Security
-
