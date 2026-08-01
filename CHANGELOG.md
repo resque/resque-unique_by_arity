@@ -46,6 +46,8 @@ Please file a bug if you notice a violation of semantic versioning.
   setup-ruby-flash planning and can prepare appraisal-only jobs without
   installing the main Gemfile bundle.
 
+- Document the gem synopsis and configuration options.
+
 ### Deprecated
 
 ### Removed

@@ -21,6 +21,10 @@ I've summarized my thoughts in [this blog post](https://dev.to/galtzo/hostile-ta
 
 ## 🌻 Synopsis <a href="https://discord.gg/3qme4XHNKN"><img alt="Galtzo FLOSS Logo by Aboling0, CC BY-SA 4.0" src="https://logos.galtzo.com/assets/images/galtzo-floss/avatar-128px.svg" width="8%" align="right"/></a> <a href="https://ruby-toolbox.com"><img alt="ruby-lang Logo, Yukihiro Matsumoto, Ruby Visual Identity Team, CC BY-SA 2.5" src="https://logos.galtzo.com/assets/images/ruby-lang/avatar-128px.svg" width="8%" align="right"/></a>
 
+`resque-unique_by_arity` composes queue-time and runtime uniqueness and lets each job choose which leading `perform` arguments define its uniqueness signature. It supports queue-local uniqueness, cross-queue uniqueness, and runtime uniqueness without hand-written Redis key methods.
+
+Use it when a job has ancillary arguments, such as options or tracing values, that should not create a separate unit of work.
+
 ## 💡 Info you can shake a stick at
 
 | Tokens to Remember | [![Gem name][⛳️name-img]][⛳️gem-name] [![Gem namespace][⛳️namespace-img]][⛳️gem-namespace] |
@@ -118,6 +122,23 @@ gem install resque-unique_by_arity
 ```
 
 ## ⚙️ Configuration
+
+Set application defaults with `Resque::UniqueByArity.configure`, then include a configured plugin instance in each job:
+
+```ruby
+class RefreshAccount
+  @queue = :accounts
+
+  include Resque::Plugins::UniqueByArity.new(
+    arity_for_uniqueness: 1,
+    unique_in_queue: true,
+    unique_at_runtime: true,
+    arity_validation: :error
+  )
+end
+```
+
+`arity_for_uniqueness` is the number of leading arguments used for the key. Use `arity_for_uniqueness_at_runtime`, `arity_for_uniqueness_in_queue`, or `arity_for_uniqueness_across_queues` when an enforcement axis needs a different arity. Choose either `unique_in_queue` or `unique_across_queues`, never both. `arity_validation` accepts `:warning`, `:error`, `:skip`, or `nil`/`false`.
 
 ## 🔧 Basic Usage
 
