@@ -1,68 +1,85 @@
-require 'spec_helper'
+require "spec_helper"
 
 RSpec.describe Resque::UniqueByArity do
-  it 'has a version number' do
-    expect(Resque::UniqueByArity::VERSION).not_to be nil
+  it "has a version number" do
+    expect(Resque::UniqueByArity::VERSION).not_to be_nil
   end
 
-  context 'configuration' do
+  context "configuration" do
     before do
       Resque::UniqueByArity::GlobalConfiguration.instance.reset
     end
-    it 'has default logger' do
+
+    it "has default logger" do
       expect(Resque::UniqueByArity.configuration.logger).to eq(nil)
     end
-    it 'has default log_level' do
+
+    it "has default log_level" do
       expect(Resque::UniqueByArity.configuration.log_level).to eq(:debug)
     end
-    it 'has default arity_for_uniqueness' do
+
+    it "has default arity_for_uniqueness" do
       expect(Resque::UniqueByArity.configuration.arity_for_uniqueness).to eq(nil)
     end
-    it 'has default arity_for_uniqueness_at_runtime' do
+
+    it "has default arity_for_uniqueness_at_runtime" do
       expect(Resque::UniqueByArity.configuration.arity_for_uniqueness_at_runtime).to eq(nil)
     end
-    it 'has default arity_for_uniqueness_in_queue' do
+
+    it "has default arity_for_uniqueness_in_queue" do
       expect(Resque::UniqueByArity.configuration.arity_for_uniqueness_in_queue).to eq(nil)
     end
-    it 'has default arity_for_uniqueness_across_queues' do
+
+    it "has default arity_for_uniqueness_across_queues" do
       expect(Resque::UniqueByArity.configuration.arity_for_uniqueness_across_queues).to eq(nil)
     end
-    it 'has default arity_validation' do
+
+    it "has default arity_validation" do
       expect(Resque::UniqueByArity.configuration.arity_validation).to eq(nil)
     end
-    it 'has default lock_after_execution_period' do
+
+    it "has default lock_after_execution_period" do
       expect(Resque::UniqueByArity.configuration.lock_after_execution_period).to eq(0)
     end
-    it 'has default runtime_lock_timeout' do
+
+    it "has default runtime_lock_timeout" do
       expect(Resque::UniqueByArity.configuration.runtime_lock_timeout).to eq(60 * 60 * 24 * 5)
     end
-    it 'has default runtime_requeue_interval' do
+
+    it "has default runtime_requeue_interval" do
       expect(Resque::UniqueByArity.configuration.runtime_requeue_interval).to eq(1)
     end
-    it 'has default unique_at_runtime_key_base' do
-      expect(Resque::UniqueByArity.configuration.unique_at_runtime_key_base).to eq('r-uar')
+
+    it "has default unique_at_runtime_key_base" do
+      expect(Resque::UniqueByArity.configuration.unique_at_runtime_key_base).to eq("r-uar")
     end
-    it 'has default unique_in_queue_key_base' do
-      expect(Resque::UniqueByArity.configuration.unique_in_queue_key_base).to eq('r-uiq')
+
+    it "has default unique_in_queue_key_base" do
+      expect(Resque::UniqueByArity.configuration.unique_in_queue_key_base).to eq("r-uiq")
     end
-    it 'has default unique_at_runtime' do
+
+    it "has default unique_at_runtime" do
       expect(Resque::UniqueByArity.configuration.unique_at_runtime).to eq(false)
     end
-    it 'has default unique_in_queue' do
+
+    it "has default unique_in_queue" do
       expect(Resque::UniqueByArity.configuration.unique_in_queue).to eq(false)
     end
-    it 'has default unique_across_queues' do
+
+    it "has default unique_across_queues" do
       expect(Resque::UniqueByArity.configuration.unique_across_queues).to eq(false)
     end
-    it 'has default ttl' do
+
+    it "has default ttl" do
       expect(Resque::UniqueByArity.configuration.ttl).to eq(-1)
     end
-    it 'has default debug_mode' do
+
+    it "has default debug_mode" do
       expect(Resque::UniqueByArity.configuration.debug_mode).to eq(false)
     end
 
-    context 'global' do
-      let(:logger) { Logger.new('/dev/null') }
+    context "global" do
+      let(:logger) { Logger.new("/dev/null") }
       let(:log_level) { :info }
       let(:arity_for_uniqueness) { 3 }
       let(:arity_for_uniqueness_at_runtime) { 1 }
@@ -72,11 +89,12 @@ RSpec.describe Resque::UniqueByArity do
       let(:unique_in_queue) { true }
       let(:runtime_lock_timeout) { 10 }
       let(:runtime_requeue_interval) { 4 }
-      let(:unique_at_runtime_key_base) { 'abc' }
+      let(:unique_at_runtime_key_base) { "abc" }
       let(:lock_after_execution_period) { 7 }
       let(:ttl) { 2 }
-      let(:unique_in_queue_key_base) { 'def' }
+      let(:unique_in_queue_key_base) { "def" }
       let(:debug_mode) { true }
+
       before do
         Resque::UniqueByArity.configure do |config|
           config.logger = logger
@@ -98,10 +116,12 @@ RSpec.describe Resque::UniqueByArity do
           config.debug_mode = debug_mode
         end
       end
+
       after do
         Resque::UniqueByArity::GlobalConfiguration.instance.reset
       end
-      it 'sets' do
+
+      it "sets" do
         expect(Resque::UniqueByArity.configuration.logger).to eq(logger)
         expect(Resque::UniqueByArity.configuration.log_level).to eq(log_level)
         expect(Resque::UniqueByArity.configuration.arity_for_uniqueness).to eq(arity_for_uniqueness)
@@ -121,28 +141,33 @@ RSpec.describe Resque::UniqueByArity do
     end
   end
 
-  context 'logging' do
+  context "logging" do
     let(:log_level) { :info }
-    let(:logger) { Logger.new('/dev/null') }
-    describe '.log' do
-      subject { Resque::UniqueByArity.log('warbler', Resque::UniqueByArity::Configuration.new(logger: logger, log_level: :info)) }
-      it('logs') do
-        expect(logger).to receive(:info).with('warbler')
+    let(:logger) { Logger.new("/dev/null") }
+
+    describe ".log" do
+      subject { Resque::UniqueByArity.log("warbler", Resque::UniqueByArity::Configuration.new(logger: logger, log_level: :info)) }
+
+      it("logs") do
+        expect(logger).to receive(:info).with("warbler")
         block_is_expected.not_to raise_error
       end
     end
 
-    describe '.debug' do
-      context 'with debug_mode => true' do
-        subject { Resque::UniqueByArity.debug('warbler', Resque::UniqueByArity::Configuration.new(debug_mode: true, logger: logger, log_level: :info)) }
-        it('logs') do
+    describe ".debug" do
+      context "with debug_mode => true" do
+        subject { Resque::UniqueByArity.debug("warbler", Resque::UniqueByArity::Configuration.new(debug_mode: true, logger: logger, log_level: :info)) }
+
+        it("logs") do
           expect(logger).to receive(:debug).with(/R-UBA.*warbler/)
           block_is_expected.not_to raise_error
         end
       end
-      context 'with debug_mode => false' do
-        subject { Resque::UniqueByArity.debug('warbler', Resque::UniqueByArity::Configuration.new(debug_mode: false, logger: logger, log_level: :info)) }
-        it('logs') do
+
+      context "with debug_mode => false" do
+        subject { Resque::UniqueByArity.debug("warbler", Resque::UniqueByArity::Configuration.new(debug_mode: false, logger: logger, log_level: :info)) }
+
+        it("logs") do
           expect(logger).not_to receive(:debug).with(/R-UBA.*warbler/)
           block_is_expected.not_to raise_error
         end

@@ -1,4 +1,4 @@
-require 'logger'
+require "logger"
 module Resque
   module UniqueByArity
     # This class is for configurations that are per job class, *not* app-wide.
@@ -103,25 +103,25 @@ module Resque
         #   for perform(opts = {}), method(:perform).arity # => -1
         #   which means that the only valid arity_for_uniqueness is 0
         msg = if perform_method.arity >= 0
-                # takes a fixed number of arguments
-                # parform(a, b, c) # => arity == 3, so arity for uniqueness can be 0, 1, 2, or 3
-                if perform_method.arity < arity_for_uniqueness
-                  "#{klass_string}.#{perform_method.name} has arity of #{perform_method.arity} which will not work with arity_for_uniqueness of #{arity_for_uniqueness}"
-                end
-              else
-                if perform_method.arity.abs < arity_for_uniqueness
-                  # parform(a, b, c, opts = {}) # => arity == -4
-                  #   and in this case arity for uniqueness can be 0, 1, 2, or 3, because 4 of the arguments are required
-                  "#{klass_string}.#{perform_method.name} has arity of #{perform_method.arity} which will not work with arity_for_uniqueness of #{arity_for_uniqueness}"
-                elsif (required_parameter_names = perform_method.parameters.take_while { |a| a[0] == :req }.map { |b| b[1] }).length < arity_for_uniqueness
-                  "#{klass_string}.#{perform_method.name} has the following required parameters: #{required_parameter_names}, which is not enough to satisfy the configured arity_for_uniqueness of #{arity_for_uniqueness}"
-                end
-              end
+          # takes a fixed number of arguments
+          # parform(a, b, c) # => arity == 3, so arity for uniqueness can be 0, 1, 2, or 3
+          if perform_method.arity < arity_for_uniqueness
+            "#{klass_string}.#{perform_method.name} has arity of #{perform_method.arity} which will not work with arity_for_uniqueness of #{arity_for_uniqueness}"
+          end
+        else
+          if perform_method.arity.abs < arity_for_uniqueness
+            # parform(a, b, c, opts = {}) # => arity == -4
+            #   and in this case arity for uniqueness can be 0, 1, 2, or 3, because 4 of the arguments are required
+            "#{klass_string}.#{perform_method.name} has arity of #{perform_method.arity} which will not work with arity_for_uniqueness of #{arity_for_uniqueness}"
+          elsif (required_parameter_names = perform_method.parameters.take_while { |a| a[0] == :req }.map { |b| b[1] }).length < arity_for_uniqueness
+            "#{klass_string}.#{perform_method.name} has the following required parameters: #{required_parameter_names}, which is not enough to satisfy the configured arity_for_uniqueness of #{arity_for_uniqueness}"
+          end
+        end
         if msg
           case arity_validation
-          when :warning then
+          when :warning
             log(ColorizedString[msg].red)
-          when :error then
+          when :error
             raise ArgumentError, msg
           else
             raise arity_validation, msg
@@ -140,8 +140,8 @@ module Resque
       private
 
       def debug_mode_from_env
-        env_debug = ENV['RESQUE_DEBUG']
-        @debug_mode = !!(env_debug == 'true' || (env_debug.is_a?(String) && env_debug.match?(/queue/)))
+        env_debug = ENV["RESQUE_DEBUG"]
+        @debug_mode = !!(env_debug == "true" || (env_debug.is_a?(String) && env_debug.match?(/queue/)))
       end
     end
   end

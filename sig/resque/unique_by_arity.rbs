@@ -1,0 +1,8 @@
+module Resque
+  module UniqueByArity
+    module Version
+      VERSION: String
+    end
+    VERSION: String
+  end
+end

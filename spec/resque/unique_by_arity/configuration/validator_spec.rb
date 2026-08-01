@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Resque::UniqueByArity::Configuration::Validator do
-  describe '#log_warnings' do
-    context 'when no configuration is set' do
+  describe "#log_warnings" do
+    context "when no configuration is set" do
+      subject { described_class.new(config) }
+
       let(:config) do
         Resque::UniqueByArity::Configuration.new(
           unique_in_queue: false,
@@ -12,8 +14,6 @@ describe Resque::UniqueByArity::Configuration::Validator do
           unique_across_queues: false
         )
       end
-
-      subject { described_class.new(config) }
 
       before do
         allow(Resque::UniqueByArity).to receive(:log)
@@ -24,15 +24,15 @@ describe Resque::UniqueByArity::Configuration::Validator do
       it { expect(Resque::UniqueByArity).not_to have_received(:log) }
     end
 
-    context 'when runtime_requeue_interval is set' do
+    context "when runtime_requeue_interval is set" do
+      subject { described_class.new(config) }
+
       let(:config) do
         Resque::UniqueByArity::Configuration.new(
           runtime_requeue_interval: 100
         )
       end
 
-      subject { described_class.new(config) }
-
       before do
         allow(Resque::UniqueByArity).to receive(:log)
 
@@ -42,15 +42,15 @@ describe Resque::UniqueByArity::Configuration::Validator do
       it { expect(Resque::UniqueByArity).to have_received(:log) }
     end
 
-    context 'when runtime_lock_timeout is set' do
+    context "when runtime_lock_timeout is set" do
+      subject { described_class.new(config) }
+
       let(:config) do
         Resque::UniqueByArity::Configuration.new(
           runtime_lock_timeout: 100
         )
       end
 
-      subject { described_class.new(config) }
-
       before do
         allow(Resque::UniqueByArity).to receive(:log)
 
@@ -60,15 +60,15 @@ describe Resque::UniqueByArity::Configuration::Validator do
       it { expect(Resque::UniqueByArity).to have_received(:log) }
     end
 
-    context 'when lock_after_execution_period is set' do
+    context "when lock_after_execution_period is set" do
+      subject { described_class.new(config) }
+
       let(:config) do
         Resque::UniqueByArity::Configuration.new(
           lock_after_execution_period: 100
         )
       end
 
-      subject { described_class.new(config) }
-
       before do
         allow(Resque::UniqueByArity).to receive(:log)
 
@@ -78,15 +78,15 @@ describe Resque::UniqueByArity::Configuration::Validator do
       it { expect(Resque::UniqueByArity).to have_received(:log) }
     end
 
-    context 'when arity_for_uniqueness is set' do
+    context "when arity_for_uniqueness is set" do
+      subject { described_class.new(config) }
+
       let(:config) do
         Resque::UniqueByArity::Configuration.new(
           arity_for_uniqueness: 100
         )
       end
 
-      subject { described_class.new(config) }
-
       before do
         allow(Resque::UniqueByArity).to receive(:log)
 
@@ -96,15 +96,15 @@ describe Resque::UniqueByArity::Configuration::Validator do
       it { expect(Resque::UniqueByArity).to have_received(:log) }
     end
 
-    context 'when arity_for_uniqueness_at_runtime is set' do
+    context "when arity_for_uniqueness_at_runtime is set" do
+      subject { described_class.new(config) }
+
       let(:config) do
         Resque::UniqueByArity::Configuration.new(
           arity_for_uniqueness_at_runtime: 100
         )
       end
 
-      subject { described_class.new(config) }
-
       before do
         allow(Resque::UniqueByArity).to receive(:log)
 
@@ -114,15 +114,15 @@ describe Resque::UniqueByArity::Configuration::Validator do
       it { expect(Resque::UniqueByArity).to have_received(:log) }
     end
 
-    context 'when arity_for_uniqueness_in_queue is set' do
+    context "when arity_for_uniqueness_in_queue is set" do
+      subject { described_class.new(config) }
+
       let(:config) do
         Resque::UniqueByArity::Configuration.new(
           arity_for_uniqueness_in_queue: 100
         )
       end
 
-      subject { described_class.new(config) }
-
       before do
         allow(Resque::UniqueByArity).to receive(:log)
 
@@ -132,14 +132,14 @@ describe Resque::UniqueByArity::Configuration::Validator do
       it { expect(Resque::UniqueByArity).to have_received(:log) }
     end
 
-    context 'when arity_for_uniqueness_across_queues is set' do
+    context "when arity_for_uniqueness_across_queues is set" do
+      subject { described_class.new(config) }
+
       let(:config) do
         Resque::UniqueByArity::Configuration.new(
           arity_for_uniqueness_across_queues: 100
         )
       end
-
-      subject { described_class.new(config) }
 
       before do
         allow(Resque::UniqueByArity).to receive(:log)

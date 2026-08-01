@@ -9,24 +9,24 @@ module Resque
               arity_for_uniqueness ||= configuration.arity_for_uniqueness
               payload = Resque.decode(Resque.encode(payload))
               Resque::UniqueByArity.debug("payload is #{payload.inspect}")
-              job  = payload['class']
+              job = payload["class"]
               # It seems possible that some jobs may not have an "args" key in the payload.
-              args = payload['args'] || []
+              args = payload["args"] || []
               args.map! do |arg|
                 arg.is_a?(Hash) ? arg.sort : arg
               end
 
               # what is the configured arity for uniqueness?
               uniqueness_args = if arity_for_uniqueness.zero?
-                                  []
-                                else
-                                  # minus one because zero indexed, so
-                                  #   when arity_for_uniqueness is 2 we use args
-                                  #   at indexes 0 and 1.
-                                  args[0..(arity_for_uniqueness - 1)]
-                                end
-              args = { class: job, args: uniqueness_args }
-              return [Digest::MD5.hexdigest(Resque.encode(args)), uniqueness_args]
+                []
+              else
+                # minus one because zero indexed, so
+                #   when arity_for_uniqueness is 2 we use args
+                #   at indexes 0 and 1.
+                args[0..(arity_for_uniqueness - 1)]
+              end
+              args = {class: job, args: uniqueness_args}
+              [Digest::MD5.hexdigest(Resque.encode(args)), uniqueness_args]
             end
           end
 
@@ -48,10 +48,10 @@ module Resque
             # @return [String] the key used to enforce uniqueness (at queue-time)
             define_method(:unique_in_queue_redis_key) do |queue, payload|
               arity_for_uniqueness = if configuration.unique_in_queue
-                                       configuration.arity_for_uniqueness_in_queue
-                                     elsif configuration.unique_across_queues
-                                       configuration.arity_for_uniqueness_across_queues
-                                     end
+                configuration.arity_for_uniqueness_in_queue
+              elsif configuration.unique_across_queues
+                configuration.arity_for_uniqueness_across_queues
+              end
               unique_hash, args_for_uniqueness = redis_unique_hash(payload, arity_for_uniqueness)
               key = "#{unique_in_queue_key_namespace(queue)}:#{unique_in_queue_redis_key_prefix}:#{unique_hash}"
               Resque::UniqueByArity.debug("#{self}.unique_in_queue_redis_key for #{args_for_uniqueness} is: #{ColorizedString[key].green}")
@@ -63,7 +63,7 @@ module Resque
               # unique_in_queue_key_namespace may or may not ignore the queue passed in, depending on config.
               key_match = "#{unique_in_queue_key_namespace(instance_variable_get(:@queue))}:#{unique_in_queue_redis_key_prefix}:*"
               keys = Resque.redis.keys(key_match)
-              Resque::UniqueByArity.log("#{Resque::UniqueByArity::PLUGIN_TAG}#{Resque::UniqueInQueue::PLUGIN_TAG} #{ColorizedString['Purging'].red} #{keys.length} keys from #{ColorizedString[key_match].red}")
+              Resque::UniqueByArity.log("#{Resque::UniqueByArity::PLUGIN_TAG}#{Resque::UniqueInQueue::PLUGIN_TAG} #{ColorizedString["Purging"].red} #{keys.length} keys from #{ColorizedString[key_match].red}")
               Resque.redis.del keys unless keys.empty?
             end
 
@@ -96,7 +96,7 @@ module Resque
             #   still funnels down to redis_key, and we handle the arity option there
             # @return [String] the key used to enforce loneliness (uniqueness at runtime)
             define_method(:unique_at_runtime_redis_key) do |*args|
-              unique_hash, args_for_uniqueness = redis_unique_hash({'class' => to_s, 'args' => args}, configuration.arity_for_uniqueness_at_runtime)
+              unique_hash, args_for_uniqueness = redis_unique_hash({"class" => to_s, "args" => args}, configuration.arity_for_uniqueness_at_runtime)
               key = "#{runtime_key_namespace}:#{unique_hash}"
               Resque::UniqueByArity.debug("#{Resque::UniqueAtRuntime::PLUGIN_TAG} #{self}.unique_at_runtime_redis_key for #{args_for_uniqueness} is: #{ColorizedString[key].yellow}")
               key
@@ -105,7 +105,7 @@ module Resque
             define_method(:purge_unique_at_runtime_redis_keys) do
               key_match = "#{runtime_key_namespace}:*"
               keys = Resque.redis.keys(key_match)
-              Resque::UniqueByArity.log("#{Resque::UniqueByArity::PLUGIN_TAG}#{Resque::UniqueAtRuntime::PLUGIN_TAG} #{ColorizedString['Purging'].red} #{keys.length} keys from #{ColorizedString[key_match].red}")
+              Resque::UniqueByArity.log("#{Resque::UniqueByArity::PLUGIN_TAG}#{Resque::UniqueAtRuntime::PLUGIN_TAG} #{ColorizedString["Purging"].red} #{keys.length} keys from #{ColorizedString[key_match].red}")
               Resque.redis.del keys unless keys.empty?
             end
           end

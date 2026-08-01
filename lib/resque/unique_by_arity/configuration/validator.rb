@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'forwardable'
+require "forwardable"
 
 module Resque
   module UniqueByArity
@@ -8,23 +8,23 @@ module Resque
       class Validator
         extend Forwardable
 
-        ARITY_FOR_UNIQUENESS_MSG = '[%<job_name>s] :arity_for_uniqueness is set to %<arity_for_uniqueness>d, but no uniqueness enforcement was turned on [:unique_at_runtime, :unique_in_queue, :unique_across_queues]'.freeze
-        ARITY_FOR_UNIQUENESS_AT_RUNTIME_MSG = '[%<job_name>s] :arity_for_uniqueness_at_runtime is set to %<arity_for_uniqueness_at_runtime>d, but :unique_at_runtime was not turned on'.freeze
-        ARITY_FOR_UNIQUENESS_IN_QUEUE_MSG = '[%<job_name>s] :arity_for_uniqueness_in_queue is set to %<arity_for_uniqueness_in_queue>d, but :unique_in_queue was not turned on'.freeze
-        ARITY_FOR_UNIQUENESS_ACROSS_QUEUES_MSG = '[%<job_name>s] :arity_for_uniqueness_across_queues is set to %<arity_for_uniqueness_across_queues>d, but :unique_across_queues was not turned on'.freeze
-        LOCK_AFTER_EXEC_PERIOD_MSG = '[%<job_name>s] :lock_after_execution_period is set to %<lock_after_execution_period>d, but :unique_at_runtime is not set'.freeze
-        RUNTIME_LOCK_TIMEOUT_MSG = '[%<job_name>s] :runtime_lock_timeout is set to %<runtime_lock_timeout>s, but :unique_at_runtime is not set'.freeze
-        RUNTIME_REQUEUE_INTERVAL_MSG = '[%<job_name>s] :runtime_requeue_interval is set to %<runtime_requeue_interval>d, but :unique_at_runtime is not set'.freeze
-        CONCURRENT_CONFIG_MSG = '[%<job_name>] :unique_in_queue and :unique_across_queues should not be set at the same time, as :unique_across_queues will always supercede :unique_in_queue'.freeze
+        ARITY_FOR_UNIQUENESS_MSG = "[%<job_name>s] :arity_for_uniqueness is set to %<arity_for_uniqueness>d, but no uniqueness enforcement was turned on [:unique_at_runtime, :unique_in_queue, :unique_across_queues]"
+        ARITY_FOR_UNIQUENESS_AT_RUNTIME_MSG = "[%<job_name>s] :arity_for_uniqueness_at_runtime is set to %<arity_for_uniqueness_at_runtime>d, but :unique_at_runtime was not turned on"
+        ARITY_FOR_UNIQUENESS_IN_QUEUE_MSG = "[%<job_name>s] :arity_for_uniqueness_in_queue is set to %<arity_for_uniqueness_in_queue>d, but :unique_in_queue was not turned on"
+        ARITY_FOR_UNIQUENESS_ACROSS_QUEUES_MSG = "[%<job_name>s] :arity_for_uniqueness_across_queues is set to %<arity_for_uniqueness_across_queues>d, but :unique_across_queues was not turned on"
+        LOCK_AFTER_EXEC_PERIOD_MSG = "[%<job_name>s] :lock_after_execution_period is set to %<lock_after_execution_period>d, but :unique_at_runtime is not set"
+        RUNTIME_LOCK_TIMEOUT_MSG = "[%<job_name>s] :runtime_lock_timeout is set to %<runtime_lock_timeout>s, but :unique_at_runtime is not set"
+        RUNTIME_REQUEUE_INTERVAL_MSG = "[%<job_name>s] :runtime_requeue_interval is set to %<runtime_requeue_interval>d, but :unique_at_runtime is not set"
+        CONCURRENT_CONFIG_MSG = "[%<job_name>] :unique_in_queue and :unique_across_queues should not be set at the same time, as :unique_across_queues will always supercede :unique_in_queue"
 
         private_constant :ARITY_FOR_UNIQUENESS_MSG,
-                         :ARITY_FOR_UNIQUENESS_AT_RUNTIME_MSG,
-                         :ARITY_FOR_UNIQUENESS_IN_QUEUE_MSG,
-                         :ARITY_FOR_UNIQUENESS_ACROSS_QUEUES_MSG,
-                         :LOCK_AFTER_EXEC_PERIOD_MSG,
-                         :RUNTIME_LOCK_TIMEOUT_MSG,
-                         :RUNTIME_REQUEUE_INTERVAL_MSG,
-                         :CONCURRENT_CONFIG_MSG
+          :ARITY_FOR_UNIQUENESS_AT_RUNTIME_MSG,
+          :ARITY_FOR_UNIQUENESS_IN_QUEUE_MSG,
+          :ARITY_FOR_UNIQUENESS_ACROSS_QUEUES_MSG,
+          :LOCK_AFTER_EXEC_PERIOD_MSG,
+          :RUNTIME_LOCK_TIMEOUT_MSG,
+          :RUNTIME_REQUEUE_INTERVAL_MSG,
+          :CONCURRENT_CONFIG_MSG
 
         def initialize(config)
           @config = config
@@ -48,17 +48,17 @@ module Resque
 
         attr_reader :config
         def_delegators :config,
-                       :arity_for_uniqueness,
-                       :arity_for_uniqueness_at_runtime,
-                       :arity_for_uniqueness_in_queue,
-                       :arity_for_uniqueness_across_queues,
-                       :base_klass_name,
-                       :lock_after_execution_period,
-                       :runtime_lock_timeout,
-                       :runtime_requeue_interval,
-                       :unique_across_queues,
-                       :unique_at_runtime,
-                       :unique_in_queue
+          :arity_for_uniqueness,
+          :arity_for_uniqueness_at_runtime,
+          :arity_for_uniqueness_in_queue,
+          :arity_for_uniqueness_across_queues,
+          :base_klass_name,
+          :lock_after_execution_period,
+          :runtime_lock_timeout,
+          :runtime_requeue_interval,
+          :unique_across_queues,
+          :unique_at_runtime,
+          :unique_in_queue
 
         def log(msg)
           Resque::UniqueByArity.log(msg, config)
@@ -74,7 +74,7 @@ module Resque
 
         def validate_runtime_requeue_interval
           return if default_config_value?(:runtime_requeue_interval) ||
-                    unique_at_runtime
+            unique_at_runtime
 
           log format(
             RUNTIME_REQUEUE_INTERVAL_MSG,
@@ -85,7 +85,7 @@ module Resque
 
         def validate_runtime_lock_timout
           return if default_config_value?(:runtime_lock_timeout) ||
-                    unique_at_runtime
+            unique_at_runtime
 
           log format(
             RUNTIME_LOCK_TIMEOUT_MSG,
@@ -96,7 +96,7 @@ module Resque
 
         def validate_after_execution_period
           return if default_config_value?(:lock_after_execution_period) ||
-                    (unique_in_queue || unique_across_queues)
+            (unique_in_queue || unique_across_queues)
 
           log format(
             LOCK_AFTER_EXEC_PERIOD_MSG,
@@ -107,9 +107,9 @@ module Resque
 
         def validate_arity_for_uniqueness
           return if arity_for_uniqueness == 1 ||
-                    (unique_at_runtime ||
-                     unique_in_queue ||
-                     unique_across_queues)
+            (unique_at_runtime ||
+             unique_in_queue ||
+             unique_across_queues)
 
           log format(
             ARITY_FOR_UNIQUENESS_MSG,

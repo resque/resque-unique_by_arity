@@ -1,4 +1,4 @@
-require 'logger'
+require "logger"
 module Resque
   module UniqueByArity
     # This class is for configurations that are app-wide, *not per job class.
@@ -10,12 +10,12 @@ module Resque
       # For resque-unique_at_runtime
       DEFAULT_LOCK_TIMEOUT = 60 * 60 * 24 * 5
       DEFAULT_REQUEUE_INTERVAL = 1
-      DEFAULT_AT_RUNTIME_KEY_BASE = 'r-uar'.freeze
+      DEFAULT_AT_RUNTIME_KEY_BASE = "r-uar".freeze
 
       # For resque-unique_in_queue
       DEFAULT_LOCK_AFTER_EXECUTION_PERIOD = 0
       DEFAULT_TTL = -1
-      DEFAULT_IN_QUEUE_KEY_BASE = 'r-uiq'.freeze
+      DEFAULT_IN_QUEUE_KEY_BASE = "r-uiq".freeze
 
       include Singleton
 
@@ -24,7 +24,7 @@ module Resque
       end
 
       def defcon(sym)
-        self.send(sym)
+        send(sym)
       end
 
       def reset
