@@ -48,6 +48,9 @@ Please file a bug if you notice a violation of semantic versioning.
 
 - Document the gem synopsis and configuration options.
 
+- kettle-jem-template-20260801-001 - Generated README gem dashboard links now
+  use ClickGems instead of BestGems.
+
 ### Deprecated
 
 ### Removed
@@ -94,6 +97,10 @@ Please file a bug if you notice a violation of semantic versioning.
   even when the gemspec is loaded from another working directory.
 
 - Restore legacy top-level RSpec DSL support after templating and accept Ruby 4 NameError quoting.
+
+- kettle-jem-template-20260801-002 - Generated RSpec helpers now normalize
+  managed configuration block bindings structurally, preventing mixed block
+  parameter names from producing invalid configuration after a merge.
 
 ### Security
 
