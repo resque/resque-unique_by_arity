@@ -1,7 +1,4 @@
 {
-  "README.md:3881616923": [
-    [132, 1, 4, "Layout/IndentationWidth: Use 2 (not 4) spaces for indentation.", 2085287685]
-  ],
   "Rakefile:3486103165": [
     [189, 1, 16, "Rake/Desc: Describe the task with `desc` method.", 850263259]
   ],
@@ -291,9 +288,6 @@
     [118, 9, 7, "RSpec/NamedSubject: Name your test subject if you need to reference it explicitly.", 1892732441],
     [124, 3, 211, "RSpec/MultipleMemoizedHelpers: Example group has too many memoized helpers [7/5]", 1280629218],
     [132, 14, 7, "RSpec/NamedSubject: Name your test subject if you need to reference it explicitly.", 1892732441]
-  ],
-  "spec/resque/unique_by_arity/version_spec.rb:2043134248": [
-    [7, 3, 472, "RSpec/ExampleLength: Example has too many lines. [6/5]", 1467854685]
   ],
   "spec/resque/unique_by_arity_spec.rb:2190034883": [
     [8, 11, 15, "RSpec/ContextWording: Context description should match /^when\\b/, /^with\\b/, or /^without\\b/.", 2516718581],

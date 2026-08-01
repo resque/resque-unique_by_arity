@@ -80,6 +80,34 @@
 # ENV override: KJ_PROJECT_EMOJI
 project_emoji: ""
 
+# Per-file configuration (nested directory structure)
+# Only files that need overrides belong here. Everything else defaults to merge.
+files:
+  AGENTS.md:
+    strategy: accept_template
+  Appraisal.root.gemfile:
+    strategy: accept_template
+  Gemfile:
+    strategy: accept_template
+  Rakefile:
+    strategy: merge
+    preference: destination
+    add_template_only_nodes: true
+  .github:
+    copilot_instructions.md:
+      strategy: accept_template
+  gemfiles:
+    modular:
+      templating.gemfile:
+        strategy: accept_template
+      templating_local.gemfile:
+        strategy: accept_template
+  spec:
+    spec_helper.rb:
+      merge:
+        preference: destination
+        add_template_only_nodes: false
+
 # Engines this project supports.
 # List the Ruby engines that your gem targets. kettle-jem uses this to decide
 # which CI workflows, README compatibility rows, and badge references to
@@ -117,7 +145,7 @@ rubygems:
   # disabled  - do not depend on version_gem or generate VersionGem entrypoints.
   #             Ruby floors below 2.2 use this effective behavior.
   # ENV override: KJ_VERSION_GEM_ENTRYPOINT
-  version_gem_entrypoint: auto
+  version_gem_entrypoint: disabled
 
 # RubyGems package manifest additions.
 # The generated gemspec owns the default package manifest. Add entries here only
@@ -464,26 +492,3 @@ patterns:
     strategy: raw_copy
   - path: ".github/workflows/**"
     strategy: accept_template
-
-# Per-file configuration (nested directory structure)
-# Only files that need overrides belong here. Everything else defaults to merge.
-files:
-  AGENTS.md:
-    strategy: accept_template
-  Appraisal.root.gemfile:
-    strategy: accept_template
-  Gemfile:
-    strategy: accept_template
-  Rakefile:
-    strategy: merge
-    preference: destination
-    add_template_only_nodes: true
-  .github:
-    copilot_instructions.md:
-      strategy: accept_template
-  gemfiles:
-    modular:
-      templating.gemfile:
-        strategy: accept_template
-      templating_local.gemfile:
-        strategy: accept_template

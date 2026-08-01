@@ -7,6 +7,6 @@ Choose the option that best fits your use case:
 
 ## Copyright Notice
 
-- Copyright (c) 2017-2018, 2026 Peter Boling
+- Copyright (c) 2017-2018, 2026 Peter H. Boling
 - Copyright (c) 2018 Daniel Cunha
 - Copyright (c) 2019 Josh Reeves

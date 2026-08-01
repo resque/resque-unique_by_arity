@@ -129,7 +129,7 @@ Create an initializer (e.g. `config/initializers/resque-unique_by_arity.rb` for 
 
 ```ruby
 Resque::UniqueByArity.configure do |config|
-    config.logger = nil
+  config.logger = nil
     config.log_level = :debug
     config.arity_for_uniqueness = 0
     config.unique_at_runtime = false
@@ -592,7 +592,7 @@ See [LICENSE.md][📄license] for the official copyright notice.
 <details markdown="1">
 <summary>Copyright holders</summary>
 
-- Copyright (c) 2017-2018, 2026 Peter Boling
+- Copyright (c) 2017-2018, 2026 Peter H. Boling
 - Copyright (c) 2018 Daniel Cunha
 - Copyright (c) 2019 Josh Reeves
 
