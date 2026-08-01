@@ -779,7 +779,7 @@ RSpec.describe Resque::Plugins::UniqueByArity do
 
     it "does not work" do
       expect(Resque::UniqueByArity).not_to receive(:log)
-      block_is_expected.to raise_error NameError, /undefined method `perform' for class/
+      block_is_expected.to raise_error NameError, /undefined method ['`]perform['`] for class/
     end
   end
 

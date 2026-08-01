@@ -91,5 +91,7 @@ Please file a bug if you notice a violation of semantic versioning.
   relative to the gemspec directory, so release package contents stay correct
   even when the gemspec is loaded from another working directory.
 
+- Restore legacy top-level RSpec DSL support after templating and accept Ruby 4 NameError quoting.
+
 ### Security
 
