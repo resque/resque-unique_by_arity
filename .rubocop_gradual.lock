@@ -353,7 +353,7 @@
     [170, 9, 10, "RSpec/MultipleExpectations: Example has too many expectations [2/1].", 1095999310],
     [171, 33, 7, "RSpec/MessageSpies: Prefer `have_received` for setting message expectations. Setup `logger` as a spy using `allow` or `instance_spy`.", 1384559950]
   ],
-  "spec/spec_helper.rb:1980475117": [
-    [47, 24, 14, "RSpec/ContextWording: Context description should match /^when\\b/, /^with\\b/, or /^without\\b/.", 379550510]
+  "spec/spec_helper.rb:3733828347": [
+    [44, 24, 14, "RSpec/ContextWording: Context description should match /^when\\b/, /^with\\b/, or /^without\\b/.", 379550510]
   ]
 }
