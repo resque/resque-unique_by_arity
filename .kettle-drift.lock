@@ -38,5 +38,14 @@
         163
       ]
     }
+  ],
+  "strategy: merge\npreference: destination": [
+    {
+      "file": ".structuredmerge/kettle-jem.yml",
+      "lines": [
+        93,
+        107
+      ]
+    }
   ]
 }

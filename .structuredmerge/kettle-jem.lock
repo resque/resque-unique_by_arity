@@ -621,7 +621,7 @@ files:
   ".structuredmerge/kettle-jem.yml":
     recipe: template_source_application_structuredmerge_kettle_jem_yml
     action: write
-    dest_sha256: a8545b55a0d83728ede1f209fefddfb1095aa831d4d196f7a21c10f333c0e076
+    dest_sha256: '08a880b7e83841ef40921accd1872b5a1c789e0e82585ee587e4f1cb99302801'
     input_fingerprint: bb0c4c94888314bb22cd77875eaf07f644f4c8a1f95f8866510d6fdee80be707
     template_sources:
     - ".structuredmerge/kettle-jem.yml.example"
@@ -1139,6 +1139,6 @@ files:
     recipe: template_source_application_spec_spec_helper_rb
     action: write
     dest_sha256: '0018de6fa4bdbbc63e4b7f1fcb2c5500fd75f7f1956f420750aa95de5f285cd4'
-    input_fingerprint: 5b5347088d891fbd63e6709dc21e9bf303425caddadd97c24f81c90ae0603a82
+    input_fingerprint: defe40cc1e053da3dc287a9b34cf0896800aceeed8b142a537915cf4577dbb94
     template_sources:
     - spec/spec_helper.rb.example

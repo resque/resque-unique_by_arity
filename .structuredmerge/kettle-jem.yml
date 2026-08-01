@@ -104,9 +104,9 @@ files:
         strategy: accept_template
   spec:
     spec_helper.rb:
-      merge:
-        preference: destination
-        add_template_only_nodes: false
+      strategy: merge
+      preference: destination
+      add_template_only_nodes: false
 
 # Engines this project supports.
 # List the Ruby engines that your gem targets. kettle-jem uses this to decide
