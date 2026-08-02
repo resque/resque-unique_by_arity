@@ -1,7 +1,7 @@
 # Just in case some code still does require 'resque/unique_by_arity'
-require_relative "unique_by_arity/version"
 
 require "resque-unique_by_arity"
+require_relative "unique_by_arity/version"
 
 module Resque
   module UniqueByArity
