@@ -1,5 +1,4 @@
 # Just in case some code still does require 'resque/unique_by_arity'
-require "version_gem"
 require_relative "unique_by_arity/version"
 
 require "resque-unique_by_arity"
@@ -35,8 +34,4 @@ module Resque
     end
     self.configuration = GlobalConfiguration.instance # setup defaults
   end
-end
-
-Resque::UniqueByArity::Version.class_eval do
-  extend VersionGem::Basic
 end
