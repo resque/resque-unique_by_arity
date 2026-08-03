@@ -20,7 +20,7 @@
     [22, 9, 81, "Style/SafeNavigation: Use safe navigation (`&.`) instead of checking if an object exists before calling the method.", 4060336930],
     [38, 9, 39, "ThreadSafety/ClassAndModuleAttributes: Avoid mutating class and module attributes.", 4180139101]
   ],
-  "resque-unique_by_arity.gemspec:1136028201": [
+  "resque-unique_by_arity.gemspec:169089865": [
     [166, 3, 39, "Gemspec/DependencyVersion: Dependency version specification is required.", 248795650]
   ],
   "spec/resque/plugins/unique_by_arity_spec.rb:4035119722": [
