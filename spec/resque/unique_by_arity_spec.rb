@@ -78,6 +78,26 @@ RSpec.describe Resque::UniqueByArity do
       expect(Resque::UniqueByArity.configuration.debug_mode).to eq(false)
     end
 
+    it "uses the global configuration for defaults" do
+      expect(Resque::UniqueByArity::GlobalConfiguration.instance.defcon(:log_level)).to eq(:debug)
+    end
+
+    context "when runtime debugging is enabled" do
+      before do
+        stub_env("RESQUE_DEBUG" => "queue")
+        Resque::UniqueByArity::GlobalConfiguration.instance.reset
+      end
+
+      after do
+        stub_env("RESQUE_DEBUG" => nil)
+        Resque::UniqueByArity::GlobalConfiguration.instance.reset
+      end
+
+      it "creates a logger" do
+        expect(Resque::UniqueByArity.configuration.logger).to be_a(Logger)
+      end
+    end
+
     context "global" do
       let(:logger) { Logger.new("/dev/null") }
       let(:log_level) { :info }
@@ -165,7 +185,7 @@ RSpec.describe Resque::UniqueByArity do
       end
 
       context "with debug_mode => false" do
-        subject { Resque::UniqueByArity.debug("warbler", Resque::UniqueByArity::Configuration.new(debug_mode: false, logger: logger, log_level: :info)) }
+        subject { described_class.debug("warbler", Resque::UniqueByArity::Configuration.new(debug_mode: false, logger: logger, log_level: :info)) }
 
         it("logs") do
           expect(logger).not_to receive(:debug).with(/R-UBA.*warbler/)
