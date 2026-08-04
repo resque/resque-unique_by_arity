@@ -2,6 +2,9 @@
   "Rakefile:3486103165": [
     [189, 1, 16, "Rake/Desc: Describe the task with `desc` method.", 850263259]
   ],
+  "gemfiles/modular/templating.gemfile:3018447732": [
+    [14, 3, 47, "Bundler/DuplicatedGem: Gem `tree_sitter_language_pack` requirements already given on line 10 of the Gemfile.", 3843603197]
+  ],
   "lib/resque/unique_by_arity.rb:933209914": [
     [8, 18, 35, "Style/RedundantParentheses: Don't use parentheses around a method call.", 1562350466],
     [12, 7, 81, "Style/SafeNavigation: Use safe navigation (`&.`) instead of checking if an object exists before calling the method.", 4060336930],
