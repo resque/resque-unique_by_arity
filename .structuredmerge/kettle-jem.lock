@@ -2,7 +2,7 @@
 version: 1
 template_state:
   version: 7.1.0
-  applied_at: '2026-08-04'
+  applied_at: '2026-08-05'
   changelog_replay:
     last_entry_key: kettle-jem-template-20260802-001
     last_entry_date: '2026-08-02'
@@ -1097,7 +1097,7 @@ files:
     recipe: template_source_application_lib_resque_unique_by_arity_version_rb
     action: write
     dest_sha256: 843603de0ac411b53f1aa8e1555f8dd351cb5869990e032a2a73219854165376
-    input_fingerprint: 6b66f798cfc720e737091663acc13737020b75ee23b8b754fca01d780894a138
+    input_fingerprint: 27d035272d9c84cbeb9db132e66ba0f7f2e9082db372353cd5c9eb7fedd20a50
     template_sources:
     - lib/gem/version.rb.example
   mise.toml:
@@ -1118,7 +1118,7 @@ files:
     recipe: template_source_application_resque_unique_by_arity_gemspec
     action: write
     dest_sha256: 8af19f23ab0867af02b74fc70d10c06f0a9b1d0f93ad12d35bf8c6b1d4ccc2c1
-    input_fingerprint: c7eecaaeca4c7648c06874a224770757145f78b664d52086c8c16202e57567e6
+    input_fingerprint: 3a529fe57792506bce9dcc33a4fd858333b9e5f2b78768fb02dd4bcdf0b2a453
     template_sources:
     - gem.gemspec.example
   sig/resque/unique_by_arity.rbs:
