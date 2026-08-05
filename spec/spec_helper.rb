@@ -24,7 +24,7 @@ require "kettle/test/rspec"
 # `kettle/test/rspec` installs harness helpers documented in spec/README.md.
 require "bundler/setup"
 
-require "debug" if RbConfig::CONFIG["RUBY_INSTALL_NAME"] == "ruby" && Gem::Version.new(RUBY_VERSION) >= Gem::Version.new("2.7")
+require "debug" if RbConfig::CONFIG["RUBY_INSTALL_NAME"] == "ruby" && Gem::Version.new(RUBY_VERSION) >= Gem::Version.new("2.7") && ENV["CI"].nil? && ENV.fetch("DEBUG", "false").casecmp("true").zero?
 require "rspec/block_is_expected"
 require "rspec/stubbed_env"
 
