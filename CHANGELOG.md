@@ -111,6 +111,8 @@ Please file a bug if you notice a violation of semantic versioning.
 
 - Cap multi_json below 1.20 in alternate-engine appraisal gemfiles for Fiber API compatibility.
 
+- Keep optional development tools out of gemspec metadata so alternate-engine appraisals do not install incompatible native extensions.
+
 ### Security
 
 ## [3.0.2] - 2018-11-17

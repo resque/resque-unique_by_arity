@@ -70,7 +70,6 @@ GEM
       toml-rb (~> 4.1)
       version_gem (~> 1.1, >= 1.1.15)
     cmdparse (3.0.7)
-    coderay (1.1.3)
     colorize (1.1.0)
     colsole (1.0.1)
     command_kit (0.6.0)
@@ -259,7 +258,6 @@ GEM
       markdown-merge (= 7.1.4)
       markly (~> 0.9)
       version_gem (~> 1.1, >= 1.1.15)
-    method_source (1.1.0)
     mister_bin (0.9.0)
       colsole (~> 1.0.0)
       docopt_ng (~> 0.7.1)
@@ -304,10 +302,6 @@ GEM
       ruby-merge (= 7.1.4)
       tree_haver (= 7.1.4)
       version_gem (~> 1.1, >= 1.1.15)
-    pry (0.16.0)
-      coderay (~> 1.1)
-      method_source (~> 1.0)
-      reline (>= 0.6.0)
     psych (5.5.0)
       date
       stringio
@@ -630,10 +624,9 @@ DEPENDENCIES
   appraisal2 (~> 3.2, >= 3.2.2)
   appraisal2-rubocop (~> 1.0, >= 1.0.1)
   benchmark (~> 0.5, >= 0.5.0)
-  bundler (>= 2.2.10)
   bundler-audit (~> 0.9.3)
   cgi (~> 0.5)
-  debug (>= 1.1, >= 0)
+  debug (>= 1.1)
   erb (~> 6.0, >= 6.0.7)
   gem_bench (~> 2.0, >= 2.0.5)
   gitmoji-regex (~> 2.0, >= 2.0.12)
@@ -647,7 +640,6 @@ DEPENDENCIES
   kramdown-parser-gfm (~> 1.1)
   mutex_m (~> 0.2)
   nomono (~> 1.1, >= 1.1.4)
-  pry (~> 0.11)
   rake (~> 13.0)
   rbs (>= 3.0)
   reek (~> 6.5, >= 6.5.0)
@@ -700,7 +692,6 @@ CHECKSUMS
   citrus (3.0.2) sha256=4ec2412fc389ad186735f4baee1460f7900a8e130ffe3f216b30d4f9c684f650
   citrus-toml-merge (7.1.4) sha256=78440225c661dfcf4fe9ccd907daa05136db11e58488e078f2ed0b8c96f2ace1
   cmdparse (3.0.7) sha256=f7c5cace10bec6abf853370ae095e4b97a84ed9d847b3fb38f41cc4fbc950739
-  coderay (1.1.3) sha256=dc530018a4684512f8f38143cd2a096c9f02a1fc2459edcfe534787a7fc77d4b
   colorize (1.1.0) sha256=30b5237f0603f6662ab8d1fc2bd4a96142b806c6415d79e45ef5fdc6a0cfc837
   colsole (1.0.1) sha256=7632a300ace2db877c024ffe413c684954cf37e41264b75ace9f456c9d657b02
   command_kit (0.6.0) sha256=e57f29cf5aee4f571c210041d910ff87f85749e42dfe75139c57cc93d84afa90
@@ -758,7 +749,6 @@ CHECKSUMS
   markdown-merge (7.1.4) sha256=d089a2ea1974f47c72d24f29b08e3eb0e78b75a230f44d773d4be74695332dbe
   markly (0.17.0) sha256=fab61b604f7c4c8f771c3b7f2f16b971034bb72ddd27009b90c3fae1990b17e6
   markly-merge (7.1.4) sha256=0129c0a13980026242228b11e52a1720c094c5d9e940489afb4a9ed157173dbd
-  method_source (1.1.0) sha256=181301c9c45b731b4769bc81e8860e72f9161ad7d66dd99103c9ab84f560f5c5
   mister_bin (0.9.0) sha256=624fe401db4faf1978e84c17e0b320827697a13a6cba4fe656001269079be7d3
   mono_logger (1.1.2) sha256=2e359def7007f5c908aadd953687991fe667995d14ae5f0d10dda76e3e8670f7
   multi_json (1.21.1) sha256=e6126a31808e3b4d19f483c775ceac34df190dffa62adfb63a165ee14ba68080
@@ -782,7 +772,6 @@ CHECKSUMS
   prettyprint (0.2.0) sha256=2bc9e15581a94742064a3cc8b0fb9d45aae3d03a1baa6ef80922627a0766f193
   prism (1.9.0) sha256=7b530c6a9f92c24300014919c9dcbc055bf4cdf51ec30aed099b06cd6674ef85
   prism-merge (7.1.4) sha256=661951c54f73bb9613a00dd86f770a2204c376f83e2949aa6a4ff3a7da2add0a
-  pry (0.16.0) sha256=d76c69065698ed1f85e717bd33d7942c38a50868f6b0673c636192b3d1b6054e
   psych (5.5.0) sha256=4b245bbbd0f3238df8ccee766ebc1a6b062b10e4ee1d3284eb588739ba156a0a
   psych-merge (7.1.4) sha256=9e7bae324ff7889f8df0a45ee10fafad359439313034fd10bb7be80e724b9278
   public_suffix (7.0.5) sha256=1a8bb08f1bbea19228d3bed6e5ed908d1cb4f7c2726d18bd9cadf60bc676f623
