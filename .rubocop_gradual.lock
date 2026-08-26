@@ -2,9 +2,6 @@
   "Rakefile:3486103165": [
     [189, 1, 16, "Rake/Desc: Describe the task with `desc` method.", 850263259]
   ],
-  "gemfiles/modular/templating.gemfile:3018447732": [
-    [14, 3, 47, "Bundler/DuplicatedGem: Gem `tree_sitter_language_pack` requirements already given on line 10 of the Gemfile.", 3843603197]
-  ],
   "lib/resque/unique_by_arity.rb:933209914": [
     [8, 18, 35, "Style/RedundantParentheses: Don't use parentheses around a method call.", 1562350466],
     [12, 7, 81, "Style/SafeNavigation: Use safe navigation (`&.`) instead of checking if an object exists before calling the method.", 4060336930],
@@ -23,7 +20,7 @@
     [22, 9, 81, "Style/SafeNavigation: Use safe navigation (`&.`) instead of checking if an object exists before calling the method.", 4060336930],
     [38, 9, 39, "ThreadSafety/ClassAndModuleAttributes: Avoid mutating class and module attributes.", 4180139101]
   ],
-  "resque-unique_by_arity.gemspec:169089865": [
+  "resque-unique_by_arity.gemspec:393012196": [
     [166, 3, 39, "Gemspec/DependencyVersion: Dependency version specification is required.", 248795650]
   ],
   "spec/resque/plugins/unique_by_arity_spec.rb:4035119722": [
@@ -356,7 +353,7 @@
     [190, 9, 10, "RSpec/MultipleExpectations: Example has too many expectations [2/1].", 1095999310],
     [191, 33, 7, "RSpec/MessageSpies: Prefer `have_received` for setting message expectations. Setup `logger` as a spy using `allow` or `instance_spy`.", 1384559950]
   ],
-  "spec/spec_helper.rb:1793035087": [
-    [45, 24, 14, "RSpec/ContextWording: Context description should match /^when\\b/, /^with\\b/, or /^without\\b/.", 379550510]
+  "spec/spec_helper.rb:4204254915": [
+    [44, 24, 14, "RSpec/ContextWording: Context description should match /^when\\b/, /^with\\b/, or /^without\\b/.", 379550510]
   ]
 }

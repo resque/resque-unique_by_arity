@@ -44,7 +44,7 @@ Use it when a job has ancillary arguments, such as options or tracing values, th
 
 ### Compatibility
 
-Compatible with MRI Ruby 2.3.0+, and concordant releases of JRuby, and TruffleRuby.
+Compatible with MRI Ruby 2.3.0+, JRuby, and TruffleRuby.
 CI workflows and Appraisals are generated for MRI Ruby 2.4+.
 This test floor is configured by `ruby.test_minimum` in `.kettle-jem.yml` and
 may be higher than the gem's runtime compatibility floor when legacy Rubies are
@@ -83,7 +83,9 @@ The _amazing_ test matrix is powered by the kettle-dev stack.
 
 </details>
 
-### Enterprise Support [![Tidelift](https://tidelift.com/badges/package/rubygems/resque-unique_by_arity)](https://tidelift.com/subscription/pkg/rubygems-resque-unique_by_arity?utm_source=rubygems-resque-unique_by_arity&utm_medium=referral&utm_campaign=readme)
+### Enterprise Support
+
+[![Tidelift](https://tidelift.com/badges/package/rubygems/resque-unique_by_arity)](https://tidelift.com/subscription/pkg/rubygems-resque-unique_by_arity?utm_source=rubygems-resque-unique_by_arity&utm_medium=referral&utm_campaign=readme)
 
 Available as part of the Tidelift Subscription.
 
@@ -525,8 +527,7 @@ See [SECURITY.md][🔐security].
 ## 🤝 Contributing
 
 If you need some ideas of where to help, you could work on adding more code coverage,
-or if it is already 💯 (see [below](#code-coverage)) check [issues][🤝gh-issues] or [PRs][🤝gh-pulls],
-or use the gem and think about how it could be better.
+check [issues][🤝gh-issues] or [PRs][🤝gh-pulls], or use the gem and think about how it could be better.
 
 We [![Keep A Changelog][📗keep-changelog-img]][📗keep-changelog] so if you make changes, remember to update it.
 
@@ -561,19 +562,6 @@ chat rooms and mailing lists agrees to follow the [![Contributor Covenant 2.1][�
 Made with [contributors-img][🖐contrib-rocks].
 
 Also see GitLab Contributors: [https://gitlab.com/resque/resque-unique_by_arity/-/graphs/main][🚎contributors-gl]
-
-<details markdown="1">
- <summary>⭐️ Star History</summary>
-
-<a href="https://star-history.com/resque/resque-unique_by_arity&Date">
- <picture>
- <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=resque/resque-unique_by_arity&type=Date&theme=dark" />
- <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=resque/resque-unique_by_arity&type=Date" />
- <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=resque/resque-unique_by_arity&type=Date" />
- </picture>
-</a>
-
-</details>
 
 ## 📌 Versioning
 
