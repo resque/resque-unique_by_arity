@@ -6,6 +6,8 @@ gem "irb", "~> 1.17"
 
 gemspec path: "../"
 
+eval_gemfile("modular/multi_json/alternative_engines.gemfile")
+
 eval_gemfile("modular/coverage.gemfile")
 
 eval_gemfile("modular/documentation.gemfile")

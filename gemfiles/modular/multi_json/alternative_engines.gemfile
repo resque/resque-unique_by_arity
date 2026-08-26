@@ -1,0 +1,9 @@
+# frozen_string_literal: true
+
+# multi_json 1.20+ stores adapter overrides in Fiber storage. The current
+# TruffleRuby appraisal combinations do not provide the Fiber API that
+# multi_json uses. Keep JRuby on the same pre-Fiber series so alternate-engine
+# appraisals resolve consistently; this does not constrain MRI appraisals.
+if %w[jruby truffleruby].include?(RUBY_ENGINE)
+  gem "multi_json", "< 1.20"
+end

@@ -4,6 +4,8 @@ source "https://gem.coop"
 
 gemspec path: "../"
 
+eval_gemfile("modular/multi_json/alternative_engines.gemfile")
+
 eval_gemfile("modular/templating.gemfile")
 
 eval_gemfile("modular/x_std_libs.gemfile")

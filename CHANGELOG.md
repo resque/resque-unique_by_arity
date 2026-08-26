@@ -109,6 +109,8 @@ Please file a bug if you notice a violation of semantic versioning.
 
 - Generated gemspec author metadata now includes all non-machine copyright holders.
 
+- Cap multi_json below 1.20 in alternate-engine appraisal gemfiles for Fiber API compatibility.
+
 ### Security
 
 ## [3.0.2] - 2018-11-17

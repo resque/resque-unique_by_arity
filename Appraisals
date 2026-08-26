@@ -45,6 +45,7 @@ appraise "unlocked_deps" do
   #       psych
   gem "irb", "~> 1.17" # ruby >= 2.7
 
+  eval_gemfile "modular/multi_json/alternative_engines.gemfile"
   eval_gemfile "modular/coverage.gemfile"
   eval_gemfile "modular/documentation.gemfile"
   eval_gemfile "modular/optional.gemfile"
@@ -53,72 +54,88 @@ appraise "unlocked_deps" do
 end
 
 appraise "head" do
+  eval_gemfile "modular/multi_json/alternative_engines.gemfile"
   eval_gemfile "modular/x_std_libs.gemfile"
 end
 
 appraise "current" do
+  eval_gemfile "modular/multi_json/alternative_engines.gemfile"
   eval_gemfile "modular/x_std_libs.gemfile"
 end
 
 appraise "dep-heads" do
+  eval_gemfile "modular/multi_json/alternative_engines.gemfile"
   eval_gemfile "modular/runtime_heads.gemfile"
 end
 
 appraise "ruby-2-4" do
+  eval_gemfile "modular/multi_json/alternative_engines.gemfile"
   eval_gemfile "modular/x_std_libs/r2.4/libs.gemfile"
 end
 
 appraise "ruby-2-5" do
+  eval_gemfile "modular/multi_json/alternative_engines.gemfile"
   eval_gemfile "modular/x_std_libs/r2.6/libs.gemfile"
 end
 
 appraise "ruby-2-6" do
+  eval_gemfile "modular/multi_json/alternative_engines.gemfile"
   eval_gemfile "modular/x_std_libs/r2.6/libs.gemfile"
 end
 
 appraise "ruby-2-7" do
+  eval_gemfile "modular/multi_json/alternative_engines.gemfile"
   eval_gemfile "modular/x_std_libs/r2/libs.gemfile"
 end
 
 appraise "ruby-3-0" do
+  eval_gemfile "modular/multi_json/alternative_engines.gemfile"
   eval_gemfile "modular/json/truffleruby_22_3.gemfile"
   eval_gemfile "modular/json/truffleruby_23_0.gemfile"
   eval_gemfile "modular/x_std_libs/r3.1/libs.gemfile"
 end
 
 appraise "ruby-3-1" do
+  eval_gemfile "modular/multi_json/alternative_engines.gemfile"
   eval_gemfile "modular/x_std_libs/r3.1/libs.gemfile"
 end
 
 appraise "ruby-3-2" do
+  eval_gemfile "modular/multi_json/alternative_engines.gemfile"
   eval_gemfile "modular/json/truffleruby_23_1.gemfile"
   eval_gemfile "modular/x_std_libs/r3/libs.gemfile"
 end
 
 appraise "ruby-3-3" do
+  eval_gemfile "modular/multi_json/alternative_engines.gemfile"
   eval_gemfile "modular/x_std_libs/r3/libs.gemfile"
 end
 
 appraise "ruby-3-4" do
+  eval_gemfile "modular/multi_json/alternative_engines.gemfile"
   eval_gemfile "modular/x_std_libs/r3/libs.gemfile"
 end
 
 appraise "audit" do
+  eval_gemfile "modular/multi_json/alternative_engines.gemfile"
   eval_gemfile "modular/x_std_libs.gemfile"
 end
 
 appraise "coverage" do
+  eval_gemfile "modular/multi_json/alternative_engines.gemfile"
   eval_gemfile "modular/coverage.gemfile"
   eval_gemfile "modular/optional.gemfile"
   eval_gemfile "modular/x_std_libs.gemfile"
 end
 
 appraise "style" do
+  eval_gemfile "modular/multi_json/alternative_engines.gemfile"
   eval_gemfile "modular/style.gemfile"
   eval_gemfile "modular/x_std_libs.gemfile"
 end
 
 appraise "templating" do
+  eval_gemfile "modular/multi_json/alternative_engines.gemfile"
   eval_gemfile "modular/templating.gemfile"
   eval_gemfile "modular/x_std_libs.gemfile"
 end
