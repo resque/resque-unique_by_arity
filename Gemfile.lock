@@ -187,7 +187,7 @@ GEM
       ruby-progressbar (~> 1.13)
       tty-progressbar (~> 0.18)
       version_gem (~> 1.1, >= 1.1.15)
-    kettle-jem (7.1.7)
+    kettle-jem (7.1.8)
       addressable (>= 2.8, < 3)
       ast-crispr-markdown-markly (~> 7.1, >= 7.1.4)
       ast-crispr-ruby-prism (~> 7.1, >= 7.1.4)
@@ -640,7 +640,7 @@ DEPENDENCIES
   irb (~> 1.17)
   kettle-changelog (~> 1.0, >= 1.0.3)
   kettle-dev (~> 3.0, >= 3.0.13)
-  kettle-family (~> 1.2, >= 1.2.61)
+  kettle-family (~> 1.2, >= 1.2.62)
   kettle-soup-cover (~> 3.0, >= 3.0.9)
   kettle-test (~> 2.0, >= 2.0.20)
   kramdown (~> 2.5, >= 2.5.2)
@@ -743,7 +743,7 @@ CHECKSUMS
   kettle-dev (3.0.13) sha256=131f23898ff9dc1aa7066c1a4f6c2ecf5b56c67e0cbda503e90d42103a8891c6
   kettle-family (1.2.62) sha256=839fd741de89a9e01dbb00d62ddf34e1a6fd63270d1dcd24ad79109278737f55
   kettle-gha-pins (0.3.13) sha256=c393aa90a7c78248d42fd63b2f4abfb0ca39df94a7b0d8f53082fa3ffdaa3f80
-  kettle-jem (7.1.7) sha256=68c441b76e855c9e8f5c4046868f79569922391271e615721fcf9030111257cb
+  kettle-jem (7.1.8) sha256=928b2b4a75c052db7504d9778e6b2180bc5424a0bdd5853ab5d47a2b68185a27
   kettle-ndjson (0.1.12) sha256=9c506b197c1b95904227876890a5b1a55a5f435f1c425857036e7fab83d152e5
   kettle-rb (0.1.10) sha256=98fadfb0baf6a655132e651079bd4e499135b9db10e2c751212739b06b9acb01
   kettle-soup-cover (3.0.9) sha256=32e3dbb6b15ad46d1ff7ef141597061b686bbfbfa2af71e7fe2e50d47c35f4e7
