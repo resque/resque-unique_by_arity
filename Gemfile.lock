@@ -16,6 +16,19 @@ PATH
       resque-unique_at_runtime (>= 3)
       resque-unique_in_queue (>= 2)
 
+PATH
+  remote: /var/home/pboling/src/my/resque/resque-unique_at_runtime
+  specs:
+    resque-unique_at_runtime (4.0.2)
+      colorize (>= 0.8)
+      resque (>= 1.2)
+
+PATH
+  remote: /var/home/pboling/src/my/resque/resque-unique_in_queue
+  specs:
+    resque-unique_in_queue (2.0.2)
+      resque (>= 1.2)
+
 GEM
   remote: https://gem.coop/
   specs:
@@ -171,7 +184,7 @@ GEM
       kettle-test (~> 2.0, >= 2.0.20)
       ruby-progressbar (~> 1.13)
       tty-progressbar (~> 0.18)
-    kettle-family (1.2.61)
+    kettle-family (1.2.62)
       command_kit (~> 0.6)
       command_kit-completion (~> 0.1)
       kettle-changelog (~> 1.0, >= 1.0.3)
@@ -366,12 +379,6 @@ GEM
       redis (>= 4.0)
       redis-namespace (~> 1.6)
       sinatra (>= 2.0)
-    resque-unique_at_runtime (4.0.1)
-      colorize (>= 0.8)
-      resque (>= 1.2)
-    resque-unique_in_queue (2.0.1)
-      colorize (>= 0.8)
-      resque (>= 1.2)
     rexml (3.4.4)
     rspec (3.13.2)
       rspec-core (~> 3.13.0)
@@ -508,7 +515,7 @@ GEM
       rack-protection (= 4.2.1)
       rack-session (>= 2.0.0, < 3)
       tilt (~> 2.0)
-    sorbet-runtime (0.6.13439)
+    sorbet-runtime (0.6.13444)
     standard (1.56.0)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.0)
@@ -652,7 +659,9 @@ DEPENDENCIES
   rbs (>= 3.0)
   reek (~> 6.5, >= 6.5.0)
   require_bench (~> 1.0, >= 1.0.4)
+  resque-unique_at_runtime!
   resque-unique_by_arity!
+  resque-unique_in_queue!
   rspec (~> 3.0)
   rspec-block_is_expected (~> 1.0)
   rspec-stubbed_env (~> 1.0, >= 1.0.6)
@@ -694,7 +703,7 @@ CHECKSUMS
   bash-merge (7.1.4) sha256=cd9eeebf368a638e72e432f1d80930077922e90cd98d8260a2c9bbd0933d21a7
   benchmark (0.5.0) sha256=465df122341aedcb81a2a24b4d3bd19b6c67c1530713fd533f3ff034e419236c
   bigdecimal (4.1.2) sha256=53d217666027eab4280346fba98e7d5b66baaae1b9c3c1c0ffe89d48188a3fbd
-  bundler (4.0.19)
+  bundler (4.0.17) sha256=214e21431b5665dd2f99df8a5511c6b151d7a72e8015c8b38f8b775b61cbb6c1
   bundler-audit (0.9.3) sha256=81c8766c71e47d0d28a0f98c7eed028539f21a6ea3cd8f685eb6f42333c9b4e9
   cgi (0.5.2) sha256=61ca30298171190fd4fa0d8018e57ada456eae9b7a2b78526debf7f0a0e6f8bb
   citrus (3.0.2) sha256=4ec2412fc389ad186735f4baee1460f7900a8e130ffe3f216b30d4f9c684f650
@@ -741,7 +750,7 @@ CHECKSUMS
   json-merge (7.1.4) sha256=70e78f84a1db0ab1145996a79be5f9951fe928aa76288f540c704e48dd431601
   kettle-changelog (1.0.3) sha256=72d977f269134b2b2fe3776ab4daffa1fac7fd5676379fb26d844fb9086acd8e
   kettle-dev (3.0.13) sha256=131f23898ff9dc1aa7066c1a4f6c2ecf5b56c67e0cbda503e90d42103a8891c6
-  kettle-family (1.2.61) sha256=62fe4fe607951a3f3920330613e59a9d97896b7fc4f2fe970f5f3ab3167cd1b7
+  kettle-family (1.2.62) sha256=839fd741de89a9e01dbb00d62ddf34e1a6fd63270d1dcd24ad79109278737f55
   kettle-gha-pins (0.3.13) sha256=c393aa90a7c78248d42fd63b2f4abfb0ca39df94a7b0d8f53082fa3ffdaa3f80
   kettle-jem (7.1.7) sha256=68c441b76e855c9e8f5c4046868f79569922391271e615721fcf9030111257cb
   kettle-ndjson (0.1.12) sha256=9c506b197c1b95904227876890a5b1a55a5f435f1c425857036e7fab83d152e5
@@ -803,9 +812,9 @@ CHECKSUMS
   reline (0.7.0) sha256=5b012d8e55dbf9d450f12bde2cf7d15ff546ae80b3f8f3b30e570d431815583d
   require_bench (1.0.4) sha256=c8ef54aac5c01f80bb5f110f7c08d304417a6c7b34f3683e1923227b6e65d004
   resque (3.0.0) sha256=ee6f02b61b2af48c587587dd6fb3b9b5eca94e348c568aed8e9d7e7872b2f713
-  resque-unique_at_runtime (4.0.1)
+  resque-unique_at_runtime (4.0.2)
   resque-unique_by_arity (3.0.3)
-  resque-unique_in_queue (2.0.1)
+  resque-unique_in_queue (2.0.2)
   rexml (3.4.4) sha256=19e0a2c3425dfbf2d4fc1189747bdb2f849b6c5e74180401b15734bc97b5d142
   rspec (3.13.2) sha256=206284a08ad798e61f86d7ca3e376718d52c0bc944626b2349266f239f820587
   rspec-block_is_expected (1.0.6) sha256=bbad3dc30eba93becf4dcb3fd1bff5f37f6e212ab5cbf6132c07edba6ff74282
@@ -847,7 +856,7 @@ CHECKSUMS
   simplecov-rcov (0.3.7) sha256=372f50bf6df6b6350b7d0c840f2f8bdabe021861a43c26877b747c9ac96139fc
   simplecov_lcov_formatter (0.9.0) sha256=4c1839bb31dcf7a8f7a6474c94ed228aa03b994e9dd5e1965e58b4121b049bed
   sinatra (4.2.1) sha256=b7aeb9b11d046b552972ade834f1f9be98b185fa8444480688e3627625377080
-  sorbet-runtime (0.6.13439) sha256=6bf3134ac7eaed0ff9669d7cdb30c192c376fbae63a14dee8d1a19797f418601
+  sorbet-runtime (0.6.13444) sha256=1b97769d5c585faac9b6c11736e0966ae64a7c352c053d43a9c254e2a7532350
   standard (1.56.0) sha256=ae2af4d9669589162ac69ed5ef59dcf9f346d4afc81f7e62b84339310dfcb787
   standard-custom (1.0.2) sha256=424adc84179a074f1a2a309bb9cf7cd6bfdb2b6541f20c6bf9436c0ba22a652b
   standard-performance (1.9.0) sha256=49483d31be448292951d80e5e67cdcb576c2502103c7b40aec6f1b6e9c88e3f2
@@ -891,4 +900,4 @@ CHECKSUMS
   zlib (3.2.3) sha256=5bd316698b32f31a64ab910a8b6c282442ca1626a81bbd6a1674e8522e319c20
 
 BUNDLED WITH
-  4.0.19
+  4.0.17
