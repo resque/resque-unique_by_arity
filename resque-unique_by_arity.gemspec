@@ -110,7 +110,7 @@ Gem::Specification.new do |spec|
   # Utilities
   spec.add_runtime_dependency "resque", ">= 1.2"
   spec.add_runtime_dependency "resque-unique_at_runtime", ">= 4.0.2"
-  spec.add_runtime_dependency "resque-unique_in_queue", ">= 2"
+  spec.add_runtime_dependency "resque-unique_in_queue", ">= 2.0.2"
 
   # NOTE: It is preferable to list development dependencies in the gemspec due to increased
   #       visibility and discoverability.
