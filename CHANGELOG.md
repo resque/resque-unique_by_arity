@@ -20,6 +20,25 @@ Please file a bug if you notice a violation of semantic versioning.
 
 ### Added
 
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+## [3.0.3] - 2026-08-27
+
+- TAG: [v3.0.3][3.0.3t]
+- COVERAGE: 100.00% -- 318/318 lines in 10 files
+- BRANCH COVERAGE: 82.71% -- 110/133 branches in 10 files
+- 52.17% documented
+
+### Added
+
 - kettle-jem-template-20260720-005 - README Support & Community links now
   include RubyForum.
 - kettle-jem-template-20260726-001 - Projects now include YARD lint
@@ -58,10 +77,6 @@ Please file a bug if you notice a violation of semantic versioning.
   - other (4)
 
 - Remove the GPL-2.0 colorize runtime dependency from logging output.
-
-### Deprecated
-
-### Removed
 
 ### Fixed
 
@@ -119,8 +134,6 @@ Please file a bug if you notice a violation of semantic versioning.
 
 - Restore Redis service provisioning for integration CI workflows.
 
-### Security
-
 ## [3.0.2] - 2018-11-17
 
 - TAG: [v3.0.2][3.0.2t]
@@ -129,6 +142,8 @@ Please file a bug if you notice a violation of semantic versioning.
 
 - Historical release notes are unavailable in this changelog.
 
-[Unreleased]: https://github.com/resque/resque-unique_by_arity/compare/v3.0.2...HEAD
+[Unreleased]: https://github.com/resque/resque-unique_by_arity/compare/v3.0.3...HEAD
+[3.0.3]: https://github.com/resque/resque-unique_by_arity/compare/v3.0.2...v3.0.3
+[3.0.3t]: https://github.com/resque/resque-unique_by_arity/releases/tag/v3.0.3
 [3.0.2]: https://github.com/resque/resque-unique_by_arity/compare/1765bbc873d8830ce982598bb129cd81208acd22...v3.0.2
 [3.0.2t]: https://github.com/resque/resque-unique_by_arity/releases/tag/v3.0.2
