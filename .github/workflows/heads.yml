@@ -30,6 +30,17 @@ jobs:
     if: "github.event_name != 'push' || (!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]'))"
     name: Specs ${{ matrix.ruby }}@${{ matrix.appraisal }}${{ matrix.name_extra || '' }}
     runs-on: ubuntu-latest
+    # Integration specs exercise Resque through a real Redis server.
+    services:
+      redis:
+        image: redis:7
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     continue-on-error: ${{ matrix.experimental || endsWith(matrix.ruby, 'head') }}
     env: # $BUNDLE_GEMFILE must be set at job level, so it is set for all steps
       BUNDLE_GEMFILE: ${{ github.workspace }}/Appraisal.root.gemfile
@@ -95,6 +106,17 @@ jobs:
     if: "(github.event_name != 'push' || (!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]'))) && (github.event_name != 'pull_request' || startsWith(github.head_ref, 'engines/') || startsWith(github.head_ref, 'truffleruby/') || startsWith(github.head_ref, 'feature/release'))"
     name: Specs truffleruby-head@head
     runs-on: ubuntu-latest
+    # Integration specs exercise Resque through a real Redis server.
+    services:
+      redis:
+        image: redis:7
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     continue-on-error: ${{ matrix.experimental || endsWith(matrix.ruby, 'head') }}
     env:
       BUNDLE_GEMFILE: ${{ github.workspace }}/Appraisal.root.gemfile
@@ -155,6 +177,17 @@ jobs:
     if: "(github.event_name != 'push' || (!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]'))) && (github.event_name != 'pull_request' || startsWith(github.head_ref, 'engines/') || startsWith(github.head_ref, 'jruby/') || startsWith(github.head_ref, 'feature/release'))"
     name: Specs jruby-head@head
     runs-on: ubuntu-latest
+    # Integration specs exercise Resque through a real Redis server.
+    services:
+      redis:
+        image: redis:7
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     continue-on-error: ${{ matrix.experimental || endsWith(matrix.ruby, 'head') }}
     env:
       BUNDLE_GEMFILE: ${{ github.workspace }}/Appraisal.root.gemfile

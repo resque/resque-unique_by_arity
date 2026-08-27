@@ -117,6 +117,8 @@ Please file a bug if you notice a violation of semantic versioning.
 
 - Run non-coverage appraisal suites without requiring SimpleCov and provide Redis to locked dependency integration tests.
 
+- Restore Redis service provisioning for integration CI workflows.
+
 ### Security
 
 ## [3.0.2] - 2018-11-17
