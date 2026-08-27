@@ -120,7 +120,7 @@ module Resque
         if msg
           case arity_validation
           when :warning
-            log(ColorizedString[msg].red)
+            log(msg)
           when :error
             raise ArgumentError, msg
           else

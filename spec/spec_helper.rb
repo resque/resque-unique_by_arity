@@ -26,8 +26,6 @@ require "debug" if RbConfig::CONFIG["RUBY_INSTALL_NAME"] == "ruby" && Gem::Versi
 require "rspec/block_is_expected"
 require "rspec/stubbed_env"
 
-SimpleCov.start
-
 # This gem
 require "resque-unique_by_arity"
 

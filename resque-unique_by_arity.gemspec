@@ -108,7 +108,6 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   # Utilities
-  spec.add_runtime_dependency "colorize", ">= 0.8"
   spec.add_runtime_dependency "resque", ">= 1.2"
   spec.add_runtime_dependency "resque-unique_at_runtime", ">= 3"
   spec.add_runtime_dependency "resque-unique_in_queue", ">= 2"

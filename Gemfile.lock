@@ -11,7 +11,6 @@ PATH
   remote: .
   specs:
     resque-unique_by_arity (3.0.3)
-      colorize (>= 0.8)
       resque (>= 1.2)
       resque-unique_at_runtime (>= 3)
       resque-unique_in_queue (>= 2)

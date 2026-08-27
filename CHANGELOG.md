@@ -57,6 +57,8 @@ Please file a bug if you notice a violation of semantic versioning.
   - documentation (2)
   - other (4)
 
+- Remove the GPL-2.0 colorize runtime dependency from logging output.
+
 ### Deprecated
 
 ### Removed
@@ -112,6 +114,8 @@ Please file a bug if you notice a violation of semantic versioning.
 - Cap multi_json below 1.20 in alternate-engine appraisal gemfiles for Fiber API compatibility.
 
 - Keep optional development tools out of gemspec metadata so alternate-engine appraisals do not install incompatible native extensions.
+
+- Run non-coverage appraisal suites without requiring SimpleCov and provide Redis to locked dependency integration tests.
 
 ### Security
 

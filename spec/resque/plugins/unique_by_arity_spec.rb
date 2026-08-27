@@ -477,7 +477,7 @@ RSpec.describe Resque::Plugins::UniqueByArity do
           subject { instance.perform(*args) }
 
           it "logs" do
-            expect(Resque::UniqueByArity).to receive(:log).with(ColorizedString["RealFake.perform has arity of -1 which will not work with arity_for_uniqueness of 2"].red, anything)
+            expect(Resque::UniqueByArity).to receive(:log).with("RealFake.perform has arity of -1 which will not work with arity_for_uniqueness of 2", anything)
             block_is_expected.not_to raise_error
           end
         end
@@ -510,7 +510,7 @@ RSpec.describe Resque::Plugins::UniqueByArity do
           subject { instance.perform(*args) }
 
           it "logs" do
-            expect(Resque::UniqueByArity).to receive(:log).with(ColorizedString["RealFake.perform has the following required parameters: [:_req], which is not enough to satisfy the configured arity_for_uniqueness of 2"].red, anything)
+            expect(Resque::UniqueByArity).to receive(:log).with("RealFake.perform has the following required parameters: [:_req], which is not enough to satisfy the configured arity_for_uniqueness of 2", anything)
             block_is_expected.not_to raise_error
           end
         end

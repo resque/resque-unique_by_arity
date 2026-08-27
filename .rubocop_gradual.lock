@@ -2,13 +2,12 @@
   "Rakefile:3486103165": [
     [189, 1, 16, "Rake/Desc: Describe the task with `desc` method.", 850263259]
   ],
-  "lib/resque/unique_by_arity.rb:933209914": [
-    [8, 18, 35, "Style/RedundantParentheses: Don't use parentheses around a method call.", 1562350466],
+  "lib/resque/unique_by_arity.rb:235557074": [
     [12, 7, 81, "Style/SafeNavigation: Use safe navigation (`&.`) instead of checking if an object exists before calling the method.", 4060336930],
     [24, 13, 14, "ThreadSafety/ClassInstanceVariable: Avoid class instance variables.", 4002963285],
     [33, 7, 28, "ThreadSafety/ClassAndModuleAttributes: Avoid mutating class and module attributes.", 3570445562]
   ],
-  "lib/resque/unique_by_arity/configuration.rb:2101455012": [
+  "lib/resque/unique_by_arity/configuration.rb:2174306853": [
     [31, 92, 6, "Style/GlobalStdStream: Use `$stdout` instead of `STDOUT`.", 3356722952],
     [56, 34, 6, "Style/GlobalStdStream: Use `$stdout` instead of `STDOUT`.", 3356722952],
     [136, 7, 15, "Lint/DuplicateMethods: Method `Resque::UniqueByArity::Configuration#debug_mode=` is defined at both lib/resque/unique_by_arity/configuration.rb:28 and lib/resque/unique_by_arity/configuration.rb:136.", 3724036658]
@@ -20,7 +19,7 @@
     [22, 9, 81, "Style/SafeNavigation: Use safe navigation (`&.`) instead of checking if an object exists before calling the method.", 4060336930],
     [38, 9, 39, "ThreadSafety/ClassAndModuleAttributes: Avoid mutating class and module attributes.", 4180139101]
   ],
-  "spec/resque/plugins/unique_by_arity_spec.rb:4035119722": [
+  "spec/resque/plugins/unique_by_arity_spec.rb:3443431882": [
     [29, 16, 7, "RSpec/NamedSubject: Name your test subject if you need to reference it explicitly.", 1892732441],
     [29, 50, 7, "RSpec/NamedSubject: Name your test subject if you need to reference it explicitly.", 1892732441],
     [36, 14, 7, "RSpec/NamedSubject: Name your test subject if you need to reference it explicitly.", 1892732441],
@@ -350,7 +349,7 @@
     [190, 9, 10, "RSpec/MultipleExpectations: Example has too many expectations [2/1].", 1095999310],
     [191, 33, 7, "RSpec/MessageSpies: Prefer `have_received` for setting message expectations. Setup `logger` as a spy using `allow` or `instance_spy`.", 1384559950]
   ],
-  "spec/spec_helper.rb:3167821769": [
-    [43, 24, 14, "RSpec/ContextWording: Context description should match /^when\\b/, /^with\\b/, or /^without\\b/.", 379550510]
+  "spec/spec_helper.rb:3511108595": [
+    [41, 24, 14, "RSpec/ContextWording: Context description should match /^when\\b/, /^with\\b/, or /^without\\b/.", 379550510]
   ]
 }

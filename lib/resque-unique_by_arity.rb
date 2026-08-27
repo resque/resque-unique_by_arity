@@ -1,7 +1,6 @@
 require "resque/unique_by_arity/version"
 
 # External Gems
-require "colorized_string"
 require "resque"
 
 # External Resque Plugins

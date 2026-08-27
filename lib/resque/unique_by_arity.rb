@@ -5,7 +5,7 @@ require_relative "unique_by_arity/version"
 
 module Resque
   module UniqueByArity
-    PLUGIN_TAG = (ColorizedString["[R-UBA] "].green).freeze
+    PLUGIN_TAG = "[R-UBA] ".freeze
 
     def log(message, config_proxy = nil)
       config_proxy ||= configuration
