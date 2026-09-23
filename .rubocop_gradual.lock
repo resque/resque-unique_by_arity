@@ -1,6 +1,40 @@
 {
+  "Gemfile:619373004": [
+    [34, 23, 6, "Lint/LtsRuby/UnavailableMethod: Pathname#empty? is unavailable before Ruby 2.4.", 1165546895]
+  ],
   "Rakefile:3486103165": [
+    [59, 70, 6, "Lint/LtsRuby/UnavailableMethod: Pathname#empty? is unavailable before Ruby 2.4.", 1165546895],
+    [74, 8, 4, "Lint/LtsRuby/UnavailableMethod: Enumerable/Enumerator::Lazy#uniq is unavailable before Ruby 2.4.", 2087995782],
     [189, 1, 16, "Rake/Desc: Describe the task with `desc` method.", 850263259]
+  ],
+  "gemfiles/modular/coverage_local.gemfile:2661471746": [
+    [19, 27, 4, "Lint/LtsRuby/UnavailableMethod: Symbol#name is unavailable before Ruby 3.0.", 2087876002],
+    [37, 101, 4, "Lint/LtsRuby/UnavailableMethod: Symbol#name is unavailable before Ruby 3.0.", 2087876002],
+    [46, 5, 5, "Lint/LtsRuby/UnavailableMethod: Thread#fetch is unavailable before Ruby 2.5.", 171106201],
+    [49, 31, 4, "Lint/LtsRuby/UnavailableMethod: Symbol#name is unavailable before Ruby 3.0.", 2087876002]
+  ],
+  "gemfiles/modular/documentation_local.gemfile:3227795705": [
+    [19, 27, 4, "Lint/LtsRuby/UnavailableMethod: Symbol#name is unavailable before Ruby 3.0.", 2087876002]
+  ],
+  "gemfiles/modular/style_local.gemfile:3577728394": [
+    [22, 27, 4, "Lint/LtsRuby/UnavailableMethod: Symbol#name is unavailable before Ruby 3.0.", 2087876002]
+  ],
+  "gemfiles/modular/templating.gemfile:960605653": [
+    [6, 39, 4, "Lint/LtsRuby/UnavailableMethod: Set#to_s is unavailable before Ruby 2.5.", 2087961426],
+    [7, 28, 6, "Lint/LtsRuby/UnavailableMethod: Pathname#empty? is unavailable before Ruby 2.4.", 1165546895],
+    [8, 40, 4, "Lint/LtsRuby/UnavailableMethod: Set#to_s is unavailable before Ruby 2.5.", 2087961426],
+    [8, 45, 6, "Lint/LtsRuby/UnavailableMethod: Pathname#empty? is unavailable before Ruby 2.4.", 1165546895],
+    [11, 35, 4, "Lint/LtsRuby/UnavailableMethod: Set#to_s is unavailable before Ruby 2.5.", 2087961426],
+    [11, 40, 6, "Lint/LtsRuby/UnavailableMethod: Pathname#empty? is unavailable before Ruby 2.4.", 1165546895]
+  ],
+  "gemfiles/modular/templating_local.gemfile:1318235891": [
+    [20, 27, 4, "Lint/LtsRuby/UnavailableMethod: Symbol#name is unavailable before Ruby 3.0.", 2087876002],
+    [85, 101, 4, "Lint/LtsRuby/UnavailableMethod: Symbol#name is unavailable before Ruby 3.0.", 2087876002],
+    [94, 5, 5, "Lint/LtsRuby/UnavailableMethod: Thread#fetch is unavailable before Ruby 2.5.", 171106201],
+    [97, 31, 4, "Lint/LtsRuby/UnavailableMethod: Symbol#name is unavailable before Ruby 3.0.", 2087876002]
+  ],
+  "lib/resque/plugins/unique_by_arity.rb:520162562": [
+    [36, 47, 4, "Lint/LtsRuby/UnavailableMethod: Set#to_s is unavailable before Ruby 2.5.", 2087961426]
   ],
   "lib/resque/unique_by_arity.rb:235557074": [
     [12, 7, 81, "Style/SafeNavigation: Use safe navigation (`&.`) instead of checking if an object exists before calling the method.", 4060336930],
@@ -10,28 +44,64 @@
   "lib/resque/unique_by_arity/configuration.rb:2174306853": [
     [31, 92, 6, "Style/GlobalStdStream: Use `$stdout` instead of `STDOUT`.", 3356722952],
     [56, 34, 6, "Style/GlobalStdStream: Use `$stdout` instead of `STDOUT`.", 3356722952],
-    [136, 7, 15, "Lint/DuplicateMethods: Method `Resque::UniqueByArity::Configuration#debug_mode=` is defined at both lib/resque/unique_by_arity/configuration.rb:28 and lib/resque/unique_by_arity/configuration.rb:136.", 3724036658]
+    [109, 47, 4, "Lint/LtsRuby/UnavailableMethod: Symbol#name is unavailable before Ruby 3.0.", 2087876002],
+    [115, 47, 4, "Lint/LtsRuby/UnavailableMethod: Symbol#name is unavailable before Ruby 3.0.", 2087876002],
+    [116, 60, 10, "Lint/LtsRuby/UnavailableMethod: TracePoint#parameters is unavailable before Ruby 2.6.", 3331928383],
+    [117, 47, 4, "Lint/LtsRuby/UnavailableMethod: Symbol#name is unavailable before Ruby 3.0.", 2087876002],
+    [136, 7, 15, "Lint/DuplicateMethods: Method `Resque::UniqueByArity::Configuration#debug_mode=` is defined at both lib/resque/unique_by_arity/configuration.rb:28 and lib/resque/unique_by_arity/configuration.rb:136.", 3724036658],
+    [144, 87, 6, "Lint/LtsRuby/UnavailableMethod: Regexp/String/Symbol#match? is unavailable before Ruby 2.4.", 1464563049]
   ],
   "lib/resque/unique_by_arity/global_configuration.rb:2556171955": [
     [50, 34, 6, "Style/GlobalStdStream: Use `$stdout` instead of `STDOUT`.", 3356722952]
+  ],
+  "lib/resque/unique_by_arity/modulizer.rb:186842767": [
+    [15, 20, 4, "Lint/LtsRuby/UnavailableMethod: Matrix/Vector#map! is unavailable before Ruby 2.6.", 2087697144],
+    [67, 49, 6, "Lint/LtsRuby/UnavailableMethod: Pathname#empty? is unavailable before Ruby 2.4.", 1165546895],
+    [109, 49, 6, "Lint/LtsRuby/UnavailableMethod: Pathname#empty? is unavailable before Ruby 2.4.", 1165546895]
   ],
   "lib/resque/unique_by_arity/unique_job.rb:2650552201": [
     [22, 9, 81, "Style/SafeNavigation: Use safe navigation (`&.`) instead of checking if an object exists before calling the method.", 4060336930],
     [38, 9, 39, "ThreadSafety/ClassAndModuleAttributes: Avoid mutating class and module attributes.", 4180139101]
   ],
+  "lib/resque/unique_by_arity/validation.rb:922528788": [
+    [7, 48, 4, "Lint/LtsRuby/UnavailableMethod: Set#to_s is unavailable before Ruby 2.5.", 2087961426]
+  ],
+  "resque-unique_by_arity.gemspec:110969467": [
+    [43, 24, 9, "Lint/LtsRuby/UnavailableMethod: Symbol#end_with? is unavailable before Ruby 2.7.", 308216808],
+    [49, 16, 16, "Lint/LtsRuby/UnavailableMethod: Matrix/Vector#[]= is unavailable before Ruby 2.6.", 3147164910],
+    [50, 16, 19, "Lint/LtsRuby/UnavailableMethod: Matrix/Vector#[]= is unavailable before Ruby 2.6.", 279056797],
+    [51, 16, 17, "Lint/LtsRuby/UnavailableMethod: Matrix/Vector#[]= is unavailable before Ruby 2.6.", 4196512528],
+    [52, 16, 19, "Lint/LtsRuby/UnavailableMethod: Matrix/Vector#[]= is unavailable before Ruby 2.6.", 3960302181],
+    [53, 16, 21, "Lint/LtsRuby/UnavailableMethod: Matrix/Vector#[]= is unavailable before Ruby 2.6.", 2359681088],
+    [53, 78, 4, "Lint/LtsRuby/UnavailableMethod: Symbol#name is unavailable before Ruby 3.0.", 2087876002],
+    [54, 16, 15, "Lint/LtsRuby/UnavailableMethod: Matrix/Vector#[]= is unavailable before Ruby 2.6.", 1629595435],
+    [55, 16, 12, "Lint/LtsRuby/UnavailableMethod: Matrix/Vector#[]= is unavailable before Ruby 2.6.", 2962383854],
+    [56, 16, 12, "Lint/LtsRuby/UnavailableMethod: Matrix/Vector#[]= is unavailable before Ruby 2.6.", 3248034781],
+    [56, 71, 4, "Lint/LtsRuby/UnavailableMethod: Symbol#name is unavailable before Ruby 3.0.", 2087876002],
+    [57, 16, 15, "Lint/LtsRuby/UnavailableMethod: Matrix/Vector#[]= is unavailable before Ruby 2.6.", 1397552598],
+    [58, 16, 20, "Lint/LtsRuby/UnavailableMethod: Matrix/Vector#[]= is unavailable before Ruby 2.6.", 2025055014],
+    [59, 16, 25, "Lint/LtsRuby/UnavailableMethod: Matrix/Vector#[]= is unavailable before Ruby 2.6.", 1727630048],
+    [71, 13, 2, "Lint/LtsRuby/UnavailableMethod: Method/Proc#<< is unavailable before Ruby 2.6.", 5859461],
+    [96, 13, 4, "Lint/LtsRuby/UnavailableMethod: Symbol#name is unavailable before Ruby 3.0.", 2087876002]
+  ],
   "spec/resque/plugins/unique_by_arity_spec.rb:3443431882": [
     [29, 16, 7, "RSpec/NamedSubject: Name your test subject if you need to reference it explicitly.", 1892732441],
     [29, 50, 7, "RSpec/NamedSubject: Name your test subject if you need to reference it explicitly.", 1892732441],
+    [29, 58, 4, "Lint/LtsRuby/UnavailableMethod: Set#to_s is unavailable before Ruby 2.5.", 2087961426],
     [36, 14, 7, "RSpec/NamedSubject: Name your test subject if you need to reference it explicitly.", 1892732441],
     [43, 16, 7, "RSpec/NamedSubject: Name your test subject if you need to reference it explicitly.", 1892732441],
     [51, 16, 7, "RSpec/NamedSubject: Name your test subject if you need to reference it explicitly.", 1892732441],
     [51, 66, 7, "RSpec/NamedSubject: Name your test subject if you need to reference it explicitly.", 1892732441],
+    [51, 74, 4, "Lint/LtsRuby/UnavailableMethod: Set#to_s is unavailable before Ruby 2.5.", 2087961426],
     [75, 16, 7, "RSpec/NamedSubject: Name your test subject if you need to reference it explicitly.", 1892732441],
     [75, 66, 7, "RSpec/NamedSubject: Name your test subject if you need to reference it explicitly.", 1892732441],
+    [75, 74, 4, "Lint/LtsRuby/UnavailableMethod: Set#to_s is unavailable before Ruby 2.5.", 2087961426],
     [100, 16, 7, "RSpec/NamedSubject: Name your test subject if you need to reference it explicitly.", 1892732441],
     [100, 66, 7, "RSpec/NamedSubject: Name your test subject if you need to reference it explicitly.", 1892732441],
+    [100, 74, 4, "Lint/LtsRuby/UnavailableMethod: Set#to_s is unavailable before Ruby 2.5.", 2087961426],
     [125, 16, 7, "RSpec/NamedSubject: Name your test subject if you need to reference it explicitly.", 1892732441],
     [125, 66, 7, "RSpec/NamedSubject: Name your test subject if you need to reference it explicitly.", 1892732441],
+    [125, 74, 4, "Lint/LtsRuby/UnavailableMethod: Set#to_s is unavailable before Ruby 2.5.", 2087961426],
     [132, 14, 7, "RSpec/NamedSubject: Name your test subject if you need to reference it explicitly.", 1892732441],
     [138, 14, 7, "RSpec/NamedSubject: Name your test subject if you need to reference it explicitly.", 1892732441],
     [161, 16, 7, "RSpec/NamedSubject: Name your test subject if you need to reference it explicitly.", 1892732441],
@@ -287,6 +357,7 @@
   ],
   "spec/resque/unique_by_arity_spec.rb:2874759672": [
     [8, 11, 15, "RSpec/ContextWording: Context description should match /^when\\b/, /^with\\b/, or /^without\\b/.", 2516718581],
+    [10, 59, 5, "Lint/LtsRuby/UnavailableMethod: Set#reset is unavailable before Ruby 2.5.", 194507792],
     [14, 14, 21, "RSpec/DescribedClass: Use `described_class` instead of `Resque::UniqueByArity`.", 1178106335],
     [14, 61, 2, "RSpec/BeEq: Prefer `be` over `eq`.", 5860785],
     [18, 14, 21, "RSpec/DescribedClass: Use `described_class` instead of `Resque::UniqueByArity`.", 1178106335],
@@ -314,11 +385,14 @@
     [74, 14, 21, "RSpec/DescribedClass: Use `described_class` instead of `Resque::UniqueByArity`.", 1178106335],
     [78, 14, 21, "RSpec/DescribedClass: Use `described_class` instead of `Resque::UniqueByArity`.", 1178106335],
     [78, 65, 2, "RSpec/BeEq: Prefer `be` over `eq`.", 5860785],
+    [88, 61, 5, "Lint/LtsRuby/UnavailableMethod: Set#reset is unavailable before Ruby 2.5.", 194507792],
+    [93, 61, 5, "Lint/LtsRuby/UnavailableMethod: Set#reset is unavailable before Ruby 2.5.", 194507792],
     [97, 16, 21, "RSpec/DescribedClass: Use `described_class` instead of `Resque::UniqueByArity`.", 1178106335],
     [101, 5, 3405, "RSpec/MultipleMemoizedHelpers: Example group has too many memoized helpers [15/5]", 2954192765],
     [101, 13, 8, "RSpec/ContextWording: Context description should match /^when\\b/, /^with\\b/, or /^without\\b/.", 3348742414],
     [102, 33, 11, "Style/FileNull: Use `File::NULL` instead of `/dev/null`.", 597636425],
     [119, 9, 21, "RSpec/DescribedClass: Use `described_class` instead of `Resque::UniqueByArity`.", 1178106335],
+    [141, 61, 5, "Lint/LtsRuby/UnavailableMethod: Set#reset is unavailable before Ruby 2.5.", 194507792],
     [144, 7, 9, "RSpec/MultipleExpectations: Example has too many expectations [15/1].", 3825924873],
     [144, 7, 1527, "RSpec/ExampleLength: Example has too many lines. [15/5]", 917838380],
     [145, 16, 21, "RSpec/DescribedClass: Use `described_class` instead of `Resque::UniqueByArity`.", 1178106335],
