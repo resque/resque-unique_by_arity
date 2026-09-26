@@ -1,4 +1,13 @@
 {
+  "exec_cmd: \"kettle-test\"\nrubygems: latest": [
+    {
+      "file": ".github/workflows/current.yml",
+      "lines": [
+        43,
+        49
+      ]
+    }
+  ],
   "strategy: merge\npreference: destination": [
     {
       "file": ".structuredmerge/kettle-jem.yml",

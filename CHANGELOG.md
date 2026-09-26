@@ -20,13 +20,22 @@ Please file a bug if you notice a violation of semantic versioning.
 
 ### Added
 
+- kettle-jem-template-20260913-001 - Templating now also surfaces a review
+  entry in `dependency_conflicts.resolve` when a direct development
+  dependency doesn't support one or more of this project's declared
+  `engines:` and has no template-managed modular home (e.g. `sqlite3` on
+  `jruby`). Review each entry and pick a resolution per the project's own
+  engine support needs.
+
 ### Changed
 
-- [kc] kettle-jem/prepare: updated 11 project files:
+- [kc] kettle-jem/prepare: updated 15 project files:
   - configuration (1)
-  - dependencies (10)
+  - dependencies (14)
 
-- [kc] kettle-jem/template: updated 31 project files:
+- [kc] kettle-jem/template: updated 33 project files:
+  - code and tests (1)
+  - dependencies (1)
   - other (1)
   - workflows (30)
 
