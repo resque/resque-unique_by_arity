@@ -23,8 +23,8 @@ Gem::Specification.new do |spec|
   spec.authors = ["Peter H. Boling", "Daniel Cunha", "Josh Reeves"]
   spec.email = ["floss@galtzo.com"]
 
-  spec.summary = "💎 Configure resque-unique_in_queue and resque-unique_at_runtime uniqueness by arity of perform method"
-  spec.description = "💎 Configure resque-unique_in_queue and resque-unique_at_runtime uniqueness by arity of perform method, with automated cleanup tools"
+  spec.summary = "🔢 Configure resque-unique_in_queue and resque-unique_at_runtime uniqueness by arity of perform method"
+  spec.description = "🔢 Configure resque-unique_in_queue and resque-unique_at_runtime uniqueness by arity of perform method, with automated cleanup tools"
   spec.homepage = "https://github.com/resque/resque-unique_by_arity"
   spec.licenses = ["MIT"]
   spec.required_ruby_version = ">= 2.3.0"
@@ -61,7 +61,7 @@ Gem::Specification.new do |spec|
   gemspec_root = __dir__
   relative_package_path = lambda do |path|
     prefix = "#{gemspec_root}/"
-    (path[0, prefix.length] == prefix) ? path[prefix.length..-1] : path
+    path[0, prefix.length] == prefix ? path[prefix.length..-1] : path
   end
   enumerate_package_glob = lambda do |glob|
     files = []
@@ -107,6 +107,7 @@ Gem::Specification.new do |spec|
   spec.executables = []
   spec.require_paths = ["lib"]
 
+  # Utilities
   spec.add_runtime_dependency "resque", ">= 1.2"
   spec.add_runtime_dependency "resque-unique_at_runtime", ">= 4.0.2"
   spec.add_runtime_dependency "resque-unique_in_queue", ">= 2.0.2"
