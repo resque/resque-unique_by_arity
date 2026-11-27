@@ -40,6 +40,8 @@ Please file a bug if you notice a violation of semantic versioning.
   - other (1)
   - workflows (30)
 
+- Raise turbo_tests2 development floor to ~> 4.0 (>= 4.0.2), required by kettle-test 2.0.30.
+
 ### Deprecated
 
 ### Removed
