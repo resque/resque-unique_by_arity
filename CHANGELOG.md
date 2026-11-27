@@ -42,6 +42,17 @@ Please file a bug if you notice a violation of semantic versioning.
 
 - Raise turbo_tests2 development floor to ~> 4.0 (>= 4.0.2), required by kettle-test 2.0.30.
 
+- [kc] kettle-deps-floor: Update dependency floors:
+  - anonymous_loader (>= 0.1.3 -> >= 0.1.5)
+  - appraisal2 (>= 3.2.4 -> >= 3.2.6)
+  - gitmoji-regex (>= 2.0.13 -> >= 2.0.17)
+  - kettle-dev (>= 3.1.1 -> >= 3.1.33)
+  - kettle-test (>= 2.0.22 -> >= 2.0.30)
+  - require_bench (>= 1.0.4 -> >= 1.0.5)
+  - resque (>= 1.2 -> >= 3.2.0)
+  - rspec-stubbed_env (>= 1.0.6 -> >= 1.0.19)
+  - stone_checksums (>= 1.0.9 -> >= 1.0.11)
+
 ### Deprecated
 
 ### Removed
