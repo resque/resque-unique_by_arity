@@ -13,8 +13,12 @@ gem_version =
     # See: https://github.com/panorama-ed/memo_wise/pull/397
     Module.new.tap { |mod| Kernel.load("#{__dir__}/lib/resque/unique_by_arity/version.rb", mod) }::Resque::UniqueByArity::Version::VERSION
   else
-    require_relative "lib/resque/unique_by_arity/version"
-    Resque::UniqueByArity::Version::VERSION
+    # Ruby < 3.1: Kernel.load(path, module) is unavailable, but Module#module_eval with file
+    # metadata works on Ruby 2.2+. Anonymous loading matters beyond coverage: evaluating this
+    # gemspec (e.g. by bundler/setup in a subprocess) must not define top-level constants,
+    # which isolated-loading specs assert on.
+    version_path = "#{__dir__}/lib/resque/unique_by_arity/version.rb"
+    Module.new.tap { |mod| mod.module_eval(File.read(version_path), version_path, 1) }::Resque::UniqueByArity::Version::VERSION
   end
 
 Gem::Specification.new do |spec|
@@ -61,7 +65,7 @@ Gem::Specification.new do |spec|
   gemspec_root = __dir__
   relative_package_path = lambda do |path|
     prefix = "#{gemspec_root}/"
-    path[0, prefix.length] == prefix ? path[prefix.length..-1] : path
+    (path[0, prefix.length] == prefix) ? path[prefix.length..-1] : path
   end
   enumerate_package_glob = lambda do |glob|
     files = []
@@ -91,6 +95,10 @@ Gem::Specification.new do |spec|
     # Executables and executable support scripts
     *enumerate_package_files.call("exe")
   ]
+  # kettle-jem:freeze
+  # Keep locally built native binaries out of release packages.
+  spec.files.reject! { |path| path.end_with?(".bundle", ".so", ".dylib", ".dll", ".o", ".a") }
+  # kettle-jem:unfreeze
   spec.rdoc_options += [
     "--title",
     "#{spec.name} - #{spec.summary}",
@@ -107,7 +115,6 @@ Gem::Specification.new do |spec|
   spec.executables = []
   spec.require_paths = ["lib"]
 
-  # Utilities
   spec.add_runtime_dependency "resque", ">= 3.2.0"
   spec.add_runtime_dependency "resque-unique_at_runtime", ">= 4.0.2"
   spec.add_runtime_dependency "resque-unique_in_queue", ">= 2.0.2"

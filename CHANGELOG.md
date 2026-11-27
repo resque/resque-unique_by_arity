@@ -29,16 +29,16 @@ Please file a bug if you notice a violation of semantic versioning.
 
 ### Changed
 
-- [kc] kettle-jem/prepare: updated 15 project files:
-  - configuration (1)
-  - dependencies (14)
+- [kc] kettle-jem/prepare: updated 29 project files since the last release:
+  - configuration (2)
+  - dependencies (27)
 
-- [kc] kettle-jem/template: updated 35 project files:
-  - code and tests (1)
-  - dependencies (2)
-  - documentation (1)
-  - other (1)
-  - workflows (30)
+- [kc] kettle-jem/template: updated 58 project files since the last release:
+  - code and tests (3)
+  - dependencies (14)
+  - documentation (2)
+  - other (7)
+  - workflows (32)
 
 - Raise turbo_tests2 development floor to ~> 4.0 (>= 4.0.2), required by kettle-test 2.0.30.
 
